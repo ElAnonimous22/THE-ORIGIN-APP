@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE ORIGIN APP - Acceso</title>
     <style>
-        /* ESTILO FUTURISTA / ADAPTADO A PANTALLAS */
         * {
             box-sizing: border-box;
         }
@@ -13,7 +12,7 @@
         body {
             margin: 0;
             padding: 10px;
-            background-color: #0a0a0a;
+            background: radial-gradient(circle, #0c1a10 0%, #020503 100%);
             color: #00ff66; 
             font-family: 'Courier New', Courier, monospace;
             display: flex;
@@ -22,120 +21,157 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
+        /* EFECTO PANTALLA CRT / ESCÁNER EN TODA LA WEB */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 9999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* CONTENEDOR TIPO TERMINAL MILITAR */
         .login-container {
             text-align: center;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
+            background: rgba(5, 15, 8, 0.85);
+            padding: 30px 20px;
             border: 2px solid #00ff66;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00ff66;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.3), inset 0 0 15px rgba(0, 255, 102, 0.1);
             width: 100%;
-            max-width: 360px; /* Tamaño ideal para móviles y centrado en PC */
+            max-width: 360px;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease;
+        }
+
+        /* ANIMACIÓN DE ERROR (VIBRACIÓN) */
+        .shake {
+            animation: shakeAnim 0.4s ease-in-out;
+            border-color: #ff3333 !important;
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.5) !important;
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin: 0 0 5px 0;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            animation: glitch 2s infinite;
+            color: #fff;
+            text-shadow: 0 0 8px #00ff66, 0 0 20px #00ff66;
         }
 
         .subtitle {
             font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 20px;
+            color: #00aa44;
+            font-weight: bold;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
         }
 
-        /* Pantalla de código adaptable */
+        /* DISPLAY DE CÓDIGO CON GLOW BLANCO */
         .code-display {
-            font-size: 2.2rem;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
-            height: 45px;
+            font-size: 2.5rem;
+            letter-spacing: 12px;
+            margin-bottom: 25px;
+            height: 50px;
             color: #fff;
-            text-shadow: 0 0 10px #00ff66;
+            text-shadow: 0 0 15px #00ff66;
             display: flex;
             justify-content: center;
             align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            border: 1px dashed rgba(0, 255, 102, 0.3);
         }
 
-        /* Teclado numérico táctil adaptable */
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            justify-content: center;
+            gap: 15px;
             width: 100%;
         }
 
+        /* BOTONES CON EFECTO CRISTAL DE NEÓN */
         .key {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Hace que los botones sean perfectamente redondos */
+            aspect-ratio: 1 / 1;
             max-width: 75px;
             margin: 0 auto;
-            background: #111;
+            background: rgba(10, 30, 15, 0.6);
             border: 1px solid #00ff66;
             color: #00ff66;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.1s ease;
-            box-shadow: inset 0 0 5px #00ff66;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.1), inset 0 0 8px rgba(0, 255, 102, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            -webkit-tap-highlight-color: transparent; /* Elimina el recuadro azul en móviles */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .key:hover {
+            background: rgba(0, 255, 102, 0.15);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
         }
 
         .key:active {
             background: #00ff66;
             color: #000;
-            box-shadow: 0 0 15px #00ff66;
-            transform: scale(0.92);
+            box-shadow: 0 0 25px #00ff66;
+            transform: scale(0.9);
         }
 
         .key.clear {
             border-color: #ff3333;
             color: #ff3333;
-            box-shadow: inset 0 0 5px #ff3333;
+            background: rgba(30, 10, 10, 0.6);
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.1), inset 0 0 8px rgba(255, 51, 51, 0.2);
+        }
+        .key.clear:hover {
+            background: rgba(255, 51, 51, 0.15);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
         }
         .key.clear:active {
             background: #ff3333;
             color: #000;
-            box-shadow: 0 0 15px #ff3333;
+            box-shadow: 0 0 25px #ff3333;
         }
 
-        /* Mensajes de estado */
         .status-message {
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 0.95rem;
             height: 20px;
             font-weight: bold;
             letter-spacing: 1px;
         }
 
-        .success { color: #00ff66; }
-        .error { color: #ff3333; }
+        .success { color: #00ff66; text-shadow: 0 0 8px #00ff66; }
+        .error { color: #ff3333; text-shadow: 0 0 8px #ff3333; }
 
-        @keyframes glitch {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; text-shadow: 0 0 10px #00ff66; }
-            55% { opacity: 0.3; }
-            60% { opacity: 1; text-shadow: 0 0 20px #00ff66; }
-            100% { opacity: 1; }
+        /* ANIMACIÓN SHAKE */
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-12px); }
+            40%, 80% { transform: translateX(12px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="login-container" id="terminal">
         <h1>THE ORIGIN APP</h1>
-        <div class="subtitle">SISTEMA OPERATIVO PERSONAL v1.14</div>
+        <div class="subtitle">SECURE INTERFACE v1.14</div>
         
         <div class="code-display" id="display">______</div>
 
@@ -159,7 +195,7 @@
     <script>
         const CORRECT_CODE = "010822";
         let currentInput = "";
-        let isLocked = false; // Bloquea el teclado mientras carga o da error
+        let isLocked = false;
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -185,7 +221,7 @@
         function pressKey(num) {
             if (currentInput.length < 6 && !isLocked) {
                 currentInput += num;
-                playSound(600, 'sine', 0.05);
+                playSound(700, 'sine', 0.04);
                 updateDisplay();
 
                 if (currentInput.length === 6) {
@@ -197,35 +233,28 @@
         function clearCode() {
             if (!isLocked) {
                 currentInput = "";
-                playSound(300, 'triangle', 0.1);
+                playSound(250, 'triangle', 0.08);
                 document.getElementById("status").innerText = "";
                 updateDisplay();
             }
         }
 
-        // --- DETECTAR ESCRITURA FÍSICA DESDE EL TECLADO ---
         document.addEventListener('keydown', (event) => {
             const key = event.key;
-            
-            // Si es un número del 0 al 9
-            if (/^[0-9]$/.test(key)) {
-                pressKey(key);
-            } 
-            // Si presiona Borrar (Backspace) o la tecla 'c'
-            else if (key === 'Backspace' || key.toLowerCase() === 'c') {
-                clearCode();
-            }
+            if (/^[0-9]$/.test(key)) pressKey(key);
+            else if (key === 'Backspace' || key.toLowerCase() === 'c') clearCode();
         });
 
         function checkCode() {
             const statusMessage = document.getElementById("status");
+            const terminal = document.getElementById("terminal");
             isLocked = true;
             
             if (currentInput === CORRECT_CODE) {
                 statusMessage.className = "status-message success";
-                statusMessage.innerText = "ACCESO CONCEDIDO. CARGANDO...";
-                playSound(523.25, 'sine', 0.1); 
-                setTimeout(() => playSound(659.25, 'sine', 0.2), 100); 
+                statusMessage.innerText = "▸ DECRYPT OVER: ACCESS GRANTED";
+                playSound(600, 'sine', 0.08); 
+                setTimeout(() => playSound(900, 'sine', 0.15), 800); 
                 
                 setTimeout(() => {
                     window.location.href = "menuprincipal.html";
@@ -233,10 +262,12 @@
 
             } else {
                 statusMessage.className = "status-message error";
-                statusMessage.innerText = "CÓDIGO INCORRECTO. REINTENTAR.";
-                playSound(150, 'sawtooth', 0.3);
+                statusMessage.innerText = "▸ ERROR: ACCESS DENIED";
+                terminal.classList.add("shake");
+                playSound(120, 'sawtooth', 0.35);
                 
                 setTimeout(() => {
+                    terminal.classList.remove("shake");
                     isLocked = false;
                     clearCode();
                 }, 1200);
