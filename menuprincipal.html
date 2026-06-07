@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE ORIGIN APP - Menú Principal</title>
     <style>
-        /* BASE FUTURISTA */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -13,103 +12,122 @@
         }
 
         body {
-            background-color: #050505;
+            background: radial-gradient(circle at center, #07140b 0%, #020503 100%);
             color: #00ff66;
             font-family: 'Courier New', Courier, monospace;
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+        }
+
+        /* EFECTO CRT EN EL MENÚ */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+            z-index: 9999;
+            background-size: 100% 4px;
+            pointer-events: none;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             width: 100%;
         }
 
         header h1 {
-            font-size: 2.2rem;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #00ff66;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            color: #fff;
+            text-shadow: 0 0 10px #00ff66, 0 0 25px rgba(0,255,102,0.5);
             text-transform: uppercase;
         }
 
         header p {
-            color: #888;
+            color: #00aa44;
             font-size: 0.9rem;
-            margin-top: 5px;
+            margin-top: 8px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
-        /* CONTENEDOR GRID RESPONSIVO */
+        /* CUADRÍCULA MEJORADA */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 25px;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             padding: 10px;
         }
 
-        /* DISEÑO DE CADA BOTÓN DE APP */
+        /* TARJETAS DE APLICACIONES INTERACTIVAS ESTILO CRISTAL */
         .app-card {
-            background: rgba(15, 15, 15, 0.9);
-            border: 1px solid #00ff66;
-            border-radius: 12px;
-            padding: 15px 10px;
+            background: rgba(10, 25, 15, 0.4);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            border-radius: 16px;
+            padding: 20px 10px;
             text-align: center;
             cursor: pointer;
             text-decoration: none;
             color: #00ff66;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.2);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,255,102,0.05);
         }
 
-        /* EMOJIS Y SU ANIMACIÓN */
         .app-icon {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            transition: transform 0.3s ease;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         }
 
         .app-name {
             font-size: 0.85rem;
             font-weight: bold;
             letter-spacing: 1px;
+            color: #ccffdd;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             width: 100%;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
-        /* ANIMACIONES EN HOVER (RATÓN POR ENCIMA O TOQUE) */
+        /* HOVER ULTRA JUICY (BRILLO RADICAL) */
         .app-card:hover {
-            transform: translateY(-8px) scale(1.05);
-            background: #00ff66;
-            color: #000;
-            box-shadow: 0 0 20px #00ff66;
-            border-color: #fff;
+            transform: translateY(-10px);
+            background: rgba(0, 255, 102, 0.15);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(0, 255, 102, 0.3), inset 0 0 15px rgba(0, 255, 102, 0.2);
+            border-color: #00ff66;
         }
 
         .app-card:hover .app-icon {
-            transform: scale(1.2);
+            transform: scale(1.25) rotate(5deg);
         }
 
-        /* Efecto clic rápido */
         .app-card:active {
-            transform: translateY(-2px) scale(0.98);
+            transform: translateY(-2px) scale(0.95);
         }
 
-        /* Adaptación extra para pantallas muy pequeñas */
-        @media (max-width: 360px) {
+        /* RESPONSIVE AJUSTADO */
+        @media (max-width: 400px) {
             .apps-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
+                gap: 15px;
             }
         }
     </style>
@@ -118,11 +136,16 @@
 
     <header>
         <h1>THE ORIGIN OS</h1>
-        <p>SELECCIONA UN MÓDULO DEL SISTEMA</p>
+        <p>▸ SYSTEM CORE ONLINE</p>
     </header>
 
     <main class="apps-grid">
         
+        <a href="originai.html" class="app-card" onclick="playAppSound(this, event)" style="border-color: #00ffff; background: rgba(0,220,255,0.05);">
+            <div class="app-icon" style="filter: drop-shadow(0 0 8px #00ffff);">🤖</div>
+            <div class="app-name" style="color: #d0ffff;">ORIGIN AI</div>
+        </a>
+
         <a href="perfil.html" class="app-card" onclick="playAppSound(this, event)">
             <div class="app-icon">👤</div>
             <div class="app-name">Perfil</div>
@@ -146,11 +169,6 @@
         <a href="cocina.html" class="app-card" onclick="playAppSound(this, event)">
             <div class="app-icon">🍳</div>
             <div class="app-name">Cocina</div>
-        </a>
-
-        <a href="originai.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🤖</div>
-            <div class="app-name">ORIGIN AI</div>
         </a>
       
         <a href="belleza.html" class="app-card" onclick="playAppSound(this, event)">
@@ -256,11 +274,9 @@
     </main>
 
     <script>
-        // Lógica de audio nativa
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playAppSound(element, event) {
-            // Detenemos un momento el salto de página para que dé tiempo a oír el pitido
             event.preventDefault();
             const destination = element.getAttribute("href");
 
@@ -268,21 +284,20 @@
                 const oscillator = audioCtx.createOscillator();
                 const gainNode = audioCtx.createGain();
                 
-                oscillator.type = 'triangle'; // Sonido retro arcade tipo consola de comandos
-                oscillator.frequency.value = 800; // Sonido agudo y limpio
-                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                oscillator.type = 'sine'; 
+                oscillator.frequency.value = 880; 
+                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
                 
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.08);
+                oscillator.stop(audioCtx.currentTime + 0.06);
             } catch(e) {}
 
-            // Redirige al archivo de la app tras un micro-retraso para disfrutar del efecto visual/sonoro
             setTimeout(() => {
                 window.location.href = destination;
-            }, 100);
+            }, 80);
         }
     </script>
 </body>
