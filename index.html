@@ -2,85 +2,101 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE ORIGIN APP - Acceso</title>
     <style>
-        /* ESTILO FUTURISTA / CYBERPUNK */
+        /* ESTILO FUTURISTA / ADAPTADO A PANTALLAS */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            padding: 0;
+            padding: 10px;
             background-color: #0a0a0a;
-            color: #00ff66; /* Verde Matrix */
+            color: #00ff66; 
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             overflow: hidden;
         }
 
         .login-container {
             text-align: center;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
             border: 2px solid #00ff66;
             border-radius: 10px;
             box-shadow: 0 0 20px #00ff66;
+            width: 100%;
+            max-width: 360px; /* Tamaño ideal para móviles y centrado en PC */
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            letter-spacing: 4px;
+            font-size: 1.8rem;
+            margin: 0 0 5px 0;
+            letter-spacing: 3px;
             text-transform: uppercase;
             animation: glitch 2s infinite;
         }
 
         .subtitle {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #888;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Pantalla que muestra los dígitos */
+        /* Pantalla de código adaptable */
         .code-display {
-            font-size: 2rem;
-            letter-spacing: 10px;
+            font-size: 2.2rem;
+            letter-spacing: 8px;
             margin-bottom: 20px;
-            height: 40px;
+            height: 45px;
             color: #fff;
             text-shadow: 0 0 10px #00ff66;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Teclado numérico */
+        /* Teclado numérico táctil adaptable */
         .keypad {
             display: grid;
-            grid-template-columns: repeat(3, 80px);
-            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
             justify-content: center;
+            width: 100%;
         }
 
         .key {
-            width: 80px;
-            height: 80px;
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Hace que los botones sean perfectamente redondos */
+            max-width: 75px;
+            margin: 0 auto;
             background: #111;
             border: 1px solid #00ff66;
             color: #00ff66;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
             box-shadow: inset 0 0 5px #00ff66;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent; /* Elimina el recuadro azul en móviles */
         }
 
         .key:active {
             background: #00ff66;
             color: #000;
             box-shadow: 0 0 15px #00ff66;
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .key.clear {
@@ -96,20 +112,20 @@
 
         /* Mensajes de estado */
         .status-message {
-            margin-top: 20px;
-            font-size: 1.1rem;
+            margin-top: 15px;
+            font-size: 0.95rem;
             height: 20px;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .success { color: #00ff66; }
         .error { color: #ff3333; }
 
-        /* Efecto de parpadeo para el título */
         @keyframes glitch {
             0% { opacity: 1; }
             50% { opacity: 0.8; text-shadow: 0 0 10px #00ff66; }
-            55% { opacity: 0.2; }
+            55% { opacity: 0.3; }
             60% { opacity: 1; text-shadow: 0 0 20px #00ff66; }
             100% { opacity: 1; }
         }
@@ -133,7 +149,7 @@
             <button class="key" onclick="pressKey('7')">7</button>
             <button class="key" onclick="pressKey('8')">8</button>
             <button class="key" onclick="pressKey('9')">9</button>
-            <button class="key" onclick="clearCode()">C</button>
+            <button class="key clear" onclick="clearCode()">C</button>
             <button class="key" onclick="pressKey('0')">0</button>
         </div>
 
@@ -143,6 +159,7 @@
     <script>
         const CORRECT_CODE = "010822";
         let currentInput = "";
+        let isLocked = false; // Bloquea el teclado mientras carga o da error
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -150,19 +167,14 @@
             try {
                 const oscillator = audioCtx.createOscillator();
                 const gainNode = audioCtx.createGain();
-                
                 oscillator.type = type;
                 oscillator.frequency.value = frequency;
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                
+                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
-                
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + duration);
-            } catch (e) {
-                console.log("Audio activado tras la primera interacción");
-            }
+            } catch (e) {}
         }
 
         function updateDisplay() {
@@ -171,7 +183,7 @@
         }
 
         function pressKey(num) {
-            if (currentInput.length < 6) {
+            if (currentInput.length < 6 && !isLocked) {
                 currentInput += num;
                 playSound(600, 'sine', 0.05);
                 updateDisplay();
@@ -183,14 +195,31 @@
         }
 
         function clearCode() {
-            currentInput = "";
-            playSound(300, 'triangle', 0.1);
-            document.getElementById("status").innerText = "";
-            updateDisplay();
+            if (!isLocked) {
+                currentInput = "";
+                playSound(300, 'triangle', 0.1);
+                document.getElementById("status").innerText = "";
+                updateDisplay();
+            }
         }
+
+        // --- DETECTAR ESCRITURA FÍSICA DESDE EL TECLADO ---
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            
+            // Si es un número del 0 al 9
+            if (/^[0-9]$/.test(key)) {
+                pressKey(key);
+            } 
+            // Si presiona Borrar (Backspace) o la tecla 'c'
+            else if (key === 'Backspace' || key.toLowerCase() === 'c') {
+                clearCode();
+            }
+        });
 
         function checkCode() {
             const statusMessage = document.getElementById("status");
+            isLocked = true;
             
             if (currentInput === CORRECT_CODE) {
                 statusMessage.className = "status-message success";
@@ -198,7 +227,6 @@
                 playSound(523.25, 'sine', 0.1); 
                 setTimeout(() => playSound(659.25, 'sine', 0.2), 100); 
                 
-                // 2. REDIRECCIÓN ACTUALIZADA A MENUPRINCIPAL.HTML
                 setTimeout(() => {
                     window.location.href = "menuprincipal.html";
                 }, 1200);
@@ -209,6 +237,7 @@
                 playSound(150, 'sawtooth', 0.3);
                 
                 setTimeout(() => {
+                    isLocked = false;
                     clearCode();
                 }, 1200);
             }
