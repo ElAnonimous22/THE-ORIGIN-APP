@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE ORIGIN APP - Menú Principal</title>
+    <style>
+        /* BASE FUTURISTA */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050505;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff66;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* CONTENEDOR GRID RESPONSIVO */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            padding: 10px;
+        }
+
+        /* DISEÑO DE CADA BOTÓN DE APP */
+        .app-card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid #00ff66;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #00ff66;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* EMOJIS Y SU ANIMACIÓN */
+        .app-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* ANIMACIONES EN HOVER (RATÓN POR ENCIMA O TOQUE) */
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 20px #00ff66;
+            border-color: #fff;
+        }
+
+        .app-card:hover .app-icon {
+            transform: scale(1.2);
+        }
+
+        /* Efecto clic rápido */
+        .app-card:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* Adaptación extra para pantallas muy pequeñas */
+        @media (max-width: 360px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>THE ORIGIN OS</h1>
+        <p>SELECCIONA UN MÓDULO DEL SISTEMA</p>
+    </header>
+
+    <main class="apps-grid">
+        
+        <a href="perfil.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">👤</div>
+            <div class="app-name">Perfil</div>
+        </a>
+
+        <a href="deporte.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🏃‍♂️</div>
+            <div class="app-name">Deporte</div>
+        </a>
+
+        <a href="negocios.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">💼</div>
+            <div class="app-name">Negocios</div>
+        </a>
+
+        <a href="habitos.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🔁</div>
+            <div class="app-name">Hábitos</div>
+        </a>
+
+        <a href="cocina.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🍳</div>
+            <div class="app-name">Cocina</div>
+        </a>
+
+        <a href="originai.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🤖</div>
+            <div class="app-name">ORIGIN AI</div>
+        </a>
+      
+        <a href="belleza.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">✨</div>
+            <div class="app-name">Belleza</div>
+        </a>
+
+        <a href="academia.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🎓</div>
+            <div class="app-name">Academia</div>
+        </a>
+
+        <a href="notas.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">📝</div>
+            <div class="app-name">Notas</div>
+        </a>
+
+        <a href="tiempo.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">☁️</div>
+            <div class="app-name">Tiempo</div>
+        </a>
+
+        <a href="configuracion.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">⚙️</div>
+            <div class="app-name">Config</div>
+        </a>
+
+        <a href="tienda.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🛒</div>
+            <div class="app-name">Tienda</div>
+        </a>
+
+        <a href="vaul.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🔒</div>
+            <div class="app-name">Vaul</div>
+        </a>
+
+        <a href="paint.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🎨</div>
+            <div class="app-name">Paint</div>
+        </a>
+
+        <a href="contactos.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">📇</div>
+            <div class="app-name">Contactos</div>
+        </a>
+
+        <a href="games.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🎮</div>
+            <div class="app-name">Games</div>
+        </a>
+
+        <a href="meditacion.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🧘‍♂️</div>
+            <div class="app-name">Meditación</div>
+        </a>
+
+        <a href="motivacion.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🔥</div>
+            <div class="app-name">Motivación</div>
+        </a>
+
+        <a href="docs.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">📂</div>
+            <div class="app-name">Docs</div>
+        </a>
+
+        <a href="kids.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🧸</div>
+            <div class="app-name">Kids</div>
+        </a>
+
+        <a href="sleep.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">💤</div>
+            <div class="app-name">Sleep</div>
+        </a>
+
+        <a href="health.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">❤️</div>
+            <div class="app-name">Health</div>
+        </a>
+
+        <a href="mentality.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">🧠</div>
+            <div class="app-name">Mentality</div>
+        </a>
+
+        <a href="calendario.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">📅</div>
+            <div class="app-name">Calendario</div>
+        </a>
+
+        <a href="noticias.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">📰</div>
+            <div class="app-name">Noticias</div>
+        </a>
+
+        <a href="biblia.html" class="app-card" onclick="playAppSound(this, event)">
+            <div class="app-icon">✝️</div>
+            <div class="app-name">Biblia</div>
+        </a>
+
+    </main>
+
+    <script>
+        // Lógica de audio nativa
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playAppSound(element, event) {
+            // Detenemos un momento el salto de página para que dé tiempo a oír el pitido
+            event.preventDefault();
+            const destination = element.getAttribute("href");
+
+            try {
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'triangle'; // Sonido retro arcade tipo consola de comandos
+                oscillator.frequency.value = 800; // Sonido agudo y limpio
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+
+            // Redirige al archivo de la app tras un micro-retraso para disfrutar del efecto visual/sonoro
+            setTimeout(() => {
+                window.location.href = destination;
+            }, 100);
+        }
+    </script>
+</body>
+</html>
