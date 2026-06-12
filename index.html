@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE ORIGIN APP - Acceso</title>
+    <title>THE ORIGIN - Sistema Central</title>
     <style>
+        /* FONDO Y CONFIGURACIÓN GENERAL */
         * {
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
             margin: 0;
             padding: 10px;
-            background: radial-gradient(circle, #0c1a10 0%, #020503 100%);
-            color: #00ff66; 
+            background-color: #010502;
+            color: #00ff66;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
@@ -24,73 +26,120 @@
             position: relative;
         }
 
-        /* EFECTO PANTALLA CRT / ESCÁNER EN TODA LA WEB */
+        /* LIENZO PARA EL FONDO ANIMADO */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* EFECTO LÍNEAS DE ESCÁNER DE PANTALLA ANTIGUA (CRT) */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.5) 50%);
             z-index: 9999;
-            background-size: 100% 4px, 6px 100%;
+            background-size: 100% 4px;
             pointer-events: none;
         }
 
-        /* CONTENEDOR TIPO TERMINAL MILITAR */
-        .login-container {
-            text-align: center;
-            background: rgba(5, 15, 8, 0.85);
-            padding: 30px 20px;
-            border: 2px solid #00ff66;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0, 255, 102, 0.3), inset 0 0 15px rgba(0, 255, 102, 0.1);
-            width: 100%;
-            max-width: 360px;
-            backdrop-filter: blur(8px);
-            transition: transform 0.2s ease;
+        /* 1. INTERFAZ DE ARRANQUE (BOOT LOG) */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 30px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            overflow: hidden;
         }
 
-        /* ANIMACIÓN DE ERROR (VIBRACIÓN) */
-        .shake {
-            animation: shakeAnim 0.4s ease-in-out;
-            border-color: #ff3333 !important;
-            box-shadow: 0 0 30px rgba(255, 51, 51, 0.5) !important;
+        .boot-line {
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 0.4s steps(40, end) forwards;
+        }
+
+        /* 2. CONTENEDOR PRINCIPAL INTERACTIVO (GLASSMORPHISM) */
+        .main-interface {
+            position: relative;
+            z-index: 5;
+            display: none; /* Se activa tras el boot */
+            text-align: center;
+            background: rgba(4, 14, 6, 0.85);
+            padding: 35px 25px;
+            border: 2px solid #00ff66;
+            border-radius: 20px;
+            box-shadow: 0 0 35px rgba(0, 255, 102, 0.25), inset 0 0 20px rgba(0, 255, 102, 0.1);
+            width: 100%;
+            max-width: 380px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease forwards;
         }
 
         h1 {
-            font-size: 2rem;
-            margin: 0 0 5px 0;
-            letter-spacing: 4px;
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 6px;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 0 8px #00ff66, 0 0 20px #00ff66;
+            text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 40px rgba(0,255,102,0.5);
         }
 
         .subtitle {
             font-size: 0.8rem;
             color: #00aa44;
             font-weight: bold;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
+            margin: 10px 0 30px 0;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
-        /* DISPLAY DE CÓDIGO CON GLOW BLANCO */
-        .code-display {
-            font-size: 2.5rem;
-            letter-spacing: 12px;
-            margin-bottom: 25px;
-            height: 50px;
-            color: #fff;
-            text-shadow: 0 0 15px #00ff66;
+        /* CASILLAS INDEPENDIENTES PARA EL CÓDIGO */
+        .code-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 6px;
-            border: 1px dashed rgba(0, 255, 102, 0.3);
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 30px;
         }
 
+        .code-slot {
+            width: 45px;
+            height: 55px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 102, 0.4);
+            border-radius: 8px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 10px #00ff66;
+            transition: all 0.15s ease;
+        }
+
+        .code-slot.active {
+            border-color: #00ff66;
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.6);
+            background: rgba(0, 255, 102, 0.05);
+        }
+
+        /* TECLADO INTEGRADO */
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -98,14 +147,13 @@
             width: 100%;
         }
 
-        /* BOTONES CON EFECTO CRISTAL DE NEÓN */
         .key {
             width: 100%;
             aspect-ratio: 1 / 1;
             max-width: 75px;
             margin: 0 auto;
-            background: rgba(10, 30, 15, 0.6);
-            border: 1px solid #00ff66;
+            background: rgba(5, 20, 10, 0.5);
+            border: 1px solid rgba(0, 255, 102, 0.5);
             color: #00ff66;
             font-size: 1.8rem;
             font-family: 'Courier New', Courier, monospace;
@@ -113,16 +161,17 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.1s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.1), inset 0 0 8px rgba(0, 255, 102, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: inset 0 0 8px rgba(0,255,102,0.1);
             -webkit-tap-highlight-color: transparent;
         }
 
         .key:hover {
-            background: rgba(0, 255, 102, 0.15);
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            background: rgba(0, 255, 102, 0.12);
+            border-color: #00ff66;
+            box-shadow: 0 0 15px rgba(0,255,102,0.3);
         }
 
         .key:active {
@@ -135,12 +184,11 @@
         .key.clear {
             border-color: #ff3333;
             color: #ff3333;
-            background: rgba(30, 10, 10, 0.6);
-            box-shadow: 0 0 10px rgba(255, 51, 51, 0.1), inset 0 0 8px rgba(255, 51, 51, 0.2);
+            background: rgba(25, 5, 5, 0.5);
         }
         .key.clear:hover {
             background: rgba(255, 51, 51, 0.15);
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+            box-shadow: 0 0 15px rgba(255,51,51,0.3);
         }
         .key.clear:active {
             background: #ff3333;
@@ -148,32 +196,54 @@
             box-shadow: 0 0 25px #ff3333;
         }
 
+        /* ESTADOS DE NOTIFICACIÓN */
         .status-message {
-            margin-top: 20px;
-            font-size: 0.95rem;
+            margin-top: 25px;
+            font-size: 0.9rem;
             height: 20px;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .success { color: #00ff66; text-shadow: 0 0 8px #00ff66; }
         .error { color: #ff3333; text-shadow: 0 0 8px #ff3333; }
 
-        /* ANIMACIÓN SHAKE */
+        /* VIBRACIÓN DE ERROR */
+        .shake {
+            animation: shakeAnim 0.4s ease-in-out;
+            border-color: #ff3333 !important;
+            box-shadow: 0 0 35px rgba(255, 51, 51, 0.4) !important;
+        }
+
+        /* ANIMACIONES CSS */
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes shakeAnim {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-12px); }
-            40%, 80% { transform: translateX(12px); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container" id="terminal">
-        <h1>THE ORIGIN APP</h1>
-        <div class="subtitle">SECURE INTERFACE v1.14</div>
+    <canvas id="particle-canvas"></canvas>
+
+    <div id="boot-screen"></div>
+
+    <div class="main-interface" id="terminal">
+        <h1>THE ORIGIN</h1>
+        <div class="subtitle">Tu existencia, sincronizada. Tu vida en un solo lugar.</div>
         
-        <div class="code-display" id="display">______</div>
+        <div class="code-container">
+            <div class="code-slot" id="slot0"></div>
+            <div class="code-slot" id="slot1"></div>
+            <div class="code-slot" id="slot2"></div>
+            <div class="code-slot" id="slot3"></div>
+            <div class="code-slot" id="slot4"></div>
+            <div class="code-slot" id="slot5"></div>
+        </div>
 
         <div class="keypad">
             <button class="key" onclick="pressKey('1')">1</button>
@@ -197,82 +267,183 @@
         let currentInput = "";
         let isLocked = false;
 
+        // CONFIGURACIÓN DE AUDIO SINTETIZADO
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playSound(frequency, type, duration) {
+        function playTone(freq, type, duration, vol = 0.08) {
             try {
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                oscillator.type = type;
-                oscillator.frequency.value = frequency;
-                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + duration);
-            } catch (e) {}
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
         }
 
+        // SIMULACIÓN DE SECUENCIA DE ARRANQUE (BOOT SYSTEM)
+        const logs = [
+            "Initializing ORIGIN_CORE v1.14...",
+            "Loading local synapses...",
+            "Connecting database modules [Perfil, Hábitos, Deporte, AI]...",
+            "Applying firewall protocols... SECURE",
+            "Establishing neural link interface...",
+            "THE ORIGIN OS ready for authorization."
+        ];
+        
+        const bootScreen = document.getElementById("boot-screen");
+        let logIndex = 0;
+
+        function printLog() {
+            if (logIndex < logs.length) {
+                const line = document.createElement("div");
+                line.className = "boot-line";
+                line.innerText = `▸ ${logs[logIndex]}`;
+                bootScreen.appendChild(line);
+                playTone(400 + (logIndex * 80), 'sine', 0.03, 0.03);
+                logIndex++;
+                setTimeout(printLog, 350);
+            } else {
+                setTimeout(() => {
+                    bootScreen.style.display = "none";
+                    document.getElementById("terminal").style.display = "block";
+                    playTone(880, 'sine', 0.15, 0.06);
+                }, 600);
+            }
+        }
+        window.addEventListener('load', printLog);
+
+        // ACTUALIZACIÓN DE CASILLAS
         function updateDisplay() {
-            const display = document.getElementById("display");
-            display.innerText = currentInput.padEnd(6, "_");
+            for (let i = 0; i < 6; i++) {
+                const slot = document.getElementById(`slot${i}`);
+                if (i < currentInput.length) {
+                    slot.innerText = "●"; // Carácter oculto tipo clave para mayor secretismo
+                    slot.classList.add("active");
+                } else {
+                    slot.innerText = "";
+                    slot.classList.remove("active");
+                }
+            }
         }
 
         function pressKey(num) {
             if (currentInput.length < 6 && !isLocked) {
                 currentInput += num;
-                playSound(700, 'sine', 0.04);
+                playTone(800, 'sine', 0.04);
                 updateDisplay();
-
-                if (currentInput.length === 6) {
-                    checkCode();
-                }
+                if (currentInput.length === 6) checkCode();
             }
         }
 
         function clearCode() {
             if (!isLocked) {
                 currentInput = "";
-                playSound(250, 'triangle', 0.08);
+                playTone(200, 'triangle', 0.1);
                 document.getElementById("status").innerText = "";
                 updateDisplay();
             }
         }
 
-        document.addEventListener('keydown', (event) => {
-            const key = event.key;
-            if (/^[0-9]$/.test(key)) pressKey(key);
-            else if (key === 'Backspace' || key.toLowerCase() === 'c') clearCode();
+        // CONTROL INTEGRADO DE TECLADO FÍSICO
+        document.addEventListener('keydown', (e) => {
+            if (bootScreen.style.display !== "none") return;
+            if (/^[0-9]$/.test(e.key)) pressKey(e.key);
+            else if (e.key === 'Backspace' || e.key.toLowerCase() === 'c') clearCode();
         });
 
+        // VALIDACIÓN DE ACCESO
         function checkCode() {
-            const statusMessage = document.getElementById("status");
+            const status = document.getElementById("status");
             const terminal = document.getElementById("terminal");
             isLocked = true;
-            
+
             if (currentInput === CORRECT_CODE) {
-                statusMessage.className = "status-message success";
-                statusMessage.innerText = "▸ DECRYPT OVER: ACCESS GRANTED";
-                playSound(600, 'sine', 0.08); 
-                setTimeout(() => playSound(900, 'sine', 0.15), 800); 
-                
+                status.className = "status-message success";
+                status.innerText = "▸ ACCESS GRANTED // INJECTING OS";
+                playTone(523.25, 'sine', 0.08);
+                setTimeout(() => playTone(659.25, 'sine', 0.08), 80);
+                setTimeout(() => playTone(783.99, 'sine', 0.15), 160);
+
                 setTimeout(() => {
                     window.location.href = "menuprincipal.html";
-                }, 1200);
-
+                }, 1400);
             } else {
-                statusMessage.className = "status-message error";
-                statusMessage.innerText = "▸ ERROR: ACCESS DENIED";
+                status.className = "status-message error";
+                status.innerText = "▸ SECURITY ERROR // INVALID KEY";
                 terminal.classList.add("shake");
-                playSound(120, 'sawtooth', 0.35);
-                
+                playTone(100, 'sawtooth', 0.4, 0.15);
+
                 setTimeout(() => {
                     terminal.classList.remove("shake");
                     isLocked = false;
                     clearCode();
-                }, 1200);
+                }, 1300);
             }
         }
+
+        // MOTOR DE PARTÍCULAS DEL FONDO DE PANTALLA
+        const canvas = document.getElementById("particle-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(0, 255, 102, 0.7)";
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            // Trazar conexiones
+            ctx.strokeStyle = "rgba(0, 255, 102, 0.05)";
+            ctx.lineWidth = 1;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
