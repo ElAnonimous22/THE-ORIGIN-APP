@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE ORIGIN APP - Menú Principal</title>
+    <title>THE ORIGIN - Terminal de Mando</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* 1. CONFIGURACIÓN DEL SISTEMA Y ESTÉTICA CRT */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
         body {
             background: radial-gradient(circle at center, #07140b 0%, #020503 100%);
             color: #00ff66;
             font-family: 'Courier New', Courier, monospace;
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            position: relative;
+            overflow-x: hidden;
         }
 
-        /* EFECTO CRT EN EL MENÚ */
+        /* EFECTO LÍNEAS DE ESCÁNER (CRT) */
         body::before {
             content: " ";
             display: block;
@@ -35,270 +31,251 @@
             pointer-events: none;
         }
 
+        /* 2. HUD SUPERIOR (ESTADO Y CRÉDITOS) */
         header {
-            text-align: center;
-            margin-bottom: 40px;
-            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+            padding-bottom: 10px;
         }
 
-        header h1 {
-            font-size: 2.5rem;
-            letter-spacing: 5px;
-            color: #fff;
-            text-shadow: 0 0 10px #00ff66, 0 0 25px rgba(0,255,102,0.5);
-            text-transform: uppercase;
+        .sys-info { font-size: 0.7rem; line-height: 1.4; }
+        .sys-info span { color: #fff; font-weight: bold; }
+
+        .currency-hub { text-align: right; }
+        #clock { font-size: 1.2rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px #00ff66; }
+        .credits { font-size: 0.8rem; color: #00ffff; margin-top: 5px; }
+
+        /* 3. WIDGETS DE SIGNOS VITALES */
+        .vitals-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        header p {
-            color: #00aa44;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+        .vital-bar { background: rgba(0,0,0,0.5); border: 1px solid #00ff6644; padding: 5px; border-radius: 5px; }
+        .vital-label { font-size: 0.6rem; margin-bottom: 3px; display: block; }
+        .bar-bg { height: 6px; background: #111; border-radius: 3px; overflow: hidden; }
+        .bar-fill { height: 100%; box-shadow: 0 0 10px currentColor; transition: width 0.5s ease; }
 
-        /* CUADRÍCULA MEJORADA */
+        /* 4. MISIÓN ACTIVA */
+        .active-quest {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid #00ff66;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.1);
+        }
+        .quest-header { font-size: 0.65rem; color: #00aa44; font-weight: bold; margin-bottom: 5px; }
+        .quest-title { font-size: 0.9rem; color: #fff; letter-spacing: 1px; }
+
+        /* 5. FILTROS DE CATEGORÍA */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #00ff6666;
+            color: #00ff66;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .filter-btn.active { background: #00ff66; color: #000; font-weight: bold; }
+
+        /* 6. GRID DE APLICACIONES */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1000px;
-            padding: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            padding-bottom: 50px;
         }
 
-        /* TARJETAS DE APLICACIONES INTERACTIVAS ESTILO CRISTAL */
         .app-card {
             background: rgba(10, 25, 15, 0.4);
-            border: 1px solid rgba(0, 255, 102, 0.25);
-            border-radius: 16px;
-            padding: 20px 10px;
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            border-radius: 12px;
+            padding: 15px 5px;
             text-align: center;
-            cursor: pointer;
             text-decoration: none;
             color: #00ff66;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            backdrop-filter: blur(5px);
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,255,102,0.05);
         }
 
-        .app-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
-        }
+        .app-card:hover { transform: translateY(-5px); border-color: #00ff66; background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 15px rgba(0, 255, 102, 0.2); }
+        .app-icon { font-size: 2rem; margin-bottom: 8px; }
+        .app-name { font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; }
 
-        .app-name {
-            font-size: 0.85rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #ccffdd;
-            white-space: nowrap;
+        /* 7. TICKER INFERIOR (MENSAJES DEL SISTEMA) */
+        footer {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #000;
+            border-top: 1px solid #00ff66;
+            padding: 5px;
             overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            white-space: nowrap;
         }
+        .ticker { display: inline-block; animation: scrollText 20s linear infinite; font-size: 0.7rem; }
 
-        /* HOVER ULTRA JUICY (BRILLO RADICAL) */
-        .app-card:hover {
-            transform: translateY(-10px);
-            background: rgba(0, 255, 102, 0.15);
-            color: #fff;
-            box-shadow: 0 10px 25px rgba(0, 255, 102, 0.3), inset 0 0 15px rgba(0, 255, 102, 0.2);
-            border-color: #00ff66;
-        }
-
-        .app-card:hover .app-icon {
-            transform: scale(1.25) rotate(5deg);
-        }
-
-        .app-card:active {
-            transform: translateY(-2px) scale(0.95);
-        }
-
-        /* RESPONSIVE AJUSTADO */
-        @media (max-width: 400px) {
-            .apps-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
+        @keyframes scrollText {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>THE ORIGIN OS</h1>
-        <p>▸ SYSTEM CORE ONLINE</p>
+        <div class="sys-info">
+            OP: <span>JUGADOR_LVL14</span><br>
+            LINK: <span style="color:#00ffff">STABLE</span><br>
+            LOC: <span>SECTOR_ORIGIN</span>
+        </div>
+        <div class="currency-hub">
+            <div id="clock">00:00:00</div>
+            <div class="credits">ORIGIN_CREDITS: 940 OC</div>
+        </div>
     </header>
 
-    <main class="apps-grid">
-        
-        <a href="originai.html" class="app-card" onclick="playAppSound(this, event)" style="border-color: #00ffff; background: rgba(0,220,255,0.05);">
-            <div class="app-icon" style="filter: drop-shadow(0 0 8px #00ffff);">🤖</div>
-            <div class="app-name" style="color: #d0ffff;">ORIGIN AI</div>
-        </a>
+    <div class="vitals-container">
+        <div class="vital-bar" style="color: #ff3333;">
+            <span class="vital-label">HP (BIO)</span>
+            <div class="bar-bg"><div class="bar-fill" style="width: 85%; background: #ff3333;"></div></div>
+        </div>
+        <div class="vital-bar" style="color: #00ffff;">
+            <span class="vital-label">FOCUS (MP)</span>
+            <div class="bar-bg"><div class="bar-fill" style="width: 60%; background: #00ffff;"></div></div>
+        </div>
+        <div class="vital-bar" style="color: #ffff00;">
+            <span class="vital-label">BATTERY</span>
+            <div class="bar-bg"><div class="bar-fill" id="bat-fill" style="width: 100%; background: #ffff00;"></div></div>
+        </div>
+    </div>
 
-        <a href="perfil.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">👤</div>
-            <div class="app-name">Perfil</div>
-        </a>
+    <div class="active-quest">
+        <div class="quest-header">▸ MISIÓN PRINCIPAL ACTIVA</div>
+        <div class="quest-title">DOMINAR EL SISTEMA "THE ORIGIN"</div>
+    </div>
 
-        <a href="deporte.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🏃‍♂️</div>
-            <div class="app-name">Deporte</div>
-        </a>
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterApps('all', this)">[ TODO ]</button>
+        <button class="filter-btn" onclick="filterApps('core', this)">[ CORE ]</button>
+        <button class="filter-btn" onclick="filterApps('bio', this)">[ BIO ]</button>
+        <button class="filter-btn" onclick="filterApps('imp', this)">[ IMPERIO ]</button>
+        <button class="filter-btn" onclick="filterApps('utils', this)">[ UTILS ]</button>
+    </div>
 
-        <a href="negocios.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">💼</div>
-            <div class="app-name">Negocios</div>
-        </a>
+    <main class="apps-grid" id="apps-grid">
+        </main>
 
-        <a href="habitos.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🔁</div>
-            <div class="app-name">Hábitos</div>
-        </a>
-
-        <a href="cocina.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🍳</div>
-            <div class="app-name">Cocina</div>
-        </a>
-      
-        <a href="belleza.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">✨</div>
-            <div class="app-name">Belleza</div>
-        </a>
-
-        <a href="academia.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🎓</div>
-            <div class="app-name">Academia</div>
-        </a>
-
-        <a href="notas.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">📝</div>
-            <div class="app-name">Notas</div>
-        </a>
-
-        <a href="tiempo.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">☁️</div>
-            <div class="app-name">Tiempo</div>
-        </a>
-
-        <a href="configuracion.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">⚙️</div>
-            <div class="app-name">Config</div>
-        </a>
-
-        <a href="tienda.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🛒</div>
-            <div class="app-name">Tienda</div>
-        </a>
-
-        <a href="vaul.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🔒</div>
-            <div class="app-name">Vaul</div>
-        </a>
-
-        <a href="paint.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🎨</div>
-            <div class="app-name">Paint</div>
-        </a>
-
-        <a href="contactos.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">📇</div>
-            <div class="app-name">Contactos</div>
-        </a>
-
-        <a href="games.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🎮</div>
-            <div class="app-name">Games</div>
-        </a>
-
-        <a href="meditacion.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🧘‍♂️</div>
-            <div class="app-name">Meditación</div>
-        </a>
-
-        <a href="motivacion.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🔥</div>
-            <div class="app-name">Motivación</div>
-        </a>
-
-        <a href="docs.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">📂</div>
-            <div class="app-name">Docs</div>
-        </a>
-
-        <a href="kids.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🧸</div>
-            <div class="app-name">Kids</div>
-        </a>
-
-        <a href="sleep.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">💤</div>
-            <div class="app-name">Sleep</div>
-        </a>
-
-        <a href="health.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">❤️</div>
-            <div class="app-name">Health</div>
-        </a>
-
-        <a href="mentality.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">🧠</div>
-            <div class="app-name">Mentality</div>
-        </a>
-
-        <a href="calendario.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">📅</div>
-            <div class="app-name">Calendario</div>
-        </a>
-
-        <a href="noticias.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">📰</div>
-            <div class="app-name">Noticias</div>
-        </a>
-
-        <a href="biblia.html" class="app-card" onclick="playAppSound(this, event)">
-            <div class="app-icon">✝️</div>
-            <div class="app-name">Biblia</div>
-        </a>
-
-    </main>
+    <footer>
+        <div class="ticker">▸ SISTEMA OPERATIVO THE ORIGIN ONLINE... TODOS LOS MÓDULOS SINCRONIZADOS... ESPERANDO ENTRADA DEL OPERADOR... MANTENTE ENFOCADO...</div>
+    </footer>
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const apps = [
+            { name: "Perfil", icon: "👤", cat: "core", url: "perfil.html" },
+            { name: "Vault", icon: "🔒", cat: "core", url: "vault.html" },
+            { name: "Settings", icon: "⚙️", cat: "core", url: "settings.html" },
+            { name: "Passwords", icon: "🔑", cat: "core", url: "passwords.html" },
+            { name: "Deporte", icon: "🏃‍♂️", cat: "bio", url: "deporte.html" },
+            { name: "Cook", icon: "🍳", cat: "bio", url: "cook.html" },
+            { name: "Health", icon: "❤️", cat: "bio", url: "health.html" },
+            { name: "SLEEP", icon: "💤", cat: "bio", url: "sleep.html" },
+            { name: "Pets", icon: "🐾", cat: "bio", url: "pets.html" },
+            { name: "Meditation", icon: "🧘‍♂️", cat: "bio", url: "meditation.html" },
+            { name: "Journal", icon: "📖", cat: "bio", url: "journal.html" },
+            { name: "Business", icon: "💼", cat: "imp", url: "business.html" },
+            { name: "Student", icon: "👨‍🎓", cat: "imp", url: "student.html" },
+            { name: "Academy", icon: "🎓", cat: "imp", url: "academy.html" },
+            { name: "Motivation", icon: "🔥", cat: "imp", url: "motivation.html" },
+            { name: "Practique", icon: "🃏", cat: "imp", url: "practique.html" },
+            { name: "Tasks", icon: "📋", cat: "imp", url: "tasks.html" },
+            { name: "Habits", icon: "🔁", cat: "imp", url: "habits.html" },
+            { name: "AI", icon: "🤖", cat: "utils", url: "ai.html" },
+            { name: "Notes", icon: "📝", cat: "utils", url: "notes.html" },
+            { name: "Time", icon: "⏳", cat: "utils", url: "time.html" },
+            { name: "Point Shop", icon: "💎", cat: "utils", url: "pointshop.html" },
+            { name: "Paint", icon: "🎨", cat: "utils", url: "paint.html" },
+            { name: "Contacts", icon: "📇", cat: "utils", url: "contacts.html" },
+            { name: "Maths", icon: "➗", cat: "utils", url: "maths.html" },
+            { name: "Maps", icon: "📍", cat: "utils", url: "maps.html" },
+            { name: "Docs", icon: "📂", cat: "utils", url: "docs.html" },
+            { name: "Kids", icon: "🧸", cat: "utils", url: "kids.html" },
+            { name: "Money", icon: "💸", cat: "utils", url: "money.html" },
+            { name: "Music", icon: "🎧", cat: "utils", url: "music.html" }
+        ];
 
-        function playAppSound(element, event) {
-            event.preventDefault();
-            const destination = element.getAttribute("href");
-
-            try {
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                oscillator.type = 'sine'; 
-                oscillator.frequency.value = 880; 
-                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.06);
-            } catch(e) {}
-
-            setTimeout(() => {
-                window.location.href = destination;
-            }, 80);
+        // RENDERIZAR APPS
+        function renderApps(filter = 'all') {
+            const grid = document.getElementById('apps-grid');
+            grid.innerHTML = '';
+            apps.forEach(app => {
+                if (filter === 'all' || app.cat === filter) {
+                    const card = document.createElement('a');
+                    card.href = app.url;
+                    card.className = 'app-card';
+                    card.onclick = (e) => playSound(e, app.url);
+                    card.innerHTML = `<div class="app-icon">${app.icon}</div><div class="app-name">${app.name}</div>`;
+                    grid.appendChild(card);
+                }
+            });
         }
+
+        function filterApps(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderApps(cat);
+            playSysSound(600, 0.05);
+        }
+
+        // RELOJ
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
+        }
+        setInterval(updateClock, 1000);
+
+        // AUDIO
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSysSound(freq, dur) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + dur);
+        }
+
+        function playSound(e, url) {
+            e.preventDefault();
+            playSysSound(880, 0.08);
+            setTimeout(() => window.location.href = url, 100);
+        }
+
+        // BATERÍA REAL
+        navigator.getBattery().then(bat => {
+            const updateBat = () => document.getElementById('bat-fill').style.width = (bat.level * 100) + '%';
+            bat.onlevelchange = updateBat; updateBat();
+        });
+
+        renderApps();
+        updateClock();
     </script>
 </body>
 </html>
