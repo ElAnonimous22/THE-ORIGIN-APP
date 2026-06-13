@@ -25,10 +25,24 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            overflow-x: hidden;
         }
 
-        .container { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        /* ANIMACIÓN DE ENTRADA AL SISTEMA */
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+            display: grid; 
+            grid-template-columns: 1fr 2fr; 
+            gap: 20px;
+            animation: systemInit 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
         @media (max-width: 850px) { .container { grid-template-columns: 1fr; } }
+
+        @keyframes systemInit {
+            from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
 
         .panel {
             background: var(--glass-bg);
@@ -39,45 +53,99 @@
             -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 20px;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        /* EFECTO DE CALIDAD / HOVER 3D DE ENTORNO */
+        .panel:hover {
+            transform: translateY(-2px);
+            border-color: rgba(192, 132, 252, 0.2);
+            box-shadow: 0 15px 35px rgba(121, 82, 245, 0.1);
         }
 
         .panel:last-child { margin-bottom: 0; }
 
-        h2 { font-size: 1.1rem; color: var(--accent-purple); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { font-size: 1.1rem; color: var(--accent-purple); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
 
-        /* INFO PERSONAL */
-        .avatar-frame { width: 80px; height: 80px; background: linear-gradient(135deg, #7952f5, #22d3ee); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 0 20px rgba(121, 82, 245, 0.3); }
+        /* INFO PERSONAL & DIBUJOS/DETALLES */
+        .avatar-container { position: relative; width: 85px; height: 85px; margin: 0 auto 15px; }
+        .avatar-frame { 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(135deg, #7952f5, #22d3ee); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 2.2rem; 
+            box-shadow: 0 0 25px rgba(121, 82, 245, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+        /* EFECTO ESCÁNER CYBERPUNK NATIVO */
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border: 2px dashed var(--accent-cyan);
+            border-radius: 50%;
+            animation: spinScanner 12s linear infinite;
+            opacity: 0.6;
+        }
+        @keyframes spinScanner { to { transform: rotate(360deg); } }
+
         .info-list { list-style: none; }
-        .info-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .info-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; transition: background 0.2s ease; }
+        .info-item:hover { background: rgba(255, 255, 255, 0.01); }
         .info-label { color: var(--text-muted); }
         
         /* EFECTO CAMUFLAJE PRIVADO */
-        .private-mode .info-value, .private-mode .bio-text { 
-            filter: blur(8px); 
-            opacity: 0.3; 
+        .private-mode .info-value, .private-mode .bio-text, .private-mode #chartCanvas { 
+            filter: blur(12px); 
+            opacity: 0.2; 
             pointer-events: none;
             user-select: none;
+            transition: all 0.4s ease;
         }
 
         /* STATS & RACHA */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .stat-num { font-size: 1.5rem; font-weight: 800; margin-top: 5px; }
-        .stat-card.xp .stat-num { color: var(--accent-purple); }
-        .stat-card.mp .stat-num { color: var(--accent-cyan); }
-        .stat-card.racha .stat-num { color: #ff6b6b; }
+        .stat-card { 
+            background: rgba(255,255,255,0.01); 
+            padding: 15px; 
+            border-radius: 15px; 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.03); 
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .stat-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.03); }
+        .stat-num { font-size: 1.5rem; font-weight: 800; margin-top: 5px; letter-spacing: -0.5px; }
+        .stat-card.xp .stat-num { color: var(--accent-purple); text-shadow: 0 0 10px rgba(192, 132, 252, 0.3); }
+        .stat-card.mp .stat-num { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(34, 211, 238, 0.3); }
+        .stat-card.racha .stat-num { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.3); }
+
+        /* CONTENEDOR GRÁFICO */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
 
         /* LIGAS */
         .ligas-box { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 5px; }
         .ligas-box::-webkit-scrollbar { width: 4px; }
         .ligas-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        .liga-item { display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 12px; font-size: 0.8rem; border-left: 4px solid #333; }
-        .liga-item.unlocked { border-left-color: var(--accent-purple); background: rgba(192, 132, 252, 0.05); }
+        .liga-item { display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 12px; font-size: 0.8rem; border-left: 4px solid #333; transition: all 0.2s ease; }
+        .liga-item.unlocked { border-left-color: var(--accent-purple); background: rgba(192, 132, 252, 0.04); box-shadow: inset 5px 0 10px rgba(192, 132, 252, 0.02); }
         .liga-reward { color: #10ac84; font-weight: bold; }
 
         /* BOTONES & TOGGLES */
-        .btn { background: var(--accent-purple); color: #000; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; transition: 0.2s; }
-        .btn:hover { transform: scale(1.01); opacity: 0.9; }
+        .btn { background: var(--accent-purple); color: #000; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .btn:hover { transform: translateY(-1px); opacity: 0.95; box-shadow: 0 5px 15px rgba(192, 132, 252, 0.3); }
+        .btn:active { transform: translateY(1px); }
 
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
         .settings-row:last-child { border: none; }
@@ -90,15 +158,17 @@
         input:checked + .slider { background-color: var(--accent-purple); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        .action-card { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.2s; }
-        .action-card:hover { border-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.05); }
+        .action-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 15px; border-radius: 15px; cursor: pointer; transition: all 0.2s ease; }
+        .action-card:hover { border-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.04); transform: translateY(-1px); }
 
         /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .modal-content { background: #11111f; padding: 25px; border-radius: 20px; width: 90%; max-width: 420px; border: 1px solid var(--glass-border); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+        .modal-content { background: #11111f; padding: 25px; border-radius: 20px; width: 90%; max-width: 420px; border: 1px solid var(--glass-border); animation: modalOpen 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes modalOpen { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
-        input, textarea { width: 100%; padding: 10px; background: #090911; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 0.9rem; }
+        input, textarea { width: 100%; padding: 10px; background: #090911; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent-purple); }
     </style>
 </head>
 <body>
@@ -106,7 +176,9 @@
     <div class="container">
         <div class="profile-sidebar">
             <div class="panel" id="sidebarPanel">
-                <div class="avatar-frame">👦</div>
+                <div class="avatar-container">
+                    <div class="avatar-frame">👦</div>
+                </div>
                 <div style="text-align: center; margin-bottom: 20px;">
                     <h1 id="disp-nombre" style="font-size: 1.5rem; font-weight: 700;">Matheo</h1>
                     <p id="disp-liga-tag" style="color: var(--accent-cyan); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Cargando Rango...</p>
@@ -159,6 +231,10 @@
                         <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">RACHA</p>
                         <div class="stat-num" id="val-racha">0</div>
                     </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="chartCanvas" width="280" height="150"></canvas>
                 </div>
             </div>
 
@@ -242,10 +318,37 @@
         const KEY_RACHA = 'origin_racha';
         const KEY_LAST_CONN = 'origin_last_conn';
 
+        // --- SISTEMA DE AUDIO DIGITAL SINTETIZADO NATIVO ---
+        let audioCtx = null;
+        function playTone(freq, type, duration, vol) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) { console.log("Audio no iniciado por políticas de navegador"); }
+        }
+
+        function soundClick() { playTone(600, 'sine', 0.08, 0.1); }
+        function soundSuccess() { playTone(523.25, 'sine', 0.1, 0.15); setTimeout(() => playTone(659.25, 'sine', 0.2, 0.15), 80); }
+        function soundError() { playTone(180, 'sawtooth', 0.25, 0.2); }
+
         function loadAll() {
             if(!localStorage.getItem(KEY_XP)) localStorage.setItem(KEY_XP, '0');
             if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
             if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
+
+            // Asignar sonidos a interacciones de botones existentes de manera automática
+            document.querySelectorAll('.btn, .action-card, .switch input').forEach(el => {
+                el.addEventListener('click', soundClick);
+            });
 
             checkRacha();
             render();
@@ -298,6 +401,66 @@
                 `;
             });
             document.getElementById('disp-liga-tag').innerText = currentRange;
+
+            // Renderizar el nuevo gráfico analítico
+            drawChart(parseInt(xp), parseInt(mp), parseInt(racha));
+        }
+
+        // --- RENDERIZADO DEL GRÁFICO CYBERPUNK EN CANVAS ---
+        function drawChart(xp, mp, racha) {
+            const canvas = document.getElementById('chartCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Ajustar límites virtuales para que las barras se vean bien al inicio
+            const maxVal = Math.max(xp, mp, racha, 10);
+            
+            const datasets = [
+                { value: xp, color: '#c084fc', label: 'XP' },
+                { value: mp, color: '#22d3ee', label: 'MP' },
+                { value: racha, color: '#ff6b6b', label: 'RCH' }
+            ];
+
+            const barWidth = 35;
+            const startX = 45;
+            const spacing = 75;
+            const bottomY = 120;
+
+            // Línea de base del dibujo gráfico
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.beginPath();
+            ctx.moveTo(20, bottomY);
+            ctx.lineTo(260, bottomY);
+            ctx.stroke();
+
+            datasets.forEach((data, index) => {
+                const x = startX + (index * spacing);
+                // Calcular altura proporcional
+                const barHeight = (data.value / maxVal) * 80;
+
+                // Dibujar sombra / resplandor de barra
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = data.color;
+
+                // Dibujar cuerpo de barra de datos
+                ctx.fillStyle = data.color;
+                ctx.beginPath();
+                ctx.roundRect(x, bottomY - barHeight, barWidth, barHeight > 0 ? barHeight : 2, 6);
+                ctx.fill();
+
+                // Quitar sombra para textos
+                ctx.shadowBlur = 0;
+
+                // Etiquetas inferiores
+                ctx.fillStyle = '#64748b';
+                ctx.font = '10px -apple-system, sans-serif';
+                ctx.fillText(data.label, x + 8, bottomY + 18);
+
+                // Valores superiores numéricos
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = 'bold 11px -apple-system, sans-serif';
+                ctx.fillText(data.value, x + (barWidth / 2) - (ctx.measureText(data.value).width / 2), bottomY - barHeight - 8);
+            });
         }
 
         function calcularFracaso() {
@@ -307,12 +470,15 @@
             if(prob < 1) prob = 1;
             if(prob > 99) prob = 99;
             document.getElementById('fracaso-txt').innerText = `Probabilidad de fracaso calculada: ${prob.toFixed(1)}%. ¡Mantén la disciplina!`;
+            soundSuccess();
         }
 
         function accederSalaVip() {
             if(document.getElementById('disp-liga-tag').innerText === "THE ORIGIN") {
+                soundSuccess();
                 alert("🔓 Acceso de nivel de Administrador confirmado. Bienvenido a la Sala VIP.");
             } else {
+                soundError();
                 alert("🔒 Error: No posees los privilegios criptográficos de la liga suprema 'THE ORIGIN'.");
             }
         }
@@ -332,7 +498,7 @@
             document.getElementById('input-colegio').value = document.getElementById('disp-colegio').innerText;
             document.getElementById('input-nacimiento').value = document.getElementById('disp-nacimiento').innerText;
             document.getElementById('input-edad').value = document.getElementById('disp-edad').innerText;
-            document.getElementById('input-nacionalidad').value = document.getElementById('disp-nacionalidad').innerText;
+            document.getElementById('input-nacionalidad').value = document.getElementById('input-nacionalidad').value || "Español y Ecuatoriano";
             document.getElementById('input-zodiaco').value = document.getElementById('disp-zodiaco').innerText;
             document.getElementById('input-descripcion').value = document.getElementById('disp-descripcion').innerText;
             document.getElementById('editModal').style.display = 'flex';
@@ -351,6 +517,8 @@
             document.getElementById('disp-zodiaco').innerText = document.getElementById('input-zodiaco').value;
             document.getElementById('disp-descripcion').innerText = document.getElementById('input-descripcion').value;
             closeModal();
+            soundSuccess();
+            render();
         }
 
         window.onload = loadAll;
