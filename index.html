@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE ORIGIN - Sistema Central</title>
+    <title>THE ORIGIN - Acceso</title>
     <style>
-        /* CONFIGURACIÓN GENERAL REUTILIZADA DEL MENÚ */
+        /* CONFIGURACIÓN GENERAL ESTILO ESPACIAL/GLASS */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,9 +14,9 @@
         }
 
         body {
-            background-color: #050806;
-            color: #00ff66;
-            font-family: 'Courier New', Courier, monospace;
+            background: radial-gradient(circle at 80% 20%, #16102b 0%, #0b0c16 60%, #06070c 100%);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,194 +26,177 @@
             position: relative;
         }
 
-        /* FONDO DE LÍNEAS MATRICIALES / REJILLA DEL MENÚ PRINCIPAL */
+        /* FONDO DE ESTRELLAS MINIMALISTAS */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.2;
             z-index: 1;
-            pointer-events: none;
         }
 
-        /* EFECTO CRT GLOBAL */
-        body::after {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
-            z-index: 9999;
-            background-size: 100% 4px;
-            pointer-events: none;
-        }
-
-        /* INTERFAZ DE ARRANQUE (BOOT LOG) */
+        /* INTERFAZ DE ARRANQUE EN NEGRO NEUTRO */
         #boot-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #020403;
+            background: #06070c;
             z-index: 100;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 30px;
-            font-size: 1rem;
+            padding: 40px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #a594fd;
             letter-spacing: 1px;
             overflow: hidden;
         }
 
         .boot-line {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             white-space: nowrap;
             overflow: hidden;
             width: 0;
-            animation: typing 0.4s steps(40, end) forwards;
+            animation: typing 0.3s steps(40, end) forwards;
         }
 
-        /* CONTENEDOR PRINCIPAL CON EL DISEÑO DE PANEL DEL MENÚ (TERMINAL BRUTALISTA) */
+        /* CONTENEDOR PRINCIPAL INTERFAZ GLASSMORPHISM */
         .main-interface {
             position: relative;
             z-index: 5;
             display: none;
             width: 100%;
-            max-width: 400px;
-            background: rgba(10, 16, 12, 0.92);
-            border: 2px solid #00ff66;
-            padding: 35px 25px;
-            box-shadow: 0 0 25px rgba(0, 255, 102, 0.15);
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* CABECERA ESTILO PANEL DE CONTROL */
-        .panel-header {
-            border-bottom: 2px solid #00ff66;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            text-align: left;
+            max-width: 390px;
+            background: rgba(20, 21, 33, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-align: center;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         h1 {
-            font-size: 2.2rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #00ff66;
-            font-weight: 900;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
         .subtitle {
-            font-size: 0.75rem;
-            color: #00aa44;
-            margin-top: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #8a8ca3;
+            margin-bottom: 35px;
+            font-weight: 400;
         }
 
-        /* CASILLAS DE CÓDIGO - DISEÑO RETRO ILUMINADO */
+        /* CASILLAS DE CÓDIGO CON LOS NÚMEROS REALES */
         .code-container {
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .code-slot {
-            width: 50px;
-            height: 60px;
-            background: #040705;
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            font-size: 2rem;
-            font-weight: bold;
-            color: #00ff66;
+            width: 48px;
+            height: 56px;
+            background: rgba(10, 11, 18, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.1s ease;
+            transition: all 0.2s ease;
         }
 
         .code-slot.active {
-            border-color: #00ff66;
-            background: rgba(0, 255, 102, 0.05);
-            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2);
+            border-color: #7952f5;
+            background: rgba(121, 82, 245, 0.1);
+            box-shadow: 0 0 15px rgba(121, 82, 245, 0.25);
         }
 
-        /* TECLADO CON DISEÑO CUADRADO DEL MENÚ */
+        /* TECLADO INTEGRADO REDONDEADO SUTIL */
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 14px;
             width: 100%;
         }
 
         .key {
             width: 100%;
-            height: 60px;
-            background: #0d140f;
-            border: 1px solid #00ff66;
-            color: #00ff66;
-            font-size: 1.6rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
+            height: 58px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 500;
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.1s ease;
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .key:hover {
-            background: #00ff66;
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .key:active {
-            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.95);
         }
 
-        /* BOTÓN DE BORRADO */
+        /* TECLA BORRAR RÁPIDO */
         .key.clear {
-            border-color: #ff3333;
-            color: #ff3333;
-            background: rgba(20, 10, 10, 0.5);
+            color: #ff4545;
+            background: rgba(255, 69, 69, 0.05);
+            border-color: rgba(255, 69, 69, 0.1);
         }
         .key.clear:hover {
-            background: #ff3333;
-            color: #000;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+            background: rgba(255, 69, 69, 0.12);
         }
 
-        /* MENSAJES DE ESTADO DE AUTORIZACIÓN */
+        /* MENSAJE DE NOTIFICACIÓN INFERIOR */
         .status-message {
             margin-top: 25px;
             font-size: 0.85rem;
             height: 20px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            text-align: left;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
-        .success { color: #00ff66; }
-        .error { color: #ff3333; }
+        .success { color: #34c759; }
+        .error { color: #ff4545; }
 
-        /* ANIMACIÓN DE ERROR SÍSMICO */
+        /* VIBRACIÓN DE ACCESO DENEGADO */
         .shake {
-            animation: shakeAnim 0.3s ease-in-out;
-            border-color: #ff3333 !important;
-            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3) !important;
+            animation: shakeAnim 0.4s ease-in-out;
+            border-color: rgba(255, 69, 69, 0.4) !important;
         }
 
-        /* KEYFRAMES */
+        /* ANIMACIONES */
         @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         @keyframes shakeAnim {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
     </style>
 </head>
@@ -222,10 +205,8 @@
     <div id="boot-screen"></div>
 
     <div class="main-interface" id="terminal">
-        <div class="panel-header">
-            <h1>THE ORIGIN</h1>
-            <div class="subtitle">SISTEMA CENTRAL // LOGIN_REQ</div>
-        </div>
+        <h1>THE ORIGIN</h1>
+        <div class="subtitle">Tu vida entera en un solo lugar.</div>
         
         <div class="code-container">
             <div class="code-slot" id="slot0"></div>
@@ -258,9 +239,9 @@
         let currentInput = "";
         let isLocked = false;
 
-        // AUDIO SINTETIZADO MONOCROMÁTICO
+        // EFECTOS DE AUDIO SUAVES (SINE CLICKS)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playTone(freq, type, duration, vol = 0.06) {
+        function playTone(freq, type, duration, vol = 0.05) {
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -274,14 +255,13 @@
             } catch(e){}
         }
 
-        // SECUENCIA LOGS DE ARRANQUE TRADICIONAL
+        // SECUENCIA DE LOGS INICIALES REVISADA
         const logs = [
-            "Initializing ORIGIN_CORE v1.14...",
-            "Loading terminal design layouts...",
-            "Connecting database modules [Perfil, Hábitos, Deporte, AI]...",
-            "Syncing terminal styling parameters...",
-            "Applying system firewall... OK",
-            "THE ORIGIN OS ready for terminal authorization."
+            "Connecting to core ecosystem...",
+            "Loading interface modules [29 active components]...",
+            "Decrypting secure vault hashes...",
+            "Establishing authorization link...",
+            "Ready for access verification."
         ];
         
         const bootScreen = document.getElementById("boot-screen");
@@ -291,27 +271,31 @@
             if (logIndex < logs.length) {
                 const line = document.createElement("div");
                 line.className = "boot-line";
-                line.innerText = `▸ ${logs[logIndex]}`;
+                line.innerText = `> ${logs[logIndex]}`;
                 bootScreen.appendChild(line);
-                playTone(450 + (logIndex * 50), 'sine', 0.03, 0.02);
+                playTone(500 + (logIndex * 40), 'sine', 0.02, 0.02);
                 logIndex++;
-                setTimeout(printLog, 300);
+                setTimeout(printLog, 250);
             } else {
                 setTimeout(() => {
-                    bootScreen.style.display = "none";
-                    document.getElementById("terminal").style.display = "block";
-                    playTone(900, 'sine', 0.12, 0.05);
-                }, 500);
+                    bootScreen.style.opacity = "0";
+                    bootScreen.style.transition = "opacity 0.4s ease";
+                    setTimeout(() => {
+                        bootScreen.style.display = "none";
+                        document.getElementById("terminal").style.display = "block";
+                        playTone(750, 'sine', 0.1, 0.04);
+                    }, 400);
+                }, 400);
             }
         }
         window.addEventListener('load', printLog);
 
-        // RENDERIZADO VISIBLE DE LOS NÚMEROS ESCRITOS
+        // ACTUALIZACIÓN CON NÚMEROS VISIBLES EN PANTALLA
         function updateDisplay() {
             for (let i = 0; i < 6; i++) {
                 const slot = document.getElementById(`slot${i}`);
                 if (i < currentInput.length) {
-                    slot.innerText = currentInput[i]; 
+                    slot.innerText = currentInput[i];
                     slot.classList.add("active");
                 } else {
                     slot.innerText = "";
@@ -323,7 +307,7 @@
         function pressKey(num) {
             if (currentInput.length < 6 && !isLocked) {
                 currentInput += num;
-                playTone(850, 'sine', 0.04);
+                playTone(900, 'sine', 0.03);
                 updateDisplay();
                 if (currentInput.length === 6) checkCode();
             }
@@ -332,20 +316,20 @@
         function clearCode() {
             if (!isLocked) {
                 currentInput = "";
-                playTone(250, 'triangle', 0.08);
+                playTone(300, 'sine', 0.06);
                 document.getElementById("status").innerText = "";
                 updateDisplay();
             }
         }
 
-        // CAPTURA DE TECLADO FÍSICO
+        // CONTROL INTEGRADO DE TECLADO FÍSICO DESDE PC
         document.addEventListener('keydown', (e) => {
             if (bootScreen.style.display !== "none") return;
             if (/^[0-9]$/.test(e.key)) pressKey(e.key);
             else if (e.key === 'Backspace' || e.key.toLowerCase() === 'c') clearCode();
         });
 
-        // VALIDACIÓN DE ACCESO TERMINAL
+        // VALIDACIÓN Y REDIRECCIÓN AUTOMÁTICA
         function checkCode() {
             const status = document.getElementById("status");
             const terminal = document.getElementById("terminal");
@@ -353,18 +337,18 @@
 
             if (currentInput === CORRECT_CODE) {
                 status.className = "status-message success";
-                status.innerText = "▸ ACCESS GRANTED // EXEC_OS_INJECTION";
-                playTone(600, 'sine', 0.08);
-                setTimeout(() => playTone(800, 'sine', 0.12), 90);
+                status.innerText = "Acceso concedido. Sincronizando...";
+                playTone(580, 'sine', 0.08);
+                setTimeout(() => playTone(780, 'sine', 0.12), 80);
 
                 setTimeout(() => {
                     window.location.href = "menuprincipal.html";
-                }, 1200);
+                }, 1100);
             } else {
                 status.className = "status-message error";
-                status.innerText = "▸ ACCESS DENIED // CORRUPT_CREDENTIALS";
+                status.innerText = "Código de autorización inválido";
                 terminal.classList.add("shake");
-                playTone(120, 'sawtooth', 0.35, 0.12);
+                playTone(130, 'triangle', 0.3, 0.1);
 
                 setTimeout(() => {
                     terminal.classList.remove("shake");
