@@ -2,526 +2,377 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE ORIGIN - Perfil Completo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE ORIGIN - Sistema Central</title>
     <style>
-        /* ESTILOS PREMIUM GLASSMORPHISM */
-        :root {
-            --bg-main: #060614; 
-            --glass-bg: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --accent-purple: #c084fc; 
-            --accent-cyan: #22d3ee;   
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
+        /* CONFIGURACIÓN GENERAL REUTILIZADA DEL MENÚ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #1c1437 0%, #060614 100%);
-            color: var(--text-main);
+            background-color: #050806;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
-            justify-content: center;
-            overflow-x: hidden;
-        }
-
-        /* ANIMACIÓN DE ENTRADA AL SISTEMA */
-        .container { 
-            width: 100%; 
-            max-width: 1100px; 
-            display: grid; 
-            grid-template-columns: 1fr 2fr; 
-            gap: 20px;
-            animation: systemInit 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @media (max-width: 850px) { .container { grid-template-columns: 1fr; } }
-
-        @keyframes systemInit {
-            from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-
-        .panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        /* EFECTO DE CALIDAD / HOVER 3D DE ENTORNO */
-        .panel:hover {
-            transform: translateY(-2px);
-            border-color: rgba(192, 132, 252, 0.2);
-            box-shadow: 0 15px 35px rgba(121, 82, 245, 0.1);
-        }
-
-        .panel:last-child { margin-bottom: 0; }
-
-        h2 { font-size: 1.1rem; color: var(--accent-purple); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-
-        /* INFO PERSONAL & DIBUJOS/DETALLES */
-        .avatar-container { position: relative; width: 85px; height: 85px; margin: 0 auto 15px; }
-        .avatar-frame { 
-            width: 100%; 
-            height: 100%; 
-            background: linear-gradient(135deg, #7952f5, #22d3ee); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 2.2rem; 
-            box-shadow: 0 0 25px rgba(121, 82, 245, 0.4);
-            position: relative;
-            z-index: 2;
-        }
-        /* EFECTO ESCÁNER CYBERPUNK NATIVO */
-        .avatar-container::after {
-            content: '';
-            position: absolute;
-            top: -4px; left: -4px; right: -4px; bottom: -4px;
-            border: 2px dashed var(--accent-cyan);
-            border-radius: 50%;
-            animation: spinScanner 12s linear infinite;
-            opacity: 0.6;
-        }
-        @keyframes spinScanner { to { transform: rotate(360deg); } }
-
-        .info-list { list-style: none; }
-        .info-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; transition: background 0.2s ease; }
-        .info-item:hover { background: rgba(255, 255, 255, 0.01); }
-        .info-label { color: var(--text-muted); }
-        
-        /* EFECTO CAMUFLAJE PRIVADO */
-        .private-mode .info-value, .private-mode .bio-text, .private-mode #chartCanvas { 
-            filter: blur(12px); 
-            opacity: 0.2; 
-            pointer-events: none;
-            user-select: none;
-            transition: all 0.4s ease;
-        }
-
-        /* STATS & RACHA */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-card { 
-            background: rgba(255,255,255,0.01); 
-            padding: 15px; 
-            border-radius: 15px; 
-            text-align: center; 
-            border: 1px solid rgba(255,255,255,0.03); 
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-        .stat-card:hover { transform: scale(1.03); background: rgba(255,255,255,0.03); }
-        .stat-num { font-size: 1.5rem; font-weight: 800; margin-top: 5px; letter-spacing: -0.5px; }
-        .stat-card.xp .stat-num { color: var(--accent-purple); text-shadow: 0 0 10px rgba(192, 132, 252, 0.3); }
-        .stat-card.mp .stat-num { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(34, 211, 238, 0.3); }
-        .stat-card.racha .stat-num { color: #ff6b6b; text-shadow: 0 0 10px rgba(255, 107, 107, 0.3); }
-
-        /* CONTENEDOR GRÁFICO */
-        .chart-container {
-            display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 10px 0;
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* LIGAS */
-        .ligas-box { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 5px; }
-        .ligas-box::-webkit-scrollbar { width: 4px; }
-        .ligas-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        .liga-item { display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 12px; font-size: 0.8rem; border-left: 4px solid #333; transition: all 0.2s ease; }
-        .liga-item.unlocked { border-left-color: var(--accent-purple); background: rgba(192, 132, 252, 0.04); box-shadow: inset 5px 0 10px rgba(192, 132, 252, 0.02); }
-        .liga-reward { color: #10ac84; font-weight: bold; }
+        /* FONDO DE LÍNEAS MATRICIALES / REJILLA DEL MENÚ PRINCIPAL */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-        /* BOTONES & TOGGLES */
-        .btn { background: var(--accent-purple); color: #000; border: none; padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
-        .btn:hover { transform: translateY(-1px); opacity: 0.95; box-shadow: 0 5px 15px rgba(192, 132, 252, 0.3); }
-        .btn:active { transform: translateY(1px); }
+        /* EFECTO CRT GLOBAL */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+            z-index: 9999;
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
 
-        .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
-        .settings-row:last-child { border: none; }
+        /* INTERFAZ DE ARRANQUE (BOOT LOG) */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #020403;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 30px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            overflow: hidden;
+        }
 
-        /* Switch Toggle */
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #2a2b3d; transition: .3s; border-radius: 22px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-purple); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        .boot-line {
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 0.4s steps(40, end) forwards;
+        }
 
-        .action-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 15px; border-radius: 15px; cursor: pointer; transition: all 0.2s ease; }
-        .action-card:hover { border-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.04); transform: translateY(-1px); }
+        /* CONTENEDOR PRINCIPAL CON EL DISEÑO DE PANEL DEL MENÚ (TERMINAL BRUTALISTA) */
+        .main-interface {
+            position: relative;
+            z-index: 5;
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(10, 16, 12, 0.92);
+            border: 2px solid #00ff66;
+            padding: 35px 25px;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.15);
+            animation: fadeIn 0.5s ease forwards;
+        }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
-        .modal-content { background: #11111f; padding: 25px; border-radius: 20px; width: 90%; max-width: 420px; border: 1px solid var(--glass-border); animation: modalOpen 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        @keyframes modalOpen { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
-        input, textarea { width: 100%; padding: 10px; background: #090911; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s; }
-        input:focus, textarea:focus { outline: none; border-color: var(--accent-purple); }
+        /* CABECERA ESTILO PANEL DE CONTROL */
+        .panel-header {
+            border-bottom: 2px solid #00ff66;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #00ff66;
+            font-weight: 900;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: #00aa44;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* CASILLAS DE CÓDIGO - DISEÑO RETRO ILUMINADO */
+        .code-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .code-slot {
+            width: 50px;
+            height: 60px;
+            background: #040705;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff66;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s ease;
+        }
+
+        .code-slot.active {
+            border-color: #00ff66;
+            background: rgba(0, 255, 102, 0.05);
+            box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        /* TECLADO CON DISEÑO CUADRADO DEL MENÚ */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .key {
+            width: 100%;
+            height: 60px;
+            background: #0d140f;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            font-size: 1.6rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:hover {
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+
+        .key:active {
+            transform: scale(0.96);
+        }
+
+        /* BOTÓN DE BORRADO */
+        .key.clear {
+            border-color: #ff3333;
+            color: #ff3333;
+            background: rgba(20, 10, 10, 0.5);
+        }
+        .key.clear:hover {
+            background: #ff3333;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
+        }
+
+        /* MENSAJES DE ESTADO DE AUTORIZACIÓN */
+        .status-message {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            height: 20px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .success { color: #00ff66; }
+        .error { color: #ff3333; }
+
+        /* ANIMACIÓN DE ERROR SÍSMICO */
+        .shake {
+            animation: shakeAnim 0.3s ease-in-out;
+            border-color: #ff3333 !important;
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3) !important;
+        }
+
+        /* KEYFRAMES */
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="profile-sidebar">
-            <div class="panel" id="sidebarPanel">
-                <div class="avatar-container">
-                    <div class="avatar-frame">👦</div>
-                </div>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <h1 id="disp-nombre" style="font-size: 1.5rem; font-weight: 700;">Matheo</h1>
-                    <p id="disp-liga-tag" style="color: var(--accent-cyan); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Cargando Rango...</p>
-                </div>
+    <div id="boot-screen"></div>
 
-                <ul class="info-list">
-                    <li class="info-item"><span class="info-label">Segundo Nombre</span><span class="info-value" id="disp-segundo">Ismael</span></li>
-                    <li class="info-item"><span class="info-label">Apellidos</span><span class="info-value" id="disp-apellidos">Tutiven Muñoz</span></li>
-                    <li class="info-item"><span class="info-label">Colegio Actual</span><span class="info-value" id="disp-colegio">Amor de dios barcelona</span></li>
-                    <li class="info-item"><span class="info-label">Nacimiento</span><span class="info-value" id="disp-nacimiento">22-04-2012</span></li>
-                    <li class="info-item"><span class="info-label">Edad</span><span class="info-value" id="disp-edad">14</span></li>
-                    <li class="info-item"><span class="info-label">Nacionalidad</span><span class="info-value" id="disp-nacionalidad">Español y Ecuatoriano</span></li>
-                    <li class="info-item"><span class="info-label">Signo Zodiacal</span><span class="info-value" id="disp-zodiaco">Tauro</span></li>
-                </ul>
-
-                <p class="bio-text" id="disp-descripcion" style="margin-top: 15px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">
-                    Soy un chico al que le gusta probar cosas nuevas y contar nuevas ideas. La verdad no soy una de esas personas que se rinden.
-                </p>
-            </div>
-
-            <div class="panel">
-                <h2>⚙️ Ajustes Operativos</h2>
-                <div class="settings-row">
-                    <div>
-                        <p style="font-weight: 500;">Perfil Privado</p>
-                        <p style="font-size: 0.7rem; color: var(--text-muted);">Camuflar y cifrar tus datos</p>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="privacyToggle" onchange="togglePrivacy()">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <button class="btn" onclick="openModal()">Editar Información</button>
-            </div>
+    <div class="main-interface" id="terminal">
+        <div class="panel-header">
+            <h1>THE ORIGIN</h1>
+            <div class="subtitle">SISTEMA CENTRAL // LOGIN_REQ</div>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-slot" id="slot0"></div>
+            <div class="code-slot" id="slot1"></div>
+            <div class="code-slot" id="slot2"></div>
+            <div class="code-slot" id="slot3"></div>
+            <div class="code-slot" id="slot4"></div>
+            <div class="code-slot" id="slot5"></div>
         </div>
 
-        <div class="main-content">
-            <div class="panel">
-                <h2>📈 Panel de Gamificación</h2>
-                <div class="stats-grid">
-                    <div class="stat-card xp">
-                        <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">XP</p>
-                        <div class="stat-num" id="val-xp">0</div>
-                    </div>
-                    <div class="stat-card mp">
-                        <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">MP</p>
-                        <div class="stat-num" id="val-mp">0</div>
-                    </div>
-                    <div class="stat-card racha">
-                        <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">RACHA</p>
-                        <div class="stat-num" id="val-racha">0</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="chartCanvas" width="280" height="150"></canvas>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>🏆 Divisiones de Rango (20 Ligas)</h2>
-                <div class="ligas-box" id="ligasContainer"></div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                <div class="panel" style="margin-bottom:0;">
-                    <h2>🏅 Medallas</h2>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align:center; padding: 10px 0;">Vacío por ahora</p>
-                </div>
-                <div class="panel" style="margin-bottom:0;">
-                    <h2>📦 Objetos</h2>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); text-align:center; padding: 10px 0;">Vacío por ahora</p>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>⚡ Otros Módulos</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="action-card" onclick="calcularFracaso()">
-                        <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 4px;">🔮 Predicción del Fracaso</p>
-                        <p id="fracaso-txt" style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">Haz clic para calcular tu porcentaje de éxito/fracaso según tus estadísticas.</p>
-                    </div>
-                    <div class="action-card" onclick="accederSalaVip()">
-                        <p style="font-weight: bold; font-size: 0.9rem; margin-bottom: 4px;">💎 Sala VIP</p>
-                        <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">Acceso restringido de alta seguridad. Disponible solo al alcanzar rango THE ORIGIN.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="keypad">
+            <button class="key" onclick="pressKey('1')">1</button>
+            <button class="key" onclick="pressKey('2')">2</button>
+            <button class="key" onclick="pressKey('3')">3</button>
+            <button class="key" onclick="pressKey('4')">4</button>
+            <button class="key" onclick="pressKey('5')">5</button>
+            <button class="key" onclick="pressKey('6')">6</button>
+            <button class="key" onclick="pressKey('7')">7</button>
+            <button class="key" onclick="pressKey('8')">8</button>
+            <button class="key" onclick="pressKey('9')">9</button>
+            <button class="key clear" onclick="clearCode()">C</button>
+            <button class="key" onclick="pressKey('0')">0</button>
         </div>
-    </div>
 
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <h2 style="color: #fff; margin-bottom: 15px;">Editar Datos Personales</h2>
-            <div class="form-group"><label>Nombre</label><input type="text" id="input-nombre"></div>
-            <div class="form-group"><label>Segundo Nombre</label><input type="text" id="input-segundo"></div>
-            <div class="form-group"><label>Apellidos</label><input type="text" id="input-apellidos"></div>
-            <div class="form-group"><label>Colegio Actual</label><input type="text" id="input-colegio"></div>
-            <div class="form-group"><label>Nacimiento</label><input type="text" id="input-nacimiento"></div>
-            <div class="form-group"><label>Edad</label><input type="text" id="input-edad"></div>
-            <div class="form-group"><label>Nacionalidad</label><input type="text" id="input-nacionalidad"></div>
-            <div class="form-group"><label>Signo Zodiacal</label><input type="text" id="input-zodiaco"></div>
-            <div class="form-group"><label>Descripción</label><textarea id="input-descripcion" rows="2"></textarea></div>
-            
-            <button class="btn" onclick="saveData()">Guardar y Sincronizar</button>
-            <button class="btn" style="background: #222; color: #fff; margin-top: 8px;" onclick="closeModal()">Cancelar</button>
-        </div>
+        <div class="status-message" id="status"></div>
     </div>
 
     <script>
-        // LAS 20 LIGAS EXACTAS CON RECOMPENSAS SUTILES
-        const LIGAS = [
-            { name: "Recluta Espacial", req: 0, rew: "Iniciación Central" },
-            { name: "Bronce Estelar I", req: 20, rew: "Icono de Bronce" },
-            { name: "Bronce Estelar II", req: 50, rew: "Multiplicador x1.1" },
-            { name: "Plata Lunar I", req: 90, rew: "Diseño Plata" },
-            { name: "Plata Lunar II", req: 140, rew: "+50 MathePoints" },
-            { name: "Oro Solar I", req: 200, rew: "Emblema Solar" },
-            { name: "Oro Solar II", req: 280, rew: "Desafíos Nivel 2" },
-            { name: "Platino Orbital I", req: 380, rew: "Borde de Perfil" },
-            { name: "Platino Orbital II", req: 500, rew: "Descuento Shop 10%" },
-            { name: "Diamante Galáctico I", req: 650, rew: "Título: Navegante" },
-            { name: "Diamante Galáctico II", req: 820, rew: "Multiplicador x1.5" },
-            { name: "Maestro Cuántico I", req: 1020, rew: "Skin Cuántica" },
-            { name: "Maestro Cuántico II", req: 1250, rew: "+150 MathePoints" },
-            { name: "Gran Maestro I", req: 1500, rew: "Fondo Animado" },
-            { name: "Gran Maestro II", req: 1800, rew: "Color de Nombre VIP" },
-            { name: "Supernova Cósmica", req: 2150, rew: "Efecto Estelar" },
-            { name: "Nebulosa Ancestral", req: 2550, rew: "Soporte IA Beta" },
-            { name: "Titán del Vacío", req: 3000, rew: "Caja de Objetos Épica" },
-            { name: "Eterno Infinito", req: 3550, rew: "Insignia Animada" },
-            { name: "THE ORIGIN", req: 4200, rew: "SALA VIP DESBLOQUEADA" }
-        ];
+        const CORRECT_CODE = "010822";
+        let currentInput = "";
+        let isLocked = false;
 
-        const KEY_XP = 'origin_xp';
-        const KEY_MP = 'origin_mp';
-        const KEY_RACHA = 'origin_racha';
-        const KEY_LAST_CONN = 'origin_last_conn';
-
-        // --- SISTEMA DE AUDIO DIGITAL SINTETIZADO NATIVO ---
-        let audioCtx = null;
-        function playTone(freq, type, duration, vol) {
+        // AUDIO SINTETIZADO MONOCROMÁTICO
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration, vol = 0.06) {
             try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
                 osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.value = freq;
                 gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + duration);
-            } catch(e) { console.log("Audio no iniciado por políticas de navegador"); }
+            } catch(e){}
         }
 
-        function soundClick() { playTone(600, 'sine', 0.08, 0.1); }
-        function soundSuccess() { playTone(523.25, 'sine', 0.1, 0.15); setTimeout(() => playTone(659.25, 'sine', 0.2, 0.15), 80); }
-        function soundError() { playTone(180, 'sawtooth', 0.25, 0.2); }
+        // SECUENCIA LOGS DE ARRANQUE TRADICIONAL
+        const logs = [
+            "Initializing ORIGIN_CORE v1.14...",
+            "Loading terminal design layouts...",
+            "Connecting database modules [Perfil, Hábitos, Deporte, AI]...",
+            "Syncing terminal styling parameters...",
+            "Applying system firewall... OK",
+            "THE ORIGIN OS ready for terminal authorization."
+        ];
+        
+        const bootScreen = document.getElementById("boot-screen");
+        let logIndex = 0;
 
-        function loadAll() {
-            if(!localStorage.getItem(KEY_XP)) localStorage.setItem(KEY_XP, '0');
-            if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
-            if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
-
-            // Asignar sonidos a interacciones de botones existentes de manera automática
-            document.querySelectorAll('.btn, .action-card, .switch input').forEach(el => {
-                el.addEventListener('click', soundClick);
-            });
-
-            checkRacha();
-            render();
-        }
-
-        function checkRacha() {
-            const hoy = new Date().toDateString();
-            const ultima = localStorage.getItem(KEY_LAST_CONN);
-            let racha = parseInt(localStorage.getItem(KEY_RACHA));
-            let xp = parseInt(localStorage.getItem(KEY_XP));
-            let mp = parseInt(localStorage.getItem(KEY_MP));
-
-            if (ultima !== hoy) {
-                const ayer = new Date();
-                ayer.setDate(ayer.getDate() - 1);
-                
-                if (ultima === ayer.toDateString()) { racha++; } else { racha = 1; }
-                
-                xp += 1;
-                mp += 1;
-
-                localStorage.setItem(KEY_RACHA, racha);
-                localStorage.setItem(KEY_XP, xp);
-                localStorage.setItem(KEY_MP, mp);
-                localStorage.setItem(KEY_LAST_CONN, hoy);
-            }
-        }
-
-        function render() {
-            const xp = localStorage.getItem(KEY_XP);
-            const mp = localStorage.getItem(KEY_MP);
-            const racha = localStorage.getItem(KEY_RACHA);
-
-            document.getElementById('val-xp').innerText = xp;
-            document.getElementById('val-mp').innerText = mp;
-            document.getElementById('val-racha').innerText = racha;
-
-            const container = document.getElementById('ligasContainer');
-            container.innerHTML = "";
-            let currentRange = LIGAS[0].name;
-
-            LIGAS.forEach(l => {
-                const unlocked = parseInt(xp) >= l.req;
-                if(unlocked) currentRange = l.name;
-                container.innerHTML += `
-                    <div class="liga-item ${unlocked ? 'unlocked' : ''}">
-                        <span>${l.name} <small style="color:var(--text-muted)">(Req: ${l.req} XP)</small></span>
-                        <span class="liga-reward">🎁 ${l.rew}</span>
-                    </div>
-                `;
-            });
-            document.getElementById('disp-liga-tag').innerText = currentRange;
-
-            // Renderizar el nuevo gráfico analítico
-            drawChart(parseInt(xp), parseInt(mp), parseInt(racha));
-        }
-
-        // --- RENDERIZADO DEL GRÁFICO CYBERPUNK EN CANVAS ---
-        function drawChart(xp, mp, racha) {
-            const canvas = document.getElementById('chartCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Ajustar límites virtuales para que las barras se vean bien al inicio
-            const maxVal = Math.max(xp, mp, racha, 10);
-            
-            const datasets = [
-                { value: xp, color: '#c084fc', label: 'XP' },
-                { value: mp, color: '#22d3ee', label: 'MP' },
-                { value: racha, color: '#ff6b6b', label: 'RCH' }
-            ];
-
-            const barWidth = 35;
-            const startX = 45;
-            const spacing = 75;
-            const bottomY = 120;
-
-            // Línea de base del dibujo gráfico
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-            ctx.beginPath();
-            ctx.moveTo(20, bottomY);
-            ctx.lineTo(260, bottomY);
-            ctx.stroke();
-
-            datasets.forEach((data, index) => {
-                const x = startX + (index * spacing);
-                // Calcular altura proporcional
-                const barHeight = (data.value / maxVal) * 80;
-
-                // Dibujar sombra / resplandor de barra
-                ctx.shadowBlur = 12;
-                ctx.shadowColor = data.color;
-
-                // Dibujar cuerpo de barra de datos
-                ctx.fillStyle = data.color;
-                ctx.beginPath();
-                ctx.roundRect(x, bottomY - barHeight, barWidth, barHeight > 0 ? barHeight : 2, 6);
-                ctx.fill();
-
-                // Quitar sombra para textos
-                ctx.shadowBlur = 0;
-
-                // Etiquetas inferiores
-                ctx.fillStyle = '#64748b';
-                ctx.font = '10px -apple-system, sans-serif';
-                ctx.fillText(data.label, x + 8, bottomY + 18);
-
-                // Valores superiores numéricos
-                ctx.fillStyle = '#f8fafc';
-                ctx.font = 'bold 11px -apple-system, sans-serif';
-                ctx.fillText(data.value, x + (barWidth / 2) - (ctx.measureText(data.value).width / 2), bottomY - barHeight - 8);
-            });
-        }
-
-        function calcularFracaso() {
-            const xp = parseInt(localStorage.getItem(KEY_XP)) || 0;
-            const racha = parseInt(localStorage.getItem(KEY_RACHA)) || 0;
-            let prob = 100 - (xp * 0.15 + racha * 6);
-            if(prob < 1) prob = 1;
-            if(prob > 99) prob = 99;
-            document.getElementById('fracaso-txt').innerText = `Probabilidad de fracaso calculada: ${prob.toFixed(1)}%. ¡Mantén la disciplina!`;
-            soundSuccess();
-        }
-
-        function accederSalaVip() {
-            if(document.getElementById('disp-liga-tag').innerText === "THE ORIGIN") {
-                soundSuccess();
-                alert("🔓 Acceso de nivel de Administrador confirmado. Bienvenido a la Sala VIP.");
+        function printLog() {
+            if (logIndex < logs.length) {
+                const line = document.createElement("div");
+                line.className = "boot-line";
+                line.innerText = `▸ ${logs[logIndex]}`;
+                bootScreen.appendChild(line);
+                playTone(450 + (logIndex * 50), 'sine', 0.03, 0.02);
+                logIndex++;
+                setTimeout(printLog, 300);
             } else {
-                soundError();
-                alert("🔒 Error: No posees los privilegios criptográficos de la liga suprema 'THE ORIGIN'.");
+                setTimeout(() => {
+                    bootScreen.style.display = "none";
+                    document.getElementById("terminal").style.display = "block";
+                    playTone(900, 'sine', 0.12, 0.05);
+                }, 500);
+            }
+        }
+        window.addEventListener('load', printLog);
+
+        // RENDERIZADO VISIBLE DE LOS NÚMEROS ESCRITOS
+        function updateDisplay() {
+            for (let i = 0; i < 6; i++) {
+                const slot = document.getElementById(`slot${i}`);
+                if (i < currentInput.length) {
+                    slot.innerText = currentInput[i]; 
+                    slot.classList.add("active");
+                } else {
+                    slot.innerText = "";
+                    slot.classList.remove("active");
+                }
             }
         }
 
-        function togglePrivacy() {
-            const isChecked = document.getElementById('privacyToggle').checked;
-            const sidebar = document.getElementById('sidebarPanel');
-            if (isChecked) sidebar.classList.add('private-mode');
-            else sidebar.classList.remove('private-mode');
+        function pressKey(num) {
+            if (currentInput.length < 6 && !isLocked) {
+                currentInput += num;
+                playTone(850, 'sine', 0.04);
+                updateDisplay();
+                if (currentInput.length === 6) checkCode();
+            }
         }
 
-        // CONTROL DEL MODAL DE EDICIÓN COMPLETA
-        function openModal() {
-            document.getElementById('input-nombre').value = document.getElementById('disp-nombre').innerText;
-            document.getElementById('input-segundo').value = document.getElementById('disp-segundo').innerText;
-            document.getElementById('input-apellidos').value = document.getElementById('disp-apellidos').innerText;
-            document.getElementById('input-colegio').value = document.getElementById('disp-colegio').innerText;
-            document.getElementById('input-nacimiento').value = document.getElementById('disp-nacimiento').innerText;
-            document.getElementById('input-edad').value = document.getElementById('disp-edad').innerText;
-            document.getElementById('input-nacionalidad').value = document.getElementById('input-nacionalidad').value || "Español y Ecuatoriano";
-            document.getElementById('input-zodiaco').value = document.getElementById('disp-zodiaco').innerText;
-            document.getElementById('input-descripcion').value = document.getElementById('disp-descripcion').innerText;
-            document.getElementById('editModal').style.display = 'flex';
+        function clearCode() {
+            if (!isLocked) {
+                currentInput = "";
+                playTone(250, 'triangle', 0.08);
+                document.getElementById("status").innerText = "";
+                updateDisplay();
+            }
         }
 
-        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+        // CAPTURA DE TECLADO FÍSICO
+        document.addEventListener('keydown', (e) => {
+            if (bootScreen.style.display !== "none") return;
+            if (/^[0-9]$/.test(e.key)) pressKey(e.key);
+            else if (e.key === 'Backspace' || e.key.toLowerCase() === 'c') clearCode();
+        });
 
-        function saveData() {
-            document.getElementById('disp-nombre').innerText = document.getElementById('input-nombre').value;
-            document.getElementById('disp-segundo').innerText = document.getElementById('input-segundo').value;
-            document.getElementById('disp-apellidos').innerText = document.getElementById('input-apellidos').value;
-            document.getElementById('disp-colegio').innerText = document.getElementById('input-colegio').value;
-            document.getElementById('disp-nacimiento').innerText = document.getElementById('input-nacimiento').value;
-            document.getElementById('disp-edad').innerText = document.getElementById('input-edad').value;
-            document.getElementById('disp-nacionalidad').innerText = document.getElementById('input-nacionalidad').value;
-            document.getElementById('disp-zodiaco').innerText = document.getElementById('input-zodiaco').value;
-            document.getElementById('disp-descripcion').innerText = document.getElementById('input-descripcion').value;
-            closeModal();
-            soundSuccess();
-            render();
+        // VALIDACIÓN DE ACCESO TERMINAL
+        function checkCode() {
+            const status = document.getElementById("status");
+            const terminal = document.getElementById("terminal");
+            isLocked = true;
+
+            if (currentInput === CORRECT_CODE) {
+                status.className = "status-message success";
+                status.innerText = "▸ ACCESS GRANTED // EXEC_OS_INJECTION";
+                playTone(600, 'sine', 0.08);
+                setTimeout(() => playTone(800, 'sine', 0.12), 90);
+
+                setTimeout(() => {
+                    window.location.href = "menuprincipal.html";
+                }, 1200);
+            } else {
+                status.className = "status-message error";
+                status.innerText = "▸ ACCESS DENIED // CORRUPT_CREDENTIALS";
+                terminal.classList.add("shake");
+                playTone(120, 'sawtooth', 0.35, 0.12);
+
+                setTimeout(() => {
+                    terminal.classList.remove("shake");
+                    isLocked = false;
+                    clearCode();
+                }, 1200);
+            }
         }
-
-        window.onload = loadAll;
     </script>
 </body>
 </html>
