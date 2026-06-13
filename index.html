@@ -237,11 +237,22 @@
             padding: 30px;
             border-radius: 24px;
             width: 100%;
-            max-width: 420px;
+            max-width: 460px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             text-align: center;
             transform: scale(0.85);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Estilización de scroll interno de los modales */
+        .glass-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+        .glass-panel::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
         }
 
         .overlay.active .glass-panel {
@@ -391,28 +402,71 @@
 
         /* Contenido Avanzado Exclusivo de Familia */
         .family-extended-content {
-            margin-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-top: 15px;
+            margin-top: 20px;
+            border-top: 2px dashed rgba(255,255,255,0.15);
+            padding-top: 20px;
             text-align: left;
         }
 
         .family-extended-content h4 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--secondary);
-            margin-bottom: 8px;
+            margin: 15px 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .family-extended-content h4:first-of-type {
+            margin-top: 0;
         }
 
         .log-item {
             font-size: 0.8rem;
             color: #cbd5e1;
             background: rgba(255,255,255,0.03);
-            padding: 6px 10px;
-            border-radius: 8px;
-            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 6px;
             border-left: 3px solid var(--success);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .info-card .title {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .info-card .data {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: 600;
         }
 
         /* Footer de Autor */
@@ -503,7 +557,7 @@
     <div class="overlay" id="modal-display">
         <div class="glass-panel">
             <h2 id="display-title">Estadísticas</h2>
-            <p style="color: #cbd5e1; font-size: 0.9rem;">Métricas en tiempo real obtenidas de la suite</p>
+            <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 5px;">Métricas en tiempo real obtenidas de la suite</p>
             
             <div class="stat-box">
                 <div class="stat-item">
@@ -517,11 +571,48 @@
             </div>
 
             <div id="family-bonus" class="family-extended-content" style="display: none;">
-                <h4>Módulos del Sistema Operativo</h4>
-                <div class="log-item">✔ Rastreador de Hábitos de Salud: Activo</div>
-                <div class="log-item">✔ Monitor de Sueño Profundo: Operativo</div>
-                <div class="log-item">✔ Banco Central Estelar (MP): En Línea</div>
-                <div class="log-item" style="border-left-color: var(--warning)">⚡ Última Sincronización: Completada con Éxito</div>
+                
+                <h4>📊 Resumen de Hábitos</h4>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="title">Agua Registrada</div>
+                        <div class="data" id="family-water">0.0 L</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="title">Pasos Totales</div>
+                        <div class="data" id="family-steps">0</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="title">Horas de Sueño</div>
+                        <div class="data" id="family-sleep">0.0h</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="title">Rango de Usuario</div>
+                        <div class="data" id="family-rank" style="color: var(--secondary); font-size: 0.9rem; padding-top:2px;">Recluta</div>
+                    </div>
+                </div>
+
+                <h4>🛠️ Estado de Módulos Core</h4>
+                <div class="log-item"><span>✔ Rastreador de Hábitos de Salud</span> <span style="color: var(--success); font-weight:700;">Activo</span></div>
+                <div class="log-item"><span>✔ Monitor de Sueño Profundo</span> <span style="color: var(--success); font-weight:700;">Operativo</span></div>
+                <div class="log-item"><span>✔ Banco Central Estelar (MP)</span> <span style="color: var(--success); font-weight:700;">En Línea</span></div>
+                <div class="log-item" style="border-left-color: var(--warning)"><span>⚡ Sincronización Global</span> <span style="color: var(--warning); font-weight:700;">Éxito</span></div>
+
+                <h4>📜 Auditoría de Eventos Recientes</h4>
+                <div class="log-item" style="border-left-color: #64748b; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <div style="width:100%; display:flex; justify-content:space-between;">
+                        <span style="font-weight:600;">Acceso solicitado al Panel</span>
+                        <span class="timestamp" id="time-log-1">Hace un momento</span>
+                    </div>
+                    <p style="font-size:0.75rem; color:#94a3b8;">Filtro de seguridad Familiar verificado mediante PIN.</p>
+                </div>
+                <div class="log-item" style="border-left-color: #64748b; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <div style="width:100%; display:flex; justify-content:space-between;">
+                        <span style="font-weight:600;">Base de datos de métricas</span>
+                        <span class="timestamp">Hoy, automática</span>
+                    </div>
+                    <p style="font-size:0.75rem; color:#94a3b8;">Extracción exitosa de variables desde LocalStorage local.</p>
+                </div>
             </div>
 
             <button class="btn-panel btn-close" onclick="cerrarModales()">Volver al Inicio</button>
@@ -646,18 +737,36 @@
         function mostrarDataReal(nombrePerfil, esFamiliaAvanzado) {
             document.getElementById('display-title').innerText = `Visualizador: ${nombrePerfil}`;
             
+            // Lectura de LocalStorage
             const aguaGuardada = parseInt(localStorage.getItem('trackerAgua')) || 0;
             const pasosGuardados = parseInt(localStorage.getItem('health-pasos')) || 0;
             const suenoGuardado = parseFloat(localStorage.getItem('health-sueno')) || 0;
 
+            // Fórmulas de conversión matemáticas internas
             const mpReal = 50 + (aguaGuardada * 20); 
             const xpReal = (pasosGuardados * 0.4) + (suenoGuardado * 100);
 
+            // Inserción en contadores globales superiores
             document.getElementById('stat-mp').innerText = Math.floor(mpReal);
             document.getElementById('stat-xp').innerText = Math.floor(xpReal).toLocaleString();
 
             const panelBonus = document.getElementById('family-bonus');
             if (esFamiliaAvanzado) {
+                // Inserción de campos detallados específicos para padres
+                document.getElementById('family-water').innerText = (aguaGuardada * 0.25).toFixed(2) + " L";
+                document.getElementById('family-steps').innerText = pasosGuardados.toLocaleString();
+                document.getElementById('family-sleep').innerText = suenoGuardado.toFixed(1) + " h";
+                
+                // Cálculo automático del Rango basado en XP acumulada
+                let rango = "Principiante Novato";
+                if(xpReal > 5000) rango = "Explorador Élite";
+                if(xpReal > 15000) rango = "Comandante Supremo";
+                document.getElementById('family-rank').innerText = rango;
+
+                // Actualizar marca de hora exacta de la consulta
+                const ahora = new Date();
+                document.getElementById('time-log-1').innerText = ahora.getHours().toString().padStart(2, '0') + ":" + ahora.getMinutes().toString().padStart(2, '0');
+
                 panelBonus.style.display = "block";
             } else {
                 panelBonus.style.display = "none";
