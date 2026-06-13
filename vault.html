@@ -6,20 +6,21 @@
     <title>THE ORIGIN - Vault</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --accent-color: #58a6ff;
-            --success-color: #2ea44f;
-            --text-color: #c9d1d9;
-            --text-muted: #8b949e;
-            --border-color: #30363d;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --accent-blue: #00f2fe;
+            --accent-green: #4facfe;
+            --text-color: #f0f3f6;
+            --text-muted: #a0aec0;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Un fondo oscuro con un toque de color para que el efecto cristal resalte */
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
             color: var(--text-color);
             display: flex;
             flex-direction: column;
@@ -29,120 +30,137 @@
 
         .container {
             width: 90%;
-            max-width: 600px;
-            margin-top: 40px;
-            padding-bottom: 40px;
+            max-width: 550px;
+            margin-top: 50px;
+            padding-bottom: 50px;
         }
 
         h1 {
             text-align: center;
-            color: #fff;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
 
         .subtitle {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             font-size: 0.95rem;
         }
 
+        /* TARJETAS ESTILO GLASSMORPHISM */
         .vault-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .vault-card h2 {
             margin-top: 0;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: 0.5px;
         }
 
         .vault-card p {
             color: var(--text-muted);
             font-size: 0.9rem;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
+        /* BOTONES MODERNOS */
         .btn {
-            background-color: var(--accent-color);
-            color: #fff;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            color: #020617;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             font-size: 0.95rem;
-            font-weight: bold;
-            border-radius: 6px;
+            font-weight: 700;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            transition: opacity 0.2s, transform 0.1s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
         }
 
         .btn:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
         }
 
         .btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         .btn-success {
-            background-color: var(--success-color);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.2);
         }
 
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
+        }
+
+        /* CUADROS DE TEXTO ESTILO CRISTAL */
         .code-box {
-            background-color: #090d13;
-            border: 1px dashed var(--accent-color);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(0, 242, 254, 0.5);
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
             margin-top: 15px;
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
             word-break: break-all;
             font-size: 0.85rem;
-            color: #58a6ff;
-            display: none; /* Se mostrará al generar el código */
+            color: #00f2fe;
+            display: none; /* Se activará con JS */
         }
 
         textarea {
             width: 100%;
             height: 80px;
-            background-color: #090d13;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
             color: #fff;
-            padding: 10px;
+            padding: 12px;
             font-family: monospace;
             font-size: 0.85rem;
             resize: none;
             box-sizing: border-box;
             margin-top: 15px;
             margin-bottom: 15px;
+            transition: border-color 0.3s;
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var(--accent-blue);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
+            transition: color 0.2s;
         }
 
         .back-link:hover {
-            color: #fff;
+            color: #00f2fe;
         }
     </style>
 </head>
@@ -150,27 +168,27 @@
 
     <div class="container">
         <h1>🔐 THE ORIGIN - VAULT</h1>
-        <p class="subtitle">Guarda tu progreso en un código secreto o restáuralo en cualquier dispositivo.</p>
+        <p class="subtitle">Salva tus datos en un código encriptado o recupéralos al instante.</p>
 
         <div class="vault-card">
-            <h2>📦 Copia de Seguridad</h2>
-            <p>Genera un código con tu XP, MP y racha actual para guardarlo en tus notas o enviártelo por mensaje.</p>
-            <button class="btn" id="btn-generar">Generar Código Secreto</button>
-            <div class="code-box" id="resultado-codigo">Aquí aparecerá tu código...</div>
+            <h2>📦 Guardar Partida</h2>
+            <p>Empaqueta tu nivel, monedas y rachas en un código de seguridad para no perder nada.</p>
+            <button class="btn" id="btn-generar">Generar Código</button>
+            <div class="code-box" id="resultado-codigo"></div>
         </div>
 
         <div class="vault-card">
-            <h2>⚡ Restaurar Progreso</h2>
-            <p>Pega aquí tu código guardado para recuperar instantáneamente todo tu nivel y monedas en este móvil o PC.</p>
+            <h2>⚡ Cargar Partida</h2>
+            <p>Introduce tu código de respaldo para inyectar todo tu progreso guardado en este dispositivo.</p>
             <textarea id="input-codigo" placeholder="Pega tu código secreto aquí..."></textarea>
-            <button class="btn btn-success" id="btn-restaurar">Cargar Progreso</button>
+            <button class="btn btn-success" id="btn-restaurar">Restaurar Progreso</button>
         </div>
 
         <a href="index.html" class="back-link">← Volver al Menú Principal</a>
     </div>
 
     <script>
-        // Aquí meteremos la lógica de JavaScript en el siguiente paso
+        // Aquí irá el JavaScript de codificación/decodificación
     </script>
 </body>
 </html>
