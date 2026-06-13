@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Health - Tu Suite de Bienestar</title>
+    <style>
+        :root {
+            --primary: #ff7675;
+            --secondary: #74b9ff;
+            --success: #55efc4;
+            --warning: #ffeaa7;
+            --info: #a29bfe;
+            --dark: #ffffff;
+            --text-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: rgba(0, 0, 0, 0.35);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(125deg, #0b0c10, #120136, #0d2040, #03001e);
+            background-size: 300% 300%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--dark);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: blink 3s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+        
+        header h1 { 
+            color: #ffffff; 
+            font-size: 3rem;
+            margin-bottom: 8px; 
+            font-weight: 800;
+        }
+
+        header p {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .btn-volver-menu {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+
+        .btn-volver-menu:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Grid de la Suite de Salud */
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+            margin-bottom: 35px;
+        }
+
+        /* Tarjetas de Cristal */
+        .health-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .health-card h3 {
+            margin-bottom: 18px;
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 12px;
+        }
+
+        /* Modificadores de color de borde superior */
+        .card-pulse h3 { border-color: var(--primary); }
+        .card-tracker h3 { border-color: var(--success); }
+        .card-tips h3 { border-color: var(--info); }
+
+        /* Herramienta de Pulsaciones */
+        .pulse-container {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .heart-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .heart-beating {
+            animation: pulse-anim 0.6s infinite alternate;
+        }
+
+        @keyframes pulse-anim {
+            to { transform: scale(1.25); }
+        }
+
+        .pulse-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        .pulse-status {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        /* Formularios internos */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+
+        .input-group input, .search-bar {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            width: 100%;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus, .search-bar:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--secondary);
+        }
+
+        /* Botones generales */
+        .btn-action {
+            background: linear-gradient(135deg, var(--secondary), #0984e3);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(9, 132, 227, 0.3);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(9, 132, 227, 0.5);
+        }
+
+        .btn-pulse { background: linear-gradient(135deg, var(--primary), #d63031); box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3); }
+        .btn-pulse:hover { box-shadow: 0 6px 20px rgba(214, 48, 49, 0.5); }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Trackers de incremento rápido */
+        .tracker-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 18px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tracker-info h4 { font-size: 1rem; color: #fff; }
+        .tracker-info p { font-size: 0.8rem; color: #cbd5e1; }
+
+        .tracker-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-circle {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-circle:hover { background: var(--success); }
+
+        .tracker-val { font-size: 1.2rem; font-weight: 800; min-width: 70px; text-align: center; }
+
+        /* Módulo de Consejos Expandido */
+        .tips-section {
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 15px 0 25px 0;
+            justify-content: center;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #cbd5e1;
+        }
+
+        .tag.active, .tag:hover {
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--glass-shadow);
+        }
+
+        .tip-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .badge-nutricion { background: rgba(85, 239, 196, 0.2); color: #55efc4; }
+        .badge-descanso { background: rgba(162, 155, 254, 0.2); color: #a29bfe; }
+        .badge-mente { background: rgba(255, 118, 117, 0.2); color: #ff7675; }
+        .badge-deporte { background: rgba(116, 185, 255, 0.2); color: #74b9ff; }
+
+        .tip-card h4 { font-size: 1.1rem; color: #fff; margin-bottom: 8px; font-weight: 700; }
+        .tip-card p { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <header>
+        <h1>🌌 Stellar Health</h1>
+        <p>Tu centro integrado de control biométrico y hábitos saludables</p>
+    </header>
+
+    <a href="menuprincipal.html" class="btn-volver-menu">🏠 Volver al Menú Principal</a>
+
+    <div class="health-grid">
+        
+        <div class="health-card card-pulse">
+            <h3>💓 Pulsímetro Estelar</h3>
+            <div class="pulse-container">
+                <span id="heart" class="heart-icon">❤️</span>
+                <div class="pulse-display" id="pulse-bpm">-- <span style="font-size: 1rem;">LPM</span></div>
+                <div class="pulse-status" id="pulse-status">Listo para medir</div>
+            </div>
+            <button class="btn-action btn-pulse" onclick="simularPulsaciones()">Iniciar Medición Espacial</button>
+        </div>
+
+        <div class="health-card">
+            <h3>⚖️ Calculadora de IMC</h3>
+            <div class="input-group">
+                <label for="imc-peso">Peso (kg):</label>
+                <input type="number" id="imc-peso" placeholder="Ej: 70" step="0.1">
+            </div>
+            <div class="input-group">
+                <label for="imc-altura">Altura (cm):</label>
+                <input type="number" id="imc-altura" placeholder="Ej: 175">
+            </div>
+            <button class="btn-action" onclick="calcularIMC()">Analizar Composición</button>
+            <div class="result-box" id="imc-resultado" style="display: none;"></div>
+        </div>
+
+        <div class="health-card card-tracker">
+            <h3>🏃 Registro de Rendimiento</h3>
+            
+            <div class="tracker-row">
+                <div class="tracker-info">
+                    <h4>Pasos Diarios</h4>
+                    <p>Meta: 10,000</p>
+                </div>
+                <div class="tracker-controls">
+                    <button class="btn-circle" onclick="modificarTracker('pasos', -1000)">-</button>
+                    <span class="tracker-val" id="val-pasos">0</span>
+                    <button class="btn-circle" onclick="modificarTracker('pasos', 1000)">+</button>
+                </div>
+            </div>
+
+            <div class="tracker-row">
+                <div class="tracker-info">
+                    <h4>Horas de Sueño</h4>
+                    <p>Meta: 8 horas</p>
+                </div>
+                <div class="tracker-controls">
+                    <button class="btn-circle" onclick="modificarTracker('sueno', -0.5)">-</button>
+                    <span class="tracker-val" id="val-sueno">0h</span>
+                    <button class="btn-circle" onclick="modificarTracker('sueno', 0.5)">+</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tips-section">
+        <div class="health-card card-tips">
+            <h3>📚 Biblioteca de Bienestar Avanzada</h3>
+            <p style="color: #cbd5e1; margin-bottom: 15px; font-size: 0.95rem;">Explora o busca decenas de tips científicos para potenciar tu día a día.</p>
+            
+            <input type="text" id="searchTips" class="search-bar" placeholder="🔍 Filtrar consejos (ej: agua, ojos, postura, cena...)" oninput="filtrarTips()">
+            
+            <div class="filter-tags">
+                <span class="tag active" onclick="filtrarCategoria(this, 'Todos')">Todos</span>
+                <span class="tag" onclick="filtrarCategoria(this, 'Nutrición')">Nutrición</span>
+                <span class="tag" onclick="filtrarCategoria(this, 'Descanso')">Descanso</span>
+                <span class="tag" onclick="filtrarCategoria(this, 'Mente')">Mente</span>
+                <span class="tag" onclick="filtrarCategoria(this, 'Deporte')">Deporte</span>
+            </div>
+
+            <div class="tips-grid" id="contenedor-tips"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS EXTENSA DE CONSEJOS ---
+        const listaConsejos = [
+            { cat: "Nutrición", t: "Regla del 80/20", d: "Come sano el 80% del tiempo y sé flexible con el 20% restante para mantener la consistencia a largo plazo." },
+            { cat: "Nutrición", t: "Hidratación Constante", d: "No esperes a tener sed. La sed es un síntoma de deshidratación ya en proceso." },
+            { cat: "Nutrición", t: "Colores en tu plato", d: "Cuantos más colores naturales veas en tus ensaladas o platos, mayor variedad de micronutrientes estarás ingiriendo." },
+            { cat: "Nutrición", t: "Fibra Inteligente", d: "Prioriza cereales integrales, legumbres y frutas enteras para mantener estables tus niveles de energía." },
+            { cat: "Nutrición", t: "Cenas más ligeras", d: "Intenta cenar al menos 2 horas antes de dormir para permitir que el cuerpo descanse en vez de digerir de forma pesada." },
+            
+            { cat: "Descanso", t: "Apagón de pantallas", d: "La luz azul inhibe la melatonina. Apaga o aleja tus dispositivos móviles 45 minutos antes de ir a la cama." },
+            { cat: "Descanso", t: "Horarios fijos", d: "Despertarse y acostarse a la misma hora ayuda a regular el reloj circadiano y mejora la calidad profunda del sueño." },
+            { cat: "Descanso", t: "Santuario Fresco", d: "La temperatura óptima de tu habitación para propiciar el sueño reparador oscila entre los 18°C y 20°C." },
+            { cat: "Descanso", t: "Siestas controladas", d: "Si necesitas reiniciar tu tarde, haz siestas de máximo 20 minutos para no entrar en fases de sueño profundo y despertar aturdido." },
+
+            { cat: "Mente", t: "Regla de los 5 minutos", d: "Si te abruma una tarea, comprométete a hacerla solo por 5 minutos. El mayor obstáculo suele ser simplemente empezar." },
+            { cat: "Mente", t: "Micro-desconexiones", d: "Por cada hora frente a la pantalla, mira un objeto fijo a la distancia durante 20 segundos para relajar la musculatura ocular." },
+            { cat: "Mente", t: "Respiración 4-7-8", d: "Inhala durante 4 segundos, retén el aire 7 segundos y exhala completamente en 8 segundos para mitigar picos de estrés." },
+            { cat: "Mente", t: "Escritura de vaciado", d: "Si tienes pensamientos circulares antes de dormir, escríbelos en una libreta para liberar espacio de procesamiento mental." },
+
+            { cat: "Deporte", t: "Entrenamiento de Fuerza", d: "No solo quemas calorías en el momento, sino que aumentar masa muscular acelera tu metabolismo basal en reposo." },
+            { cat: "Deporte", t: "Postura de Trabajo", d: "Cada 45 minutos levántate del escritorio, estira los flexores de la cadera y rota tus hombros hacia atrás." },
+            { cat: "Deporte", t: "Pasos no negociables", d: "Caminar después de las comidas principales reduce notablemente los picos de glucosa en sangre." },
+            { cat: "Deporte", t: "Movilidad articular", d: "Dedica 5 minutos por la mañana a rotar articulaciones clave; disminuye la rigidez diaria drásticamente." }
+        ];
+
+        let filtroActual = "Todos";
+
+        // --- SISTEMA DE ESTRELLAS DE FONDO ---
+        function crearEstrellas() {
+            const contenedor = document.getElementById('stars-container');
+            for (let i = 0; i < 100; i++) {
+                const estrella = document.createElement('div');
+                estrella.classList.add('star');
+                const tam = Math.random() * 2 + 0.5;
+                estrella.style.width = `${tam}px`;
+                estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`;
+                estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.animationDelay = `${Math.random() * 5}s`;
+                contenedor.appendChild(estrella);
+            }
+        }
+        crearEstrellas();
+
+        // --- TRACKERS INTERACTIVOS ---
+        let pasos = parseInt(localStorage.getItem('health-pasos')) || 0;
+        let sueno = parseFloat(localStorage.getItem('health-sueno')) || 0;
+
+        document.getElementById('val-pasos').innerText = pasos.toLocaleString();
+        document.getElementById('val-sueno').innerText = sueno + "h";
+
+        function modificarTracker(tipo, cantidad) {
+            if (tipo === 'pasos') {
+                pasos = Math.max(0, pasos + cantidad);
+                document.getElementById('val-pasos').innerText = pasos.toLocaleString();
+                localStorage.setItem('health-pasos', pasos);
+            } else if (tipo === 'sueno') {
+                sueno = Math.max(0, sueno + cantidad);
+                document.getElementById('val-sueno').innerText = sueno + "h";
+                localStorage.setItem('health-sueno', sueno);
+            }
+        }
+
+        // --- SIMULADOR DE PULSACIONES ---
+        function simularPulsaciones() {
+            const btn = document.querySelector('.btn-pulse');
+            const heart = document.getElementById('heart');
+            const display = document.getElementById('pulse-bpm');
+            const status = document.getElementById('pulse-status');
+
+            btn.disabled = true;
+            status.innerText = "Sincronizando con sensor virtual...";
+            heart.classList.add('heart-beating');
+            
+            let conteo = 0;
+            let intervalo = setInterval(() => {
+                display.innerHTML = `${Math.floor(Math.random() * (95 - 65) + 65)} <span style="font-size: 1rem;">LPM</span>`;
+                conteo++;
+                if (conteo > 10) {
+                    clearInterval(intervalo);
+                    finalizarMedicion();
+                }
+            }, 250);
+
+            function finalizarMedicion() {
+                heart.classList.remove('heart-beating');
+                const finalBpm = Math.floor(Math.random() * (85 - 60) + 60);
+                display.innerHTML = `${finalBpm} <span style="font-size: 1rem;">LPM</span>`;
+                
+                let evaluacion = "Óptimo (En reposo)";
+                if (finalBpm > 80) evaluacion = "Ligera excitación o cafeína";
+                
+                status.innerHTML = `🟢 Estado: <strong>${evaluacion}</strong>`;
+                btn.disabled = false;
+            }
+        }
+
+        // --- CALCULADORA DE IMC ---
+        function calcularIMC() {
+            const peso = parseFloat(document.getElementById('imc-peso').value);
+            const alturaCm = parseFloat(document.getElementById('imc-altura').value);
+            const resultadoBox = document.getElementById('imc-resultado');
+
+            if (!peso || !alturaCm) {
+                alert("Por favor introduce valores válidos.");
+                return;
+            }
+
+            const alturaM = alturaCm / 100;
+            const imc = (peso / (alturaM * alturaM)).toFixed(1);
+            let clasificacion = "";
+
+            if (imc < 18.5) clasificacion = "Bajo peso 🥞";
+            else if (imc < 25) clasificacion = "Peso saludable ✨";
+            else if (imc < 30) clasificacion = "Sobrepeso de nivel leve 🏋️";
+            else clasificacion = "Obesidad (Consulta un especialista) 🩺";
+
+            resultadoBox.style.display = "block";
+            resultadoBox.innerHTML = `Tu IMC es: <strong>${imc}</strong><br><span style="color:var(--secondary);">${clasificacion}</span>`;
+        }
+
+        // --- FILTRADO Y RENDER DE TIPS ---
+        function filtrarCategoria(elemento, categoria) {
+            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            elemento.classList.add('active');
+            filtroActual = categoria;
+            renderTips();
+        }
+
+        function filtrarTips() {
+            renderTips();
+        }
+
+        function renderTips() {
+            const contenedor = document.getElementById('contenedor-tips');
+            const busqueda = document.getElementById('searchTips').value.toLowerCase();
+            contenedor.innerHTML = '';
+
+            listaConsejos.forEach(tip => {
+                const coincideCat = (filtroActual === "Todos" || tip.cat === filtroActual);
+                const coincideBusqueda = (tip.t.toLowerCase().includes(busqueda) || tip.d.toLowerCase().includes(busqueda));
+
+                if (coincideCat && coincideBusqueda) {
+                    const claseBadge = `badge-${tip.cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+                    contenedor.innerHTML += `
+                        <div class="tip-card">
+                            <span class="tip-badge ${claseBadge}">${tip.cat}</span>
+                            <h4>${tip.t}</h4>
+                            <p>${tip.d}</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Inicializar renderizado
+        renderTips();
+    </script>
+</body>
+</html>
