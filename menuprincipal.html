@@ -544,6 +544,7 @@
                 </div>
             </div>
         </div>
+
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 0;">
             <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; background: rgba(255,255,255,0.02); padding: 6px 14px; border-radius: 12px; border: 1px solid var(--glass-border);">
                 Sistemas Activos: <span id="app-counter" style="color: var(--accent-cyan);">0</span> Módulos
@@ -552,26 +553,6 @@
                 THE ORIGIN © 2026
             </span>
         </div>
-    </div> ```
-
----
-
-### 2. La línea de JavaScript para activar el contador automático
-Para que calcule el total de tu array `originApps` de forma automática sin romper nada, ve a la sección final de tu `<script>` donde inicializas todo y añade la línea de `document.getElementById...`:
-
-```javascript
-        // INICIALIZACIÓN GENERAL
-        loadPointsSystem();
-        renderApps();
-        updateHUD();
-        initParticles();
-        animateParticles();
-        initVisualizer();
-        
-        // ESTA LÍNEA ES LA QUE DEBES AÑADIR:
-        document.getElementById('app-counter').innerText = originApps.length;
-
-        setInterval(updateHUD, 1000);
     </div>
 
     <script>
@@ -767,20 +748,39 @@ Para que calcule el total de tu array `originApps` de forma automática sin romp
         let soundInterval = null;
         let visualizerAnalyser = null;
         let canvasVis, ctxVis;
+        let mockWaveData = [];
 
-        // Inicia el canvas del visualizador
         function initVisualizer() {
             canvasVis = document.getElementById('audio-visualizer');
             ctxVis = canvasVis.getContext('2d');
             canvasVis.width = canvasVis.parentElement.clientWidth;
             canvasVis.height = 40;
             
-            // Dibujar estado en reposo
-            ctxVis.clearRect(0, 0, canvasVis.width, canvasVis.height);
-            ctxVis.fillStyle = "rgba(100, 116, 139, 0.3)";
-            for(let i=0; i < canvasVis.width; i+=6) {
-                ctxVis.fillRect(i, 18, 3, 4);
+            // Generar barras simuladas en reposo
+            mockWaveData = [];
+            for(let i = 0; i < canvasVis.width; i += 7) {
+                mockWaveData.push(4);
             }
+            drawVisualizer();
+        }
+
+        function drawVisualizer() {
+            ctxVis.clearRect(0, 0, canvasVis.width, canvasVis.height);
+            ctxVis.fillStyle = isMusicPlaying ? "rgba(34, 211, 238, 0.6)" : "rgba(100, 116, 139, 0.3)";
+            
+            mockWaveData.forEach((val, idx) => {
+                const x = idx * 7;
+                const h = val;
+                const y = (canvasVis.height - h) / 2;
+                ctxVis.fillRect(x, y, 4, h);
+            });
+        }
+
+        function animateVisualizer() {
+            if (!isMusicPlaying) return;
+            mockWaveData = mockWaveData.map(() => Math.floor(Math.random() * 30) + 4);
+            drawVisualizer();
+            requestAnimationFrame(animateVisualizer);
         }
 
         function toggleMusic() {
@@ -803,6 +803,7 @@ Para que calcule el total de tu array `originApps` de forma automática sin romp
                 btnPlay.innerText = "▶";
                 vinyl.classList.remove('playing');
                 clearInterval(soundInterval);
+                initVisualizer();
             }
         }
 
@@ -818,102 +819,52 @@ Para que calcule el total de tu array `originApps` de forma automática sin romp
             }
         }
 
-        // Secuenciador procedural que crea el ritmo Phonk/Drift
         function startPhonkSequencer() {
-            if(!visualizerAnalyser) {
-                visualizerAnalyser = audioCtx.createAnalyser();
-                visualizerAnalyser.fftSize = 32;
-            }
-
             let beatCount = 0;
-            // Un tempo rápido de 130 BPM aprox.
+            // Ritmo procedural simulado del secuenciador Phonk
             soundInterval = setInterval(() => {
-                const now = audioCtx.currentTime;
+                if (audioCtx.state === 'suspended') return;
                 
-                // 1. Kick/Sub-Bass pesado (Esencial en el Phonk)
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                // Bombo / Kick profundo en cada beat de Phonk
                 if (beatCount % 2 === 0) {
-                    const oscBass = audioCtx.createOscillator();
-                    const gainBass = audioCtx.createGain();
-                    oscBass.type = 'sawtooth'; 
-                    oscBass.frequency.setValueAtTime(55, now); // Nota La (A1) muy baja
-                    oscBass.frequency.exponentialRampToValueAtTime(30, now + 0.2);
-                    
-                    // Distorsión suave
-                    gainBass.gain.setValueAtTime(0.3, now);
-                    gainBass.gain.linearRampToValueAtTime(0.01, now + 0.25);
-                    
-                    oscBass.connect(gainBass);
-                    gainBass.connect(visualizerAnalyser);
-                    visualizerAnalyser.connect(audioCtx.destination);
-                    oscBass.start(now);
-                    oscBass.stop(now + 0.25);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(45, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.18);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.18);
+                } 
+                // Platillo o Bajo distorsionado intercalado
+                else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(currentTrackIdx === 1 ? 70 : 60, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.12);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.12);
                 }
-
-                // 2. Cowbell rítmico o sintetizador agudo distorsionado (La firma del Phonk)
-                if (beatCount % 4 === 1 || beatCount % 7 === 3) {
-                    const oscCowbell = audioCtx.createOscillator();
-                    const gainCowbell = audioCtx.createGain();
-                    oscCowbell.type = 'triangle';
-                    
-                    // Varía notas basado en la pista activa
-                    let freq = 659.25; // Mi5
-                    if(currentTrackIdx === 1) freq = 587.33; // Re5
-                    if(currentTrackIdx === 2) freq = 783.99; // Sol5
-                    
-                    oscCowbell.frequency.setValueAtTime(freq, now);
-                    gainCowbell.gain.setValueAtTime(0.06, now);
-                    gainCowbell.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-                    
-                    oscCowbell.connect(gainCowbell);
-                    gainCowbell.connect(visualizerAnalyser);
-                    oscCowbell.start(now);
-                    oscCowbell.stop(now + 0.15);
-                }
-
                 beatCount++;
-            }, 220); 
+            }, 300);
         }
 
-        // Renderizado del ecualizador visual dinámico
-        function animateVisualizer() {
-            if (!isMusicPlaying) return;
-            requestAnimationFrame(animateVisualizer);
-
-            const bufferLength = visualizerAnalyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            visualizerAnalyser.getByteFrequencyData(dataArray);
-
-            ctxVis.clearRect(0, 0, canvasVis.width, canvasVis.height);
-
-            const barWidth = 4;
-            const barGap = 3;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                // Mapeo de potencia del sonido a altura
-                let percent = dataArray[i] / 255;
-                let barHeight = (percent * canvasVis.height) + 3;
-
-                // Gradiente del color neón cian al morado según el ritmo
-                ctxVis.fillStyle = i % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-purple)';
-                
-                // Centrar barras verticalmente
-                let y = (canvasVis.height - barHeight) / 2;
-
-                ctxVis.fillRect(x, y, barWidth, barHeight);
-                x += barWidth + barGap;
-                if (x > canvasVis.width) break;
-            }
-        }
-
-        // INICIALIZACIÓN GENERAL
+        // INICIALIZACIÓN GENERAL DEL DASHBOARD
         loadPointsSystem();
         renderApps();
         updateHUD();
         initParticles();
         animateParticles();
         initVisualizer();
-        setInterval(updateHUD, 1000); 
+        
+        // Inyectar el número exacto total de tus aplicaciones en tiempo real
+        document.getElementById('app-counter').innerText = originApps.length;
+
+        setInterval(updateHUD, 1000);
     </script>
 </body>
 </html>
