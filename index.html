@@ -86,14 +86,12 @@
             border: 1px solid rgba(116, 185, 255, 0.25); text-shadow: 0 0 10px rgba(116, 185, 255, 0.4);
         }
 
-        /* --- ANIMACIÓN PARA EL TÍTULO "THE ORIGIN" --- */
         header h1 {
             font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px;
             background: linear-gradient(135deg, #ffffff, #74b9ff, #ffffff);
             background-size: 200% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: inline-block;
-            /* Combina el movimiento de flotado continuo y el brillo del texto */
             animation: floatText 4s ease-in-out infinite, shineText 6s linear infinite;
         }
 
@@ -109,7 +107,6 @@
 
         header p { color: #cbd5e1; font-size: 1.1rem; margin-bottom: 35px; font-weight: 500; }
 
-        /* --- PERFIL PRINCIPAL DE MATHEO (EN GRANDE) --- */
         .admin-section {
             display: flex; justify-content: center; margin-bottom: 40px;
         }
@@ -124,7 +121,6 @@
         .profile-card.admin-card .avatar { font-size: 5rem; }
         .profile-card.admin-card h3 { font-size: 1.8rem; color: #fff; }
 
-        /* Grid de Perfiles Secundarios */
         .profiles-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px; width: 100%; perspective: 1000px;
@@ -155,7 +151,6 @@
         .profile-card h3 { font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
         .profile-card p { font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Modales */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -177,7 +172,6 @@
         .overlay.active .glass-panel { transform: scale(1); }
         .glass-panel h2 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 800; }
 
-        /* Teclado y Inputs */
         .pin-input {
             width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 14px;
@@ -200,7 +194,6 @@
         .btn-close { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); }
         .btn-close:hover { background: rgba(255, 255, 255, 0.2); color: white; }
 
-        /* Estadísticas e Info Extendida */
         .stat-box { display: flex; justify-content: space-around; margin: 20px 0; gap: 15px; }
         .stat-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 16px; flex: 1; }
         .stat-item .label { font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 5px; }
@@ -216,7 +209,6 @@
         .info-card .title { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
         .info-card .data { font-size: 1rem; font-weight: 700; color: #ffffff; }
 
-        /* --- BOTONES EXCLUSIVOS DE DANNA --- */
         .danna-links-container { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
         .danna-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -228,12 +220,32 @@
 
         footer { z-index: 1; text-align: center; padding-top: 30px; width: 100%; }
         footer p { font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase; }
+
+        /* --- CONTROL DE MÚSICA FLOTANTE --- */
+        .music-controller {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+        .music-btn {
+            background: none; border: none; color: #ffffff; font-size: 1rem; cursor: pointer;
+            transition: transform 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .music-btn:hover { transform: scale(1.15); color: var(--secondary); }
+        .music-info { font-size: 0.75rem; font-weight: 600; color: #94a3b8; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     </style>
 </head>
 <body>
 
     <div id="stars-container"></div>
     <div class="dev-badge">En Desarrollo</div>
+
+    <div class="music-controller">
+        <button class="music-btn" id="btn-play-music" onclick="toggleMúsica()">🎵</button>
+        <button class="music-btn" onclick="siguienteCancion()">⏭️</button>
+        <span class="music-info" id="track-title">Pista 1</span>
+    </div>
 
     <div class="welcome-container">
         <header>
@@ -284,7 +296,7 @@
     </div>
 
     <footer>
-        <p>THE ORIGIN - By Matheo</p>
+        <p>THE ORIGIN - By Matheo -2026</p>
     </footer>
 
     <div class="overlay" id="modal-auth">
@@ -370,6 +382,50 @@
         let perfilActualSesion = ""; 
         let maxPinLength = 6;
 
+        // --- GESTIÓN DE MÚSICA DE FONDO ---
+        const listaCanciones = [
+            { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { titulo: "Retro Pulse", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+        
+        let indiceCancionActual = 0;
+        const reproductorMusica = new Audio();
+        reproductorMusica.volume = 0.25; // Volumen al 25% para que no moleste al usuario
+
+        function cargarCancion(index) {
+            reproductorMusica.src = listaCanciones[index].url;
+            document.getElementById('track-title').innerText = listaCanciones[index].titulo;
+        }
+        
+        function toggleMúsica() {
+            // Activar AudioContext por si los sonidos de los clics no se han inicializado
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            if (reproductorMusica.paused) {
+                reproductorMusica.play().catch(err => console.log("Interacción requerida primero"));
+                document.getElementById('btn-play-music').innerText = "⏸️";
+            } else {
+                reproductorMusica.pause();
+                document.getElementById('btn-play-music').innerText = "▶️";
+            }
+        }
+
+        function siguienteCancion() {
+            indiceCancionActual = (indiceCancionActual + 1) % listaCanciones.length;
+            cargarCancion(indiceCancionActual);
+            reproductorMusica.play().catch(() => {});
+            document.getElementById('btn-play-music').innerText = "⏸️";
+        }
+
+        // Detectar automáticamente el final de la canción para poner la siguiente
+        reproductorMusica.addEventListener('ended', siguienteCancion);
+
+        // Inicializar la primera canción de la lista
+        cargarCancion(indiceCancionActual);
+
+
+        // --- EFECTOS DE SONIDO DE INTERFAZ (FX) ---
         function playSound(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -394,6 +450,15 @@
                 osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             }
         }
+
+        // Intentar iniciar la música si el usuario hace cualquier clic en la pantalla
+        document.body.addEventListener('click', () => {
+            if (reproductorMusica.paused && reproductorMusica.src && document.getElementById('btn-play-music').innerText === "🎵") {
+                reproductorMusica.play().then(() => {
+                    document.getElementById('btn-play-music').innerText = "⏸️";
+                }).catch(() => {});
+            }
+        }, { once: true });
 
         document.querySelectorAll('.profile-card, .btn-key').forEach(elem => {
             elem.addEventListener('mouseenter', () => playSound('hover'));
