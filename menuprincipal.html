@@ -13,6 +13,7 @@
             --glass-hover: rgba(255, 255, 255, 0.10);
             --accent-purple: #c084fc; 
             --accent-cyan: #22d3ee;   
+            --accent-orange: #f97316;
             --accent-neon-glow: rgba(34, 211, 238, 0.3);
             --text-main: #f8fafc;
             --text-muted: #64748b;
@@ -31,7 +32,7 @@
         
         body {
             background-color: var(--bg-main);
-            background-image: 
+            background-image:  
                 radial-gradient(circle at 85% 15%, rgba(192, 132, 252, 0.12) 0%, transparent 50%),
                 radial-gradient(circle at 15% 85%, rgba(34, 211, 238, 0.08) 0%, transparent 50%);
             background-attachment: fixed;
@@ -144,11 +145,17 @@
             border-color: var(--accent-cyan);
         }
 
-        /* 3. PANEL DE STATS AJUSTADO SIN LA MISIÓN */
+        /* 3. PANEL DE STATS AJUSTADO A 3 COLUMNAS CON LA RACHA */
         .stats-layout {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1, 1fr);
             gap: 14px;
+        }
+
+        @media (min-width: 550px) {
+            .stats-layout {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .stat-card {
@@ -193,6 +200,15 @@
             text-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
         }
 
+        .racha-card {
+            border-color: rgba(249, 115, 22, 0.2);
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.03), rgba(255, 255, 255, 0.002));
+        }
+        .racha-card .stat-val {
+            color: var(--accent-orange);
+            text-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+        }
+
         /* 4. TABS FILTROS DISEÑO ELÁSTICO */
         .tabs-row {
             display: flex;
@@ -230,46 +246,50 @@
             transform: scale(1.02);
         }
 
-        /* 5. REJILLA DE APPS GAMER PREMIUM */
+        /* 5. REJILLA DE APPS GAMER PREMIUM MODIFICADA PARA DESCRIPCIONES */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            row-gap: 28px;
-            column-gap: 18px;
+            grid-template-columns: repeat(2, 1fr); 
+            row-gap: 24px;
+            column-gap: 16px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            padding: 28px;
+            padding: 24px;
             border-radius: 28px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.02), 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        @media (min-width: 600px) { .apps-grid { grid-template-columns: repeat(6, 1fr); } }
-        @media (min-width: 900px) { .apps-grid { grid-template-columns: repeat(8, 1fr); } }
-        @media (min-width: 1200px) { .apps-grid { grid-template-columns: repeat(10, 1fr); } }
+        @media (min-width: 480px) { .apps-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 700px) { .apps-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 950px) { .apps-grid { grid-template-columns: repeat(5, 1fr); } }
+        @media (min-width: 1200px) { .apps-grid { grid-template-columns: repeat(6, 1fr); } }
 
         .app-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            gap: 10px;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            gap: 8px;
+            padding: 10px 6px;
+            border-radius: 18px;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
         }
 
-        .app-item:active { transform: scale(0.88); }
+        .app-item:active { transform: scale(0.92); }
+        .app-item:hover { background: rgba(255,255,255,0.01); }
 
         .app-icon-wrapper {
-            width: 64px;
-            height: 64px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             box-shadow: 0 6px 16px rgba(0,0,0,0.2);
             transition: all 0.3s var(--anim-space);
             position: relative;
@@ -278,14 +298,22 @@
         .app-item:hover .app-icon-wrapper {
             border-color: var(--accent-cyan);
             background: var(--glass-hover);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             box-shadow: 0 0 20px var(--accent-neon-glow), 0 8px 20px rgba(0,0,0,0.4);
         }
 
+        .app-text-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 3px;
+        }
+
         .app-title {
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             color: #94a3b8;
-            font-weight: 600;
+            font-weight: 700;
             text-align: center;
             max-width: 100%;
             overflow: hidden;
@@ -293,9 +321,22 @@
             white-space: nowrap;
             transition: color 0.2s;
         }
-        .app-item:hover .app-title { 
-            color: #fff; 
+        
+        .app-desc {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-align: center;
+            width: 100%;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: color 0.2s;
         }
+
+        .app-item:hover .app-title { color: #fff; }
+        .app-item:hover .app-desc { color: #94a3b8; }
 
         @keyframes fadeInHUD {
             from { opacity: 0; transform: translateY(15px); filter: blur(4px); }
@@ -332,6 +373,13 @@
                 <div class="stat-info">
                     <span class="stat-label">MP (MathePoints)</span>
                     <div class="stat-val" id="display-mp">0</div>
+                </div>
+            </div>
+            <div class="stat-card racha-card">
+                <div class="stat-icon">☀️</div>
+                <div class="stat-info">
+                    <span class="stat-label">Racha Activa</span>
+                    <div class="stat-val" id="display-racha">1 día</div>
                 </div>
             </div>
         </div>
@@ -379,47 +427,51 @@
             }
         }
 
+        // ARRAY CON LAS DESCRIPCIONES DE CADA APLICACIÓN INTEGRADA
         const originApps = [
-            { name: "Perfil", icon: "👤", cat: "core", url: "perfil.html" },
-            { name: "Vault", icon: "🔒", cat: "core", url: "vault.html" },
-            { name: "Settings", icon: "⚙️", cat: "core", url: "settings.html" },
-            { name: "Passwords", icon: "🔑", cat: "core", url: "passwords.html" },
+            { name: "Perfil", icon: "👤", cat: "core", url: "perfil.html", desc: "Núcleo de identidad" },
+            { name: "Vault", icon: "🔒", cat: "core", url: "vault.html", desc: "Archivos ocultos" },
+            { name: "Settings", icon: "⚙️", cat: "core", url: "settings.html", desc: "Ajustes del sistema" },
+            { name: "Passwords", icon: "🔑", cat: "core", url: "passwords.html", desc: "Llavero de claves" },
             
-            { name: "Deporte", icon: "🏃‍♂️", cat: "bio", url: "deporte.html" },
-            { name: "Cook", icon: "🍳", cat: "bio", url: "cook.html" },
-            { name: "Health", icon: "❤️", cat: "bio", url: "health.html" },
-            { name: "SLEEP", icon: "💤", cat: "bio", url: "sleep.html" },
-            { name: "Pets", icon: "🐾", cat: "bio", url: "pets.html" },
-            { name: "Meditation", icon: "🧘‍♂️", cat: "bio", url: "meditation.html" },
-            { name: "Journal", icon: "📖", cat: "bio", url: "journal.html" },
+            { name: "Deporte", icon: "🏃‍♂️", cat: "bio", url: "deporte.html", desc: "Entrenamientos" },
+            { name: "Cook", icon: "🍳", cat: "bio", url: "cook.html", desc: "Macros y recetas" },
+            { name: "Health", icon: "❤️", cat: "bio", url: "health.html", desc: "Constantes vitales" },
+            { name: "SLEEP", icon: "💤", cat: "bio", url: "sleep.html", desc: "Ciclos de descanso" },
+            { name: "Pets", icon: "🐾", cat: "bio", url: "pets.html", desc: "Control de mascotas" },
+            { name: "Meditation", icon: "🧘‍♂️", cat: "bio", url: "meditation.html", desc: "Foco y respiración" },
+            { name: "Journal", icon: "📖", cat: "bio", url: "journal.html", desc: "Diario personal" },
             
-            { name: "Business", icon: "💼", cat: "imp", url: "business.html" },
-            { name: "Student", icon: "👨‍🎓", cat: "imp", url: "student.html" },
-            { name: "Academy", icon: "🎓", cat: "imp", url: "academy.html" },
-            { name: "Motivation", icon: "🔥", cat: "imp", url: "motivation.html" },
-            { name: "Practique", icon: "🃏", cat: "imp", url: "practique.html" },
-            { name: "Tasks", icon: "📋", cat: "imp", url: "tasks.html" },
-            { name: "Habits", icon: "🔁", cat: "imp", url: "habits.html" },
+            { name: "Business", icon: "💼", cat: "imp", url: "business.html", desc: "Finanzas corporativas" },
+            { name: "Student", icon: "👨‍🎓", cat: "imp", url: "student.html", desc: "Horario de clases" },
+            { name: "Academy", icon: "🎓", cat: "imp", url: "academy.html", desc: "Cursos y apuntes" },
+            { name: "Motivation", icon: "🔥", cat: "imp", url: "motivation.html", desc: "Frases de poder" },
+            { name: "Practique", icon: "🃏", cat: "imp", url: "practique.html", desc: "Tarjetas de memoria" },
+            { name: "Tasks", icon: "📋", cat: "imp", url: "tasks.html", desc: "Gestor de tareas" },
+            { name: "Habits", icon: "🔁", cat: "imp", url: "habits.html", desc: "Rutinas diarias" },
             
-            { name: "AI", icon: "🤖", cat: "utils", url: "ai.html" },
-            { name: "Notes", icon: "📝", cat: "utils", url: "notes.html" },
-            { name: "Time", icon: "⏳", cat: "utils", url: "time.html" },
-            { name: "Point Shop", icon: "💎", cat: "utils", url: "pointshop.html" },
-            { name: "Paint", icon: "🎨", cat: "utils", url: "paint.html" },
-            { name: "Contacts", icon: "📇", cat: "utils", url: "contacts.html" },
-            { name: "Maths", icon: "➗", cat: "utils", url: "maths.html" },
-            { name: "Maps", icon: "📍", cat: "utils", url: "maps.html" },
-            { name: "Docs", icon: "📂", cat: "utils", url: "docs.html" },
-            { name: "Kids", icon: "🧸", cat: "utils", url: "kids.html" },
-            { name: "Money", icon: "💸", cat: "utils", url: "money.html" },
-            { name: "Music", icon: "🎧", cat: "utils", url: "music.html" }
+            { name: "AI", icon: "🤖", cat: "utils", url: "ai.html", desc: "Asistente inteligente" },
+            { name: "Notes", icon: "📝", cat: "utils", url: "notes.html", desc: "Bloc de notas rápido" },
+            { name: "Time", icon: "⏳", cat: "utils", url: "time.html", desc: "Pomodoro y crono" },
+            { name: "Point Shop", icon: "💎", cat: "utils", url: "pointshop.html", desc: "Tienda de puntos" },
+            { name: "Paint", icon: "🎨", cat: "utils", url: "paint.html", desc: "Lienzo de dibujo" },
+            { name: "Contacts", icon: "📇", cat: "utils", url: "contacts.html", desc: "Directorio central" },
+            { name: "Maths", icon: "➗", cat: "utils", url: "maths.html", desc: "Calculadora de matriz" },
+            { name: "Maps", icon: "📍", cat: "utils", url: "maps.html", desc: "Radar de posiciones" },
+            { name: "Docs", icon: "📂", cat: "utils", url: "docs.html", desc: "Explorador local" },
+            { name: "Kids", icon: "🧸", cat: "utils", url: "kids.html", desc: "Zona recreativa" },
+            { name: "Money", icon: "💸", cat: "utils", url: "money.html", desc: "Presupuesto personal" },
+            { name: "Music", icon: "🎧", cat: "utils", url: "music.html", desc: "Reproductor sónico" }
         ];
 
         function loadPointsSystem() {
             if (localStorage.getItem('origin_xp') === null) localStorage.setItem('origin_xp', '0');
             if (localStorage.getItem('origin_mp') === null) localStorage.setItem('origin_mp', '0');
+            if (localStorage.getItem('origin_racha') === null) localStorage.setItem('origin_racha', '1');
+            
             document.getElementById('display-xp').innerText = localStorage.getItem('origin_xp');
             document.getElementById('display-mp').innerText = localStorage.getItem('origin_mp');
+            document.getElementById('display-racha').innerText = localStorage.getItem('origin_racha') + (localStorage.getItem('origin_racha') == 1 ? ' día' : ' días');
         }
 
         function renderApps(category = 'all') {
@@ -435,7 +487,10 @@
                     
                     item.innerHTML = `
                         <div class="app-icon-wrapper">${app.icon}</div>
-                        <span class="app-title">${app.name}</span>
+                        <div class="app-text-block">
+                            <span class="app-title">${app.name}</span>
+                            <span class="app-desc">${app.desc}</span>
+                        </div>
                     `;
                     container.appendChild(item);
                 }
@@ -449,25 +504,18 @@
             renderApps(módulo);
         }
 
-        // CONTROL ACTUALIZADO DEL HUD (RELOJ + FECHA AUTOMÁTICA EN ESPAÑOL)
         function updateHUD() {
             const d = new Date();
-            
-            // Reloj
             document.getElementById('live-clock').innerText = d.toTimeString().split(' ')[0];
             
-            // Fecha dinámica ("Viernes, 12 de Junio")
             const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
             let fechaString = d.toLocaleDateString('es-ES', opciones);
             
-            // Dar formato exacto: capitalizar primera letra de cada palabra clave
             fechaString = fechaString.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
-            // Reemplazar la "De" intermedia por "de" minúscula para que quede natural en español
             fechaString = fechaString.replace(/ De /g, ' de ');
             
             document.getElementById('live-date').innerText = fechaString;
             
-            // Saludo dinámico por horas
             const h = d.getHours();
             let greet = "Hola, Matheo";
             if (h >= 6 && h < 12) greet = "Buenos días, Matheo";
