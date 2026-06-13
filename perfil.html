@@ -19,13 +19,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #1c1437 0%, #060614 100%);
+            background: #060614;
             color: var(--text-main);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             justify-content: center;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* FONDO ANIMADO CANVAS FIXED */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 0%, #1c1437 0%, #060614 100%);
         }
 
         /* ANIMACIÓN DE ENTRADA AL SISTEMA */
@@ -36,6 +48,7 @@
             grid-template-columns: 1fr 2fr; 
             gap: 20px;
             animation: systemInit 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 1;
         }
         @media (max-width: 850px) { .container { grid-template-columns: 1fr; } }
 
@@ -55,6 +68,7 @@
             margin-bottom: 20px;
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
         }
+        
         /* EFECTO DE CALIDAD / HOVER 3D DE ENTORNO */
         .panel:hover {
             transform: translateY(-2px);
@@ -173,6 +187,10 @@
 </head>
 <body>
 
+    <canvas id="bgCanvas"></canvas>
+
+    <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
     <div class="container">
         <div class="profile-sidebar">
             <div class="panel" id="sidebarPanel">
@@ -201,6 +219,18 @@
 
             <div class="panel">
                 <h2>⚙️ Ajustes Operativos</h2>
+                
+                <div class="settings-row">
+                    <div>
+                        <p style="font-weight: 500;">Música de Fondo</p>
+                        <p style="font-size: 0.7rem; color: var(--text-muted);">Sintonía Cyberpunk Loop</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="musicToggle" onchange="toggleMusic()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
                 <div class="settings-row">
                     <div>
                         <p style="font-weight: 500;">Perfil Privado</p>
@@ -345,13 +375,13 @@
             if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
             if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
 
-            // Asignar sonidos a interacciones de botones existentes de manera automática
             document.querySelectorAll('.btn, .action-card, .switch input').forEach(el => {
                 el.addEventListener('click', soundClick);
             });
 
             checkRacha();
             render();
+            initBgAnimation(); // Iniciar fondo animado
         }
 
         function checkRacha() {
@@ -402,7 +432,6 @@
             });
             document.getElementById('disp-liga-tag').innerText = currentRange;
 
-            // Renderizar el nuevo gráfico analítico
             drawChart(parseInt(xp), parseInt(mp), parseInt(racha));
         }
 
@@ -412,7 +441,6 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Ajustar límites virtuales para que las barras se vean bien al inicio
             const maxVal = Math.max(xp, mp, racha, 10);
             
             const datasets = [
@@ -426,7 +454,6 @@
             const spacing = 75;
             const bottomY = 120;
 
-            // Línea de base del dibujo gráfico
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
             ctx.beginPath();
             ctx.moveTo(20, bottomY);
@@ -435,32 +462,95 @@
 
             datasets.forEach((data, index) => {
                 const x = startX + (index * spacing);
-                // Calcular altura proporcional
                 const barHeight = (data.value / maxVal) * 80;
 
-                // Dibujar sombra / resplandor de barra
                 ctx.shadowBlur = 12;
                 ctx.shadowColor = data.color;
 
-                // Dibujar cuerpo de barra de datos
                 ctx.fillStyle = data.color;
                 ctx.beginPath();
                 ctx.roundRect(x, bottomY - barHeight, barWidth, barHeight > 0 ? barHeight : 2, 6);
                 ctx.fill();
 
-                // Quitar sombra para textos
                 ctx.shadowBlur = 0;
 
-                // Etiquetas inferiores
                 ctx.fillStyle = '#64748b';
                 ctx.font = '10px -apple-system, sans-serif';
                 ctx.fillText(data.label, x + 8, bottomY + 18);
 
-                // Valores superiores numéricos
                 ctx.fillStyle = '#f8fafc';
                 ctx.font = 'bold 11px -apple-system, sans-serif';
                 ctx.fillText(data.value, x + (barWidth / 2) - (ctx.measureText(data.value).width / 2), bottomY - barHeight - 8);
             });
+        }
+
+        // --- CONTROL DE REPRODUCCIÓN DE MÚSICA ---
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const toggle = document.getElementById('musicToggle');
+            if (toggle.checked) {
+                music.play().catch(err => {
+                    console.log("Interacción requerida para audio.");
+                    toggle.checked = false;
+                });
+            } else {
+                music.pause();
+            }
+        }
+
+        // --- MOTOR DE ANIMACIÓN DE FONDO INTERACTIVO (PARTÍCULAS) ---
+        function initBgAnimation() {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Crear 70 partículas cibernéticas flotantes
+            for(let i = 0; i < 70; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.25,
+                    vy: (Math.random() - 0.5) * 0.25,
+                    color: Math.random() > 0.5 ? 'rgba(34, 211, 238,' : 'rgba(192, 132, 252,',
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Redibujar degradado de fondo base
+                let grad = ctx.createRadialGradient(canvas.width/2, 0, 10, canvas.width/2, 0, canvas.height);
+                grad.addColorStop(0, '#1c1437');
+                grad.addColorStop(1, '#060614');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Mover y dibujar partículas virtuales
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.fillStyle = p.color + p.alpha + ')';
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
 
         function calcularFracaso() {
@@ -498,7 +588,7 @@
             document.getElementById('input-colegio').value = document.getElementById('disp-colegio').innerText;
             document.getElementById('input-nacimiento').value = document.getElementById('disp-nacimiento').innerText;
             document.getElementById('input-edad').value = document.getElementById('disp-edad').innerText;
-            document.getElementById('input-nacionalidad').value = document.getElementById('input-nacionalidad').value || "Español y Ecuatoriano";
+            document.getElementById('input-nacionalidad').value = document.getElementById('disp-nacionalidad').innerText || "Español y Ecuatoriano";
             document.getElementById('input-zodiaco').value = document.getElementById('disp-zodiaco').innerText;
             document.getElementById('input-descripcion').value = document.getElementById('disp-descripcion').innerText;
             document.getElementById('editModal').style.display = 'flex';
