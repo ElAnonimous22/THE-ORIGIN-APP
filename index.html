@@ -67,6 +67,25 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Indicador Permanente de Desarrollo Lateral */
+        .dev-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 118, 117, 0.15);
+            border: 1px solid rgba(255, 118, 117, 0.4);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 5;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
         /* Contenedor Principal */
         .welcome-container {
             z-index: 1;
@@ -82,6 +101,22 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Etiqueta Beta sobre el Título */
+        .beta-tag {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--secondary);
+            background: rgba(116, 185, 255, 0.1);
+            padding: 4px 16px;
+            border-radius: 20px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(116, 185, 255, 0.25);
+            text-shadow: 0 0 10px rgba(116, 185, 255, 0.4);
+        }
+
         header h1 {
             font-size: 4rem;
             font-weight: 900;
@@ -91,6 +126,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 10px 30px rgba(116, 185, 255, 0.2);
+            line-height: 1.1;
         }
 
         header p {
@@ -400,9 +436,12 @@
 <body>
 
     <div id="stars-container"></div>
+    
+    <div class="dev-badge">En Desarrollo</div>
 
     <div class="welcome-container">
         <header>
+            <div class="beta-tag">Beta</div>
             <h1>THE ORIGIN</h1>
             <p>La vida en una sola app</p>
         </header>
@@ -564,7 +603,7 @@
                 authTitle.innerText = "Acceso Administrador: Matheo";
             } else if (perfil === 'Familia') {
                 authTitle.innerText = "Filtro Familiar Requerido";
-                hintBtn.style.display = "block"; // Mostrar el botón de pista únicamente a los padres
+                hintBtn.style.display = "block";
             }
             modalAuth.classList.add('active');
         }
@@ -607,7 +646,6 @@
         function mostrarDataReal(nombrePerfil, esFamiliaAvanzado) {
             document.getElementById('display-title').innerText = `Visualizador: ${nombrePerfil}`;
             
-            // Extracción real de datos de los trackers integrados en la app
             const aguaGuardada = parseInt(localStorage.getItem('trackerAgua')) || 0;
             const pasosGuardados = parseInt(localStorage.getItem('health-pasos')) || 0;
             const suenoGuardado = parseFloat(localStorage.getItem('health-sueno')) || 0;
@@ -618,7 +656,6 @@
             document.getElementById('stat-mp').innerText = Math.floor(mpReal);
             document.getElementById('stat-xp').innerText = Math.floor(xpReal).toLocaleString();
 
-            // Activar visualización extendida si es el perfil Familia verificado
             const panelBonus = document.getElementById('family-bonus');
             if (esFamiliaAvanzado) {
                 panelBonus.style.display = "block";
@@ -635,7 +672,6 @@
             pinField.value = "";
         }
 
-        // Eventos para teclado físico
         window.addEventListener('keydown', function(e) {
             const modalAuth = document.getElementById('modal-auth');
             if (modalAuth.classList.contains('active')) {
