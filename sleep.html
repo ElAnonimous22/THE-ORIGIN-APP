@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Registro de Sueño</title>
+    <style>
+        :root {
+            --primary: #ff7675;
+            --secondary: #74b9ff;
+            --success: #55efc4;
+            --warning: #ffeaa7;
+            --dark: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(125deg, #050508, #0b0c10, #120136, #1a0826);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 30px 20px;
+        }
+
+        #stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: blink 3s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.1; transform: scale(0.6); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(-3px);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px var(--glass-shadow);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="time"], textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="time"]:focus, textarea:focus {
+            border-color: var(--secondary);
+        }
+
+        textarea {
+            font-size: 0.95rem;
+            resize: none;
+            height: 80px;
+        }
+
+        /* Sistema de Estrellas */
+        .stars-rating {
+            display: flex;
+            gap: 10px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .star-item {
+            color: rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .star-item.active {
+            color: var(--warning);
+            text-shadow: 0 0 10px rgba(255, 234, 167, 0.4);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--secondary), #0984e3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.4);
+        }
+
+        /* Stats e Historial */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-top: 5px;
+        }
+
+        .history-list {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .history-list::-webkit-scrollbar { width: 6px; }
+        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+        .history-item {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--secondary);
+            padding: 12px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .history-stars { color: var(--warning); font-size: 0.8rem; }
+        .history-note { color: #94a3b8; font-size: 0.8rem; font-style: italic; margin-top: 4px; }
+
+        /* Control de Música Flotante */
+        .music-controller {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+        .music-btn {
+            background: none; border: none; color: #ffffff; font-size: 1rem; cursor: pointer;
+            transition: transform 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .music-info { font-size: 0.75rem; font-weight: 600; color: #94a3b8; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <div class="music-controller">
+        <button class="music-btn" id="btn-play-music" onclick="toggleMúsica()">🎵</button>
+        <button class="music-btn" onclick="siguienteCancion()">⏭️</button>
+        <span class="music-info" id="track-title">Pista 1</span>
+    </div>
+
+    <div class="nav-header">
+        <a href="menuprincipal.html" class="btn-back">← Volver</a>
+        <h1>Monitor de Sueño</h1>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="glass-card">
+            <h2>🌙 Registrar Descanso</h2>
+            
+            <div class="form-group">
+                <label for="sleep-time">¿A qué hora te dormiste?</label>
+                <input type="time" id="sleep-time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="wake-time">¿A qué hora te despertaste?</label>
+                <input type="time" id="wake-time" required>
+            </div>
+
+            <div class="form-group">
+                <label>Calidad del Sueño</label>
+                <div class="stars-rating" id="star-container-selector">
+                    <span class="star-item" onclick="setRating(1)">★</span>
+                    <span class="star-item" onclick="setRating(2)">★</span>
+                    <span class="star-item" onclick="setRating(3)">★</span>
+                    <span class="star-item" onclick="setRating(4)">★</span>
+                    <span class="star-item" onclick="setRating(5)">★</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sleep-notes">Notas / Sueños (Opcional)</label>
+                <textarea id="sleep-notes" placeholder="Ej. Tuve un sueño raro con naves espaciales, me desperté sediento..."></textarea>
+            </div>
+
+            <button class="btn-submit" onclick="guardarRegistroSueño()">Guardar en la Base de Datos</button>
+        </div>
+
+        <div class="glass-card">
+            <h2>📊 Resumen Analítico</h2>
+            
+            <div class="stats-summary">
+                <div class="stat-box">
+                    <label>Media de Sueño</label>
+                    <div class="val" id="avg-hours">0.0h</div>
+                </div>
+                <div class="stat-box">
+                    <label>Eficiencia Global</label>
+                    <div class="val" id="sleep-efficiency" style="color: var(--secondary);">0%</div>
+                </div>
+            </div>
+
+            <h2>📜 Historial de Registros</h2>
+            <div class="history-list" id="history-container">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let ratingSeleccionado = 0;
+
+        // --- FX AUDIO ---
+        function playSound(tipo) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+
+            if (tipo === 'click') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+            } else if (tipo === 'success') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+            }
+        }
+
+        // --- SISTEMA DE CALIFICACIÓN DE ESTRELLAS ---
+        function setRating(rating) {
+            playSound('click');
+            ratingSeleccionado = rating;
+            const estrellas = document.querySelectorAll('.star-item');
+            estrellas.forEach((estrella, idx) => {
+                if (idx < rating) {
+                    estrella.classList.add('active');
+                } else {
+                    estrella.classList.remove('active');
+                }
+            });
+        }
+
+        // --- LÓGICA CORE: CÁLCULOS Y LOCALSTORAGE ---
+        function calcularDiferenciaHoras(inicio, fin) {
+            const [horasInicio, minsInicio] = inicio.split(':').map(Number);
+            const [horasFin, minsFin] = fin.split(':').map(Number);
+
+            let totalMinsInicio = horasInicio * 60 + minsInicio;
+            let totalMinsFin = horasFin * 60 + minsFin;
+
+            // Si la hora de fin es menor que la de inicio, significa que pasó al día siguiente
+            if (totalMinsFin < totalMinsInicio) {
+                totalMinsFin += 24 * 60;
+            }
+
+            const diferenciaMins = totalMinsFin - totalMinsInicio;
+            return parseFloat((diferenciaMins / 60).toFixed(1));
+        }
+
+        function guardarRegistroSueño() {
+            const horaDormir = document.getElementById('sleep-time').value;
+            const horaDespertar = document.getElementById('wake-time').value;
+            const notas = document.getElementById('sleep-notes').value;
+
+            if (!horaDormir || !horaDespertar) {
+                alert("Por favor rellena las horas de dormir y despertar.");
+                return;
+            }
+
+            const horasTotales = calcularDiferenciaHoras(horaDormir, horaDespertar);
+            
+            const nuevoRegistro = {
+                fecha: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }),
+                horaDormir,
+                horaDespertar,
+                horasTotales,
+                calidad: ratingSeleccionado,
+                notas
+            };
+
+            // Guardar en el array general de historial de sueño
+            let historial = JSON.parse(localStorage.getItem('historialSueño')) || [];
+            historial.unshift(nuevoRegistro); // Añadir al inicio
+            localStorage.setItem('historialSueño', JSON.stringify(historial));
+
+            // COMPATIBILIDAD CON INDEX.HTML: Guardar el último valor bruto de horas para tu menú principal
+            localStorage.setItem('health-sueno', horasTotales);
+
+            playSound('success');
+
+            // Limpiar formulario
+            document.getElementById('sleep-time').value = "";
+            document.getElementById('wake-time').value = "";
+            document.getElementById('sleep-notes').value = "";
+            setRating(0);
+
+            actualizarPantalla();
+        }
+
+        function actualizarPantalla() {
+            const historial = JSON.parse(localStorage.getItem('historialSueño')) || [];
+            const contenedor = document.getElementById('history-container');
+            contenedor.innerHTML = "";
+
+            if (historial.length === 0) {
+                contenedor.innerHTML = `<p style="color:#94a3b8; font-size:0.9rem; text-align:center; padding-top:20px;">No hay registros espaciales aún.</p>`;
+                document.getElementById('avg-hours').innerText = "0.0h";
+                document.getElementById('sleep-efficiency').innerText = "0%";
+                return;
+            }
+
+            let sumaHoras = 0;
+            let sumaCalidad = 0;
+
+            historial.forEach(reg => {
+                sumaHoras += reg.horasTotales;
+                sumaCalidad += reg.calidad;
+
+                const estrellasText = "★".repeat(reg.calidad) + "☆".repeat(5 - reg.calidad);
+                
+                const item = document.createElement('div');
+                item.classList.add('history-item');
+                item.innerHTML = `
+                    <div class="history-header">
+                        <span>📅 ${reg.fecha} (${reg.horasTotales}h)</span>
+                        <span class="history-stars">${estrellasText}</span>
+                    </div>
+                    <div style="color: #cbd5e1; font-size:0.8rem;">Dormido: ${reg.horaDormir} | Despertado: ${reg.horaDespertar}</div>
+                    ${reg.notas ? `<div class="history-note">"${reg.notas}"</div>` : ''}
+                `;
+                contenedor.appendChild(item);
+            });
+
+            // Actualizar tarjetas de métricas superiores
+            const promedioHoras = (sumaHoras / historial.length).toFixed(1);
+            document.getElementById('avg-hours').innerText = `${promedioHoras}h`;
+
+            // Algoritmo para calcular eficiencia (Basado en Horas ideales (8h = 100%) y Calidad de estrellas)
+            const factorHoras = Math.min(promedioHoras / 8, 1); 
+            const factorCalidad = (sumaCalidad / historial.length) / 5;
+            const eficienciaTotal = Math.round(((factorHoras + factorCalidad) / 2) * 100);
+            
+            document.getElementById('sleep-efficiency').innerText = `${eficienciaTotal}%`;
+        }
+
+        // --- CREADOR DE ESTRELLAS DE FONDO ---
+        function crearEstrellas() {
+            const contenedor = document.getElementById('stars-container');
+            for (let i = 0; i < 60; i++) {
+                const estrella = document.createElement('div');
+                estrella.classList.add('star');
+                const tam = Math.random() * 2 + 0.5;
+                estrella.style.width = `${tam}px`; estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`; estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.animationDelay = `${Math.random() * 4}s`;
+                contenedor.appendChild(estrella);
+            }
+        }
+
+        // --- MÚSICA REUTILIZADA (IGUAL A INDEX.HTML) ---
+        const listaCanciones = [
+            { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { titulo: "Retro Pulse", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+        let indiceCancionActual = 0;
+        const reproductorMusica = new Audio();
+        reproductorMusica.volume = 0.25;
+
+        function cargarCancion(index) {
+            reproductorMusica.src = listaCanciones[index].url;
+            document.getElementById('track-title').innerText = listaCanciones[index].titulo;
+        }
+        function toggleMúsica() {
+            if (reproductorMusica.paused) {
+                reproductorMusica.play().catch(() => {});
+                document.getElementById('btn-play-music').innerText = "⏸️";
+            } else {
+                reproductorMusica.pause();
+                document.getElementById('btn-play-music').innerText = "▶️";
+            }
+        }
+        function siguienteCancion() {
+            indiceCancionActual = (indiceCancionActual + 1) % listaCanciones.length;
+            cargarCancion(indiceCancionActual);
+            reproductorMusica.play().catch(() => {});
+            document.getElementById('btn-play-music').innerText = "⏸️";
+        }
+        reproductorMusica.addEventListener('ended', siguienteCancion);
+
+        // Auto-reproducir si viene de otra ventana con interacción previa
+        document.body.addEventListener('click', () => {
+            if (reproductorMusica.paused && document.getElementById('btn-play-music').innerText === "🎵") {
+                reproductorMusica.play().then(() => { document.getElementById('btn-play-music').innerText = "⏸️"; }).catch(() => {});
+            }
+        }, { once: true });
+
+        // Inicialización
+        crearEstrellas();
+        cargarCancion(indiceCancionActual);
+        actualizarPantalla();
+    </script>
+</body>
+</html>
