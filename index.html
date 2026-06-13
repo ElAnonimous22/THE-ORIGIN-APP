@@ -201,7 +201,7 @@
             padding: 30px;
             border-radius: 24px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             text-align: center;
             transform: scale(0.85);
@@ -291,6 +291,24 @@
             box-shadow: 0 5px 15px rgba(9, 132, 227, 0.4);
         }
 
+        .btn-hint {
+            background: rgba(255, 234, 167, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(255, 234, 167, 0.3);
+            font-size: 0.85rem;
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-hint:hover {
+            background: rgba(255, 234, 167, 0.25);
+        }
+
         .btn-close {
             background: rgba(255, 255, 255, 0.1);
             color: #cbd5e1;
@@ -306,7 +324,7 @@
         .stat-box {
             display: flex;
             justify-content: space-around;
-            margin: 25px 0;
+            margin: 20px 0;
             gap: 15px;
         }
 
@@ -334,6 +352,32 @@
 
         .val-mp { color: var(--success); text-shadow: 0 0 10px rgba(85, 239, 180, 0.3); }
         .val-xp { color: var(--secondary); text-shadow: 0 0 10px rgba(116, 185, 255, 0.3); }
+
+        /* Contenido Avanzado Exclusivo de Familia */
+        .family-extended-content {
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        .family-extended-content h4 {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .log-item {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            background: rgba(255,255,255,0.03);
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            border-left: 3px solid var(--success);
+        }
 
         /* Footer de Autor */
         footer {
@@ -364,19 +408,19 @@
         </header>
 
         <div class="profiles-grid">
-            <div class="profile-card" onclick="abrirMatheo()">
+            <div class="profile-card" onclick="solicitarAcceso('Matheo')">
                 <div class="avatar">👑</div>
                 <h3>Matheo</h3>
                 <p>Administrador</p>
             </div>
 
-            <div class="profile-card" onclick="abrirStats('Familia')">
+            <div class="profile-card" onclick="solicitarAcceso('Familia')">
                 <div class="avatar">🏠</div>
                 <h3>Familia</h3>
-                <p>Modo Consulta</p>
+                <p>Acceso Protegido</p>
             </div>
 
-            <div class="profile-card" onclick="abrirStats('Invitados')">
+            <div class="profile-card" onclick="abrirInvitados()">
                 <div class="avatar">✨</div>
                 <h3>Invitados</h3>
                 <p>Modo Consulta</p>
@@ -388,12 +432,14 @@
         <p>THE ORIGIN - By Matheo</p>
     </footer>
 
-    <div class="overlay" id="modal-matheo">
+    <div class="overlay" id="modal-auth">
         <div class="glass-panel">
-            <h2>Acceso de Administrador</h2>
-            <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 15px;">Introduce el código PIN</p>
+            <h2 id="auth-title">Acceso de Administrador</h2>
+            <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 15px;">Introduce el código PIN de seguridad</p>
             
-            <input type="password" id="pin-field" class="pin-input" maxlength="6" placeholder="******">
+            <button id="hint-button" class="btn-hint" onclick="mostrarPista()" style="display: none;">Ver Pista</button>
+            
+            <input type="password" id="pin-field" class="pin-input" maxlength="6" placeholder="******" readonly>
             
             <div class="keyboard-grid">
                 <button class="btn-key" onclick="pressKey('1')">1</button>
@@ -410,60 +456,64 @@
                 <button class="btn-key" onclick="pressKey('back')">⌫</button>
             </div>
 
-            <button class="btn-panel btn-confirm" onclick="verificarPin()">Verificar Identidad</button>
+            <button class="btn-panel btn-confirm" onclick="procesarVerificacion()">Validar Entrada</button>
             <button class="btn-panel btn-close" onclick="cerrarModales()">Cancelar</button>
         </div>
     </div>
 
-    <div class="overlay" id="modal-stats">
+    <div class="overlay" id="modal-display">
         <div class="glass-panel">
-            <h2 id="stats-title">Estadísticas</h2>
-            <p style="color: #cbd5e1; font-size: 0.9rem;">Métricas en tiempo real obtenidas del sistema</p>
+            <h2 id="display-title">Estadísticas</h2>
+            <p style="color: #cbd5e1; font-size: 0.9rem;">Métricas en tiempo real obtenidas de la suite</p>
             
             <div class="stat-box">
                 <div class="stat-item">
                     <div class="label">Menú Puntos (MP)</div>
-                    <div class="val val-mp" id="display-mp">0</div>
+                    <div class="val val-mp" id="stat-mp">0</div>
                 </div>
                 <div class="stat-item">
                     <div class="label">Experiencia (XP)</div>
-                    <div class="val val-xp" id="display-xp">0</div>
+                    <div class="val val-xp" id="stat-xp">0</div>
                 </div>
             </div>
 
-            <button class="btn-panel btn-close" onclick="cerrarModales()">Volver</button>
+            <div id="family-bonus" class="family-extended-content" style="display: none;">
+                <h4>Módulos del Sistema Operativo</h4>
+                <div class="log-item">✔ Rastreador de Hábitos de Salud: Activo</div>
+                <div class="log-item">✔ Monitor de Sueño Profundo: Operativo</div>
+                <div class="log-item">✔ Banco Central Estelar (MP): En Línea</div>
+                <div class="log-item" style="border-left-color: var(--warning)">⚡ Última Sincronización: Completada con Éxito</div>
+            </div>
+
+            <button class="btn-panel btn-close" onclick="cerrarModales()">Volver al Inicio</button>
         </div>
     </div>
 
     <script>
-        // --- SINTETIZADOR DE AUDIO INTEGRADO ---
+        // --- SINTETIZADOR DE AUDIO ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let perfilActualSesion = ""; 
 
         function playSound(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(audioCtx.destination);
 
             if (tipo === 'hover') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(450, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.12);
                 gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.12);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.12);
             } else if (tipo === 'click') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(580, audioCtx.currentTime);
                 osc.frequency.setValueAtTime(200, audioCtx.currentTime + 0.05);
                 gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.08);
             } else if (tipo === 'error') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
                 gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.3);
@@ -474,76 +524,109 @@
             elem.addEventListener('mouseenter', () => playSound('hover'));
         });
 
-        // --- FONDO DE ESTRELLAS ANIMADAS ---
+        // --- SISTEMA DE ESTRELLAS ANIMADAS ---
         function crearEstrellas() {
             const contenedor = document.getElementById('stars-container');
             for (let i = 0; i < 90; i++) {
                 const estrella = document.createElement('div');
                 estrella.classList.add('star');
                 const tam = Math.random() * 2.2 + 0.5;
-                estrella.style.width = `${tam}px`;
-                estrella.style.height = `${tam}px`;
-                estrella.style.left = `${Math.random() * 100}%`;
-                estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.width = `${tam}px`; estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`; estrella.style.top = `${Math.random() * 100}%`;
                 estrella.style.animationDelay = `${Math.random() * 4}s`;
                 contenedor.appendChild(estrella);
             }
         }
         crearEstrellas();
 
-        // --- SISTEMA DEL TECLADO TÁCTIL ---
+        // --- MANEJO DEL TECLADO ---
         const pinField = document.getElementById('pin-field');
-
         function pressKey(key) {
             playSound('click');
-            if (key === 'clear') {
-                pinField.value = '';
-            } else if (key === 'back') {
-                pinField.value = pinField.value.slice(0, -1);
-            } else {
-                if (pinField.value.length < 6) {
-                    pinField.value += key;
-                }
-            }
+            if (key === 'clear') { pinField.value = ''; } 
+            else if (key === 'back') { pinField.value = pinField.value.slice(0, -1); } 
+            else { if (pinField.value.length < 6) pinField.value += key; }
         }
 
-        // --- PANEL DE VERIFICACIÓN DE MATHEO ---
-        function abrirMatheo() {
+        // --- CONTROL DE FLUJO Y VERIFICACIONES ---
+        function solicitarAcceso(perfil) {
             playSound('click');
-            document.getElementById('modal-matheo').classList.add('active');
-            pinField.focus();
-        }
-
-        function verificarPin() {
-            if (pinField.value === "010822") {
-                playSound('click');
-                window.location.href = "menuprincipal.html";
-            } else {
-                playSound('error');
-                alert("Código PIN Incorrecto. Acceso denegado.");
-                pinField.value = "";
-            }
-        }
-
-        // --- PANEL DE ESTADÍSTICAS REALES (DATOS DEL LOCALSTORAGE) ---
-        function abrirStats(perfil) {
-            playSound('click');
-            document.getElementById('stats-title').innerText = `Perfil: ${perfil}`;
+            perfilActualSesion = perfil;
+            pinField.value = "";
             
-            // Extracción de datos reales guardados por las otras secciones de la suite
+            const modalAuth = document.getElementById('modal-auth');
+            const authTitle = document.getElementById('auth-title');
+            const hintBtn = document.getElementById('hint-button');
+            
+            hintBtn.style.display = "none";
+            
+            if(perfil === 'Matheo') {
+                authTitle.innerText = "Acceso Administrador: Matheo";
+            } else if (perfil === 'Familia') {
+                authTitle.innerText = "Filtro Familiar Requerido";
+                hintBtn.style.display = "block"; // Mostrar el botón de pista únicamente a los padres
+            }
+            modalAuth.classList.add('active');
+        }
+
+        function mostrarPista() {
+            playSound('click');
+            alert("PISTA: CUMPLEAÑOS");
+        }
+
+        function procesarVerificacion() {
+            const pinIntroducido = pinField.value;
+
+            if (perfilActualSesion === "Matheo") {
+                if (pinIntroducido === "010822") {
+                    playSound('click');
+                    window.location.href = "menuprincipal.html";
+                } else { fallbackError(); }
+            } 
+            else if (perfilActualSesion === "Familia") {
+                if (pinIntroducido === "220412") {
+                    playSound('click');
+                    document.getElementById('modal-auth').classList.remove('active');
+                    mostrarDataReal('Familia', true);
+                } else { fallbackError(); }
+            }
+        }
+
+        function abrirInvitados() {
+            playSound('click');
+            mostrarDataReal('Invitados', false);
+        }
+
+        function fallbackError() {
+            playSound('error');
+            alert("Código de verificación incorrecto. Acceso bloqueado.");
+            pinField.value = "";
+        }
+
+        // --- RENDERIZADO DE DATOS REALES EXTRAÍDOS DEL LOCALSTORAGE ---
+        function mostrarDataReal(nombrePerfil, esFamiliaAvanzado) {
+            document.getElementById('display-title').innerText = `Visualizador: ${nombrePerfil}`;
+            
+            // Extracción real de datos de los trackers integrados en la app
             const aguaGuardada = parseInt(localStorage.getItem('trackerAgua')) || 0;
             const pasosGuardados = parseInt(localStorage.getItem('health-pasos')) || 0;
             const suenoGuardado = parseFloat(localStorage.getItem('health-sueno')) || 0;
 
-            // Cálculo matemático en base a tu actividad real registrada
             const mpReal = 50 + (aguaGuardada * 20); 
             const xpReal = (pasosGuardados * 0.4) + (suenoGuardado * 100);
 
-            // Inserción limpia en la pantalla de visualización
-            document.getElementById('display-mp').innerText = Math.floor(mpReal);
-            document.getElementById('display-xp').innerText = Math.floor(xpReal).toLocaleString();
+            document.getElementById('stat-mp').innerText = Math.floor(mpReal);
+            document.getElementById('stat-xp').innerText = Math.floor(xpReal).toLocaleString();
 
-            document.getElementById('modal-stats').classList.add('active');
+            // Activar visualización extendida si es el perfil Familia verificado
+            const panelBonus = document.getElementById('family-bonus');
+            if (esFamiliaAvanzado) {
+                panelBonus.style.display = "block";
+            } else {
+                panelBonus.style.display = "none";
+            }
+
+            document.getElementById('modal-display').classList.add('active');
         }
 
         function cerrarModales() {
@@ -552,9 +635,20 @@
             pinField.value = "";
         }
 
-        // Soporte adicional por si escribes directamente con tu teclado físico
-        pinField.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') verificarPin();
+        // Eventos para teclado físico
+        window.addEventListener('keydown', function(e) {
+            const modalAuth = document.getElementById('modal-auth');
+            if (modalAuth.classList.contains('active')) {
+                if (e.key >= '0' && e.key <= '9') {
+                    if (pinField.value.length < 6) pinField.value += e.key;
+                    playSound('click');
+                } else if (e.key === 'Backspace') {
+                    pinField.value = pinField.value.slice(0, -1);
+                    playSound('click');
+                } else if (e.key === 'Enter') {
+                    procesarVerificacion();
+                }
+            }
         });
     </script>
 </body>
