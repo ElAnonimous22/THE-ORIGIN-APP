@@ -161,6 +161,10 @@
         .btn:hover { transform: translateY(-1px); opacity: 0.95; box-shadow: 0 5px 15px rgba(192, 132, 252, 0.3); }
         .btn:active { transform: translateY(1px); }
 
+        /* BOTÓN VOLVER (ESTILO CIAN NEÓN) */
+        .btn-back { background: var(--accent-cyan); color: #000; text-decoration: none; display: block; text-align: center; }
+        .btn-back:hover { box-shadow: 0 5px 15px rgba(34, 211, 238, 0.4); }
+
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
         .settings-row:last-child { border: none; }
 
@@ -242,6 +246,7 @@
                     </label>
                 </div>
                 <button class="btn" onclick="openModal()">Editar Información</button>
+                <a href="menuprincipal.html" class="btn btn-back">⬅ Volver al Menú Principal</a>
             </div>
         </div>
 
@@ -375,7 +380,8 @@
             if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
             if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
 
-            document.querySelectorAll('.btn, .action-card, .switch input').forEach(el => {
+            // Seleccionamos también la clase .btn-back para que haga el clic de sonido cyberpunk al volver
+            document.querySelectorAll('.btn, .btn-back, .action-card, .switch input').forEach(el => {
                 el.addEventListener('click', soundClick);
             });
 
@@ -561,6 +567,7 @@
             if(prob > 99) prob = 99;
             document.getElementById('fracaso-txt').innerText = `Probabilidad de fracaso calculada: ${prob.toFixed(1)}%. ¡Mantén la disciplina!`;
             soundSuccess();
+            var render;
         }
 
         function accederSalaVip() {
