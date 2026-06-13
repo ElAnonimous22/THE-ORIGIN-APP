@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Suite de Cocina Completa - Premium Glass</title>
+    <title>Mi Suite de Cocina Completa - Ultimate Premium Glass</title>
     <style>
         :root {
             --primary: #ff6b6b;
@@ -11,7 +11,7 @@
             --dark: #1e293b;
             --light: #f8fafc;
             --success: #2ecc71;
-            /* Variables para el efecto Glass */
+            --info: #3498db;
             --glass-bg: rgba(255, 255, 255, 0.45);
             --glass-border: rgba(255, 255, 255, 0.25);
             --glass-shadow: rgba(31, 38, 135, 0.15);
@@ -25,7 +25,6 @@
         }
 
         body {
-            /* Fondo con degradado animado para potenciar el efecto cristal */
             background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -45,7 +44,7 @@
 
         header { 
             text-align: center; 
-            margin-bottom: 35px; 
+            margin-bottom: 25px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
@@ -59,6 +58,70 @@
         header p {
             color: #4a5568;
             font-weight: 500;
+        }
+
+        /* --- NUEVO: PANEL DE TRACKING (AGUA Y MACROS) --- */
+        .panel-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 950px;
+            margin-bottom: 25px;
+        }
+
+        .tarjeta-tracker {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px var(--glass-shadow);
+            text-align: center;
+        }
+
+        .tarjeta-tracker h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+
+        .tracker-controles {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-counter {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .btn-counter:hover { background: var(--primary); color: white; }
+
+        .tracker-valor {
+            font-size: 1.4rem;
+            font-weight: 800;
+            min-width: 60px;
+        }
+
+        .tracker-input-rapido {
+            width: 70px;
+            padding: 5px;
+            text-align: center;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.1);
+            font-weight: bold;
         }
 
         /* Botones Principales de Navegación */
@@ -113,8 +176,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Formularios y Cajas con Glassmorphism Real */
-        .bloque-comida, .formulario-receta-caja, .tarjeta-menu {
+        /* Formularios y Cajas con Glassmorphism */
+        .bloque-comida, .formulario-receta-caja, .tarjeta-menu, .panel-filtros {
             background: var(--glass-bg);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
@@ -125,7 +188,7 @@
             box-shadow: 0 8px 32px 0 var(--glass-shadow);
         }
 
-        .bloque-comida h3, .formulario-receta-caja h3 {
+        .bloque-comida h3, .formulario-receta-caja h3, .tarjeta-menu h2 {
             margin-bottom: 20px;
             color: var(--dark);
             text-transform: uppercase;
@@ -142,8 +205,7 @@
             gap: 12px;
         }
 
-        /* Estilo de Inputs tipo Cristal */
-        .grid-opciones input, .grupo-input input, .grupo-input select, .grupo-input textarea {
+        .grid-opciones input, .grupo-input input, .grupo-input select, .grupo-input textarea, .buscador-input {
             padding: 12px;
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -155,17 +217,14 @@
             transition: all 0.2s;
         }
 
-        .grid-opciones input:focus, .grupo-input input:focus, .grupo-input select:focus, .grupo-input textarea:focus {
+        .grid-opciones input:focus, .grupo-input input:focus, .grupo-input select:focus, .grupo-input textarea:focus, .buscador-input:focus {
             outline: none;
             background: rgba(255, 255, 255, 0.95);
             border-color: var(--secondary);
             box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.25);
         }
 
-        .grupo-input {
-            margin-bottom: 18px;
-        }
-
+        .grupo-input { margin-bottom: 18px; }
         .grupo-input label {
             display: block;
             margin-bottom: 7px;
@@ -174,7 +233,7 @@
             color: #334155;
         }
 
-        /* Botones de Acción estilizados */
+        /* Botones de Acción */
         .btn-accion {
             background: linear-gradient(135deg, var(--secondary), #3bc4ba);
             color: white;
@@ -195,12 +254,12 @@
             box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
         }
         
-        .btn-guardar-receta { 
-            background: linear-gradient(135deg, var(--success), #27ae60); 
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-        }
-        .btn-guardar-receta:hover {
-            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        .btn-guardar-receta { background: linear-gradient(135deg, var(--success), #27ae60); box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
+        .btn-guardar-receta:hover { box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4); }
+
+        .btn-secundario {
+            background: linear-gradient(135deg, var(--info), #2980b9);
+            margin-bottom: 20px;
         }
 
         /* Elementos del Menú Guardado */
@@ -210,12 +269,6 @@
             border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
         }
 
-        .item-menu-guardado:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
         .item-menu-guardado h4 {
             color: var(--primary);
             font-size: 1.3rem;
@@ -223,12 +276,7 @@
             font-weight: 700;
         }
 
-        .lista-opciones-guardadas {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .lista-opciones-guardadas { display: flex; gap: 10px; flex-wrap: wrap; }
         .opcion-tag {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -236,10 +284,45 @@
             border-radius: 8px;
             font-size: 0.9rem;
             font-weight: 600;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* Grid de Recetas de Cristal */
+        /* --- NUEVO: DISPLAY DEL MENÚ ALEATORIO --- */
+        .box-aleatorio {
+            background: rgba(255,255,255,0.7);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 5px solid var(--primary);
+            display: none;
+        }
+
+        /* --- NUEVO: PANEL FILTROS RECETARIO --- */
+        .panel-filtros {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .container-tags-filtro {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tag-filtro {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tag-filtro.active, .tag-filtro:hover {
+            background: var(--dark);
+            color: white;
+        }
+
+        /* Grid de Recetas */
         .recetas-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
@@ -260,9 +343,7 @@
             transition: transform 0.3s;
         }
 
-        .receta-card:hover {
-            transform: translateY(-5px);
-        }
+        .receta-card:hover { transform: translateY(-5px); }
 
         .receta-cat {
             font-size: 0.75rem;
@@ -272,22 +353,10 @@
             font-weight: 700;
             align-self: flex-start;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .receta-card h3 { 
-            margin: 12px 0 8px 0; 
-            font-size: 1.3rem; 
-            color: var(--dark);
-            font-weight: 700;
-        }
-        
-        .receta-card p { 
-            font-size: 0.95rem; 
-            color: #475569; 
-            line-height: 1.5; 
-            font-weight: 500;
-        }
+        .receta-card h3 { margin: 12px 0 8px 0; font-size: 1.3rem; color: var(--dark); font-weight: 700; }
+        .receta-card p { font-size: 0.95rem; color: #475569; line-height: 1.5; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -296,6 +365,31 @@
         <h1>🍳 Mi Suite de Cocina</h1>
         <p>Gestiona tus menús de 10 opciones y expande tu recetario</p>
     </header>
+
+    <div class="panel-tracker">
+        <div class="tarjeta-tracker">
+            <h4>💧 Control de Agua</h4>
+            <div class="tracker-controles">
+                <button class="btn-counter" onclick="modificarAgua(-1)">-</button>
+                <span class="tracker-valor" id="val-agua">0 / 8</span>
+                <button class="btn-counter" onclick="modificarAgua(1)">+</button>
+            </div>
+        </div>
+        <div class="tarjeta-tracker">
+            <h4>🔥 Calorías Diarias</h4>
+            <div class="tracker-controles">
+                <input type="number" id="input-kcal" class="tracker-input-rapido" placeholder="0" onchange="actualizarMacros()">
+                <span class="tracker-valor">kcal</span>
+            </div>
+        </div>
+        <div class="tarjeta-tracker">
+            <h4>💪 Proteínas</h4>
+            <div class="tracker-controles">
+                <input type="number" id="input-prot" class="tracker-input-rapido" placeholder="0" onchange="actualizarMacros()">
+                <span class="tracker-valor">g</span>
+            </div>
+        </div>
+    </div>
 
     <div class="nav-principal">
         <button class="btn-nav active" onclick="cambiarVista('crear-menu')">📋 Crear Menú</button>
@@ -312,6 +406,10 @@
     </div>
 
     <div id="seccion-ver-menu" class="seccion">
+        <button class="btn-accion btn-secundario" onclick="generarMenuAleatorio()">🎲 ¡Generar Combinación Aleatoria!</button>
+        
+        <div class="box-aleatorio" id="displayAleatorio"></div>
+
         <div class="tarjeta-menu" id="vistaMenuGuardado">
             <p style="text-align: center; color: #4a5568; font-weight: 500;">No has configurado ningún menú todavía. Ve a "Crear Menú".</p>
         </div>
@@ -346,13 +444,26 @@
     </div>
 
     <div id="seccion-recetario" class="seccion">
+        <div class="panel-filtros">
+            <input type="text" id="buscadorRecetas" class="buscador-input" placeholder="🔍 Buscar receta por nombre o ingredientes..." oninput="filtrarRecetario()">
+            <div class="container-tags-filtro">
+                <span class="tag-filtro active" onclick="filtrarPorTag(this, 'Todos')">Todos</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Desayuno')">Desayunos</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Almuerzo')">Almuerzos</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Comida')">Comidas</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Merienda')">Meriendas</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Post-entreno')">Post-entreno</span>
+                <span class="tag-filtro" onclick="filtrarPorTag(this, 'Cena')">Cenas</span>
+            </div>
+        </div>
         <div class="recetas-grid" id="contenedorRecetas"></div>
     </div>
 
     <script>
         const tiemposComida = ["Desayuno", "Almuerzo", "Comida", "Merienda", "Post-entreno", "Cena"];
+        let filtroCategoriaActual = "Todos";
 
-        // Generar dinámicamente las 10 opciones
+        // Inicializar Formularios de Opciones
         const contenedorForm = document.getElementById('contenedorFormulariosComidas');
         tiemposComida.forEach(comida => {
             let htmlBloque = `
@@ -374,12 +485,25 @@
             document.getElementById(`seccion-${idSeccion}`).classList.add('activa');
             event.target.classList.add('active');
 
-            if(idSeccion === 'ver-menu') {
-                cargarMenuEnPantalla();
-            }
-            if(idSeccion === 'recetario') {
-                mostrarRecetarioCompleto();
-            }
+            if(idSeccion === 'ver-menu') cargarMenuEnPantalla();
+            if(idSeccion === 'recetario') mostrarRecetarioCompleto();
+        }
+
+        // --- LÓGICA DEL TRACKER (AGUA Y MACROS) ---
+        let vasosAgua = parseInt(localStorage.getItem('trackerAgua')) || 0;
+        document.getElementById('val-agua').innerText = `${vasosAgua} / 8`;
+        document.getElementById('input-kcal').value = localStorage.getItem('trackerKcal') || "";
+        document.getElementById('input-prot').value = localStorage.getItem('trackerProt') || "";
+
+        function modificarAgua(cant) {
+            vasosAgua = Math.max(0, vasosAgua + cant);
+            document.getElementById('val-agua').innerText = `${vasosAgua} / 8`;
+            localStorage.setItem('trackerAgua', vasosAgua);
+        }
+
+        function actualizarMacros() {
+            localStorage.setItem('trackerKcal', document.getElementById('input-kcal').value);
+            localStorage.setItem('trackerProt', document.getElementById('input-prot').value);
         }
 
         // --- LÓGICA DEL MENÚ ---
@@ -403,11 +527,9 @@
         function cargarMenuEnPantalla() {
             const contenedorVista = document.getElementById('vistaMenuGuardado');
             const datos = JSON.parse(localStorage.getItem('miMenuPlanificado'));
-
             if (!datos) return;
 
             contenedorVista.innerHTML = '<h2 style="margin-bottom:25px; font-weight:800; color:var(--dark);">📋 Opciones de tu Menú Guardado</h2>';
-            
             tiemposComida.forEach(comida => {
                 let opciones = datos[comida] || [];
                 let opcionesHtml = opciones.map(op => `<span class="opcion-tag">🔹 ${op}</span>`).join('');
@@ -422,10 +544,41 @@
             });
         }
 
+        // --- NUEVO: SUGERIDOR ALEATORIO ---
+        function generarMenuAleatorio() {
+            const datos = JSON.parse(localStorage.getItem('miMenuPlanificado'));
+            const display = document.getElementById('displayAleatorio');
+            
+            if (!datos) {
+                alert("Primero debes añadir y guardar opciones en 'Crear Menú'.");
+                return;
+            }
+
+            let htmlSugerencia = '<h3 style="margin-bottom:10px; color:var(--primary);">🎲 Tu Menú Sugerido del Día</h3><ul style="list-style:none; padding-left:5px;">';
+            let tieneContenido = false;
+
+            tiemposComida.forEach(comida => {
+                let opciones = datos[comida] || [];
+                if(opciones.length > 0) {
+                    let eleccionRandom = opciones[Math.floor(Math.random() * opciones.length)];
+                    htmlSugerencia += `<li style="margin-bottom:6px; font-weight:600;"><strong>${comida}:</strong> ${eleccionRandom}</li>`;
+                    tieneContenido = true;
+                }
+            });
+
+            htmlSugerencia += '</ul>';
+
+            if(!tieneContenido) {
+                display.innerHTML = "❌ No hay opciones guardadas para elegir al azar.";
+            } else {
+                display.innerHTML = htmlSugerencia;
+            }
+            display.style.display = "block";
+        }
+
         function precargarFormularioMenu() {
             const datos = JSON.parse(localStorage.getItem('miMenuPlanificado'));
             if (!datos) return;
-
             tiemposComida.forEach(comida => {
                 let opciones = datos[comida] || [];
                 opciones.forEach((op, index) => {
@@ -435,14 +588,14 @@
             });
         }
 
-        // --- LÓGICA DEL RECETARIO ---
+        // --- LÓGICA DEL RECETARIO CON BUSCADOR Y FILTROS ---
         const recetasBaseFijas = [];
         for (let i = 1; i <= 54; i++) {
             let cat = tiemposComida[(i - 1) % tiemposComida.length];
             recetasBaseFijas.push({
                 categoria: cat,
                 titulo: `Receta Base ${i}: Plato Recomendado`,
-                detalles: `Descripción automática para la receta base número ${i}. Aporta macros equilibrados ideales para tus objetivos de alimentación diaria.`
+                detalles: `Descripción automática para la receta base número ${i}. Contiene macros equilibrados óptimos para tu rutina diaria.`
             });
         }
 
@@ -450,22 +603,27 @@
 
         document.getElementById('formNuevaReceta').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const nuevaR = {
                 categoria: document.getElementById('receta-categoria').value,
                 titulo: document.getElementById('receta-titulo').value,
                 detalles: document.getElementById('receta-detalles').value
             };
-
             recetasUsuario.unshift(nuevaR);
             localStorage.setItem('recetasCreadasUsuario', JSON.stringify(recetasUsuario));
-
-            alert('¡Receta guardada con éxito en el recetario!');
+            alert('¡Receta guardada con éxito!');
             document.getElementById('formNuevaReceta').reset();
             cambiarVista('recetario');
         });
 
-        function mostrarRecetarioCompleto() {
+        function filtrarPorTag(elemento, categoria) {
+            document.querySelectorAll('.tag-filtro').forEach(tag => tag.classList.remove('active'));
+            elemento.classList.add('active');
+            filtroCategoriaActual = categoria;
+            filtrarRecetario();
+        }
+
+        function filtrarRecetario() {
+            const busqueda = document.getElementById('buscadorRecetas').value.toLowerCase();
             const contenedor = document.getElementById('contenedorRecetas');
             contenedor.innerHTML = '';
 
@@ -473,18 +631,27 @@
 
             todoElRecetario.forEach(r => {
                 const esPropia = recetasUsuario.includes(r);
-                contenedor.innerHTML += `
-                    <div class="receta-card">
-                        <div>
-                            <span class="receta-cat" style="${esPropia ? 'background:rgba(46, 204, 113, 0.2); color:#1e7e34;' : ''}">
-                                ${r.categoria} ${esPropia ? '• Mía' : ''}
-                            </span>
-                            <h3>${r.titulo}</h3>
-                            <p>${r.detalles}</p>
+                const cumpleFiltro = (filtroCategoriaActual === "Todos" || r.categoria === filtroCategoriaActual);
+                const cumpleBusqueda = (r.titulo.toLowerCase().includes(busqueda) || r.detalles.toLowerCase().includes(busqueda));
+
+                if (cumpleFiltro && cumpleBusqueda) {
+                    contenedor.innerHTML += `
+                        <div class="receta-card">
+                            <div>
+                                <span class="receta-cat" style="${esPropia ? 'background:rgba(46, 204, 113, 0.2); color:#1e7e34;' : ''}">
+                                    ${r.categoria} ${esPropia ? '• Mía' : ''}
+                                </span>
+                                <h3>${r.titulo}</h3>
+                                <p>${r.detalles}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             });
+        }
+
+        function mostrarRecetarioCompleto() {
+            filtrarRecetario();
         }
 
         precargarFormularioMenu();
