@@ -73,7 +73,7 @@
 
         header { 
             text-align: center; 
-            margin-bottom: 35px; 
+            margin-bottom: 20px; 
             text-shadow: 0 4px 10px rgba(0,0,0,0.5);
             z-index: 1;
         }
@@ -89,6 +89,33 @@
         header p {
             color: #cbd5e1;
             font-weight: 500;
+        }
+
+        /* Botón Volver al Menú Principal (Enlace Externo) */
+        .btn-volver-menu {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-volver-menu:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
         }
 
         /* Panel Tracker Superior */
@@ -422,6 +449,8 @@
         <p>Gestiona tus menús de 10 opciones y expande tu recetario estelar</p>
     </header>
 
+    <a href="menuprincipal.html" class="btn-volver-menu">🏠 Volver al Menú Principal</a>
+
     <div class="panel-tracker">
         <div class="tarjeta-tracker">
             <h4>💧 Control de Agua</h4>
@@ -526,9 +555,9 @@
             for (let i = 0; i < numEstrellas; i++) {
                 const estrella = document.createElement('div');
                 estrella.classList.add('star');
-                const tamaño = Math.random() * 2.5 + 0.5;
-                estrella.style.width = `${tamaño}px`;
-                estrella.style.height = `${tamaño}px`;
+                const tamano = Math.random() * 2.5 + 0.5;
+                estrella.style.width = `${tamano}px`;
+                estrella.style.height = `${tamano}px`;
                 estrella.style.left = `${Math.random() * 100}%`;
                 estrella.style.top = `${Math.random() * 100}%`;
                 estrella.style.animationDelay = `${Math.random() * 5}s`;
@@ -558,7 +587,7 @@
             document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(`seccion-${idSeccion}`).classList.add('activa');
-            if(event && event.target) event.target.classList.add('active');
+            if(window.event && window.event.target) window.event.target.classList.add('active');
 
             if(idSeccion === 'ver-menu') cargarMenuEnPantalla();
             if(idSeccion === 'recetario') mostrarRecetarioCompleto();
