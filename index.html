@@ -86,10 +86,25 @@
             border: 1px solid rgba(116, 185, 255, 0.25); text-shadow: 0 0 10px rgba(116, 185, 255, 0.4);
         }
 
+        /* --- ANIMACIÓN PARA EL TÍTULO "THE ORIGIN" --- */
         header h1 {
             font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px;
-            background: linear-gradient(135deg, #ffffff, #74b9ff);
+            background: linear-gradient(135deg, #ffffff, #74b9ff, #ffffff);
+            background-size: 200% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block;
+            /* Combina el movimiento de flotado continuo y el brillo del texto */
+            animation: floatText 4s ease-in-out infinite, shineText 6s linear infinite;
+        }
+
+        @keyframes floatText {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); filter: drop-shadow(0 15px 15px rgba(116, 185, 255, 0.3)); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes shineText {
+            to { background-position: 200% center; }
         }
 
         header p { color: #cbd5e1; font-size: 1.1rem; margin-bottom: 35px; font-weight: 500; }
@@ -231,7 +246,7 @@
             <div class="profile-card admin-card" onclick="solicitarAcceso('Matheo', 6)">
                 <div class="avatar">👑</div>
                 <h3>Matheo</h3>
-                <p>Administrador Principal</p>
+                <p>Administrador</p>
             </div>
         </div>
 
@@ -239,31 +254,31 @@
             <div class="profile-card" onclick="solicitarAcceso('Danna', 4)">
                 <div class="avatar">🌸</div>
                 <h3>Danna</h3>
-                <p>Acceso Privado</p>
+                <p>Infantil</p>
             </div>
 
             <div class="profile-card" onclick="solicitarAcceso('Mama', 6)">
                 <div class="avatar">👩‍🦰</div>
                 <h3>Mama</h3>
-                <p>Filtro Familiar</p>
+                <p>Adulto</p>
             </div>
 
             <div class="profile-card" onclick="solicitarAcceso('Yaya', 6)">
                 <div class="avatar">👵</div>
                 <h3>Yaya</h3>
-                <p>Filtro Familiar</p>
+                <p>Adulto</p>
             </div>
 
             <div class="profile-card" onclick="solicitarAcceso('Yayo', 6)">
                 <div class="avatar">👴</div>
                 <h3>Yayo</h3>
-                <p>Filtro Familiar</p>
+                <p>Adulto</p>
             </div>
 
             <div class="profile-card" onclick="abrirInvitados()">
                 <div class="avatar">✨</div>
                 <h3>Invitado</h3>
-                <p>Modo Consulta</p>
+                <p>Consulta</p>
             </div>
         </div>
     </div>
