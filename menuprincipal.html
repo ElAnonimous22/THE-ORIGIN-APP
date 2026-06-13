@@ -338,6 +338,135 @@
         .app-item:hover .app-title { color: #fff; }
         .app-item:hover .app-desc { color: #94a3b8; }
 
+        /* ========================================================
+           6. NUEVO ESTILO: REPRODUCTOR DE MÚSICA PHONK PREMIUM
+           ======================================================== */
+        .phonk-player-card {
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.03), rgba(34, 211, 238, 0.02));
+            border: 1px solid rgba(192, 132, 252, 0.15);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            transition: border-color 0.4s var(--anim-space);
+        }
+        .phonk-player-card:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        .player-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .track-info-block {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .vinyl-art {
+            width: 52px;
+            height: 52px;
+            background: radial-gradient(circle, #22d3ee 10%, #060614 40%, #1e1b4b 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+            transition: transform 0.5s linear;
+        }
+        .vinyl-art.playing {
+            animation: spinVinyl 3s linear infinite;
+            border-color: var(--accent-cyan);
+        }
+
+        .track-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .track-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        .track-genre {
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CONTROLES */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .control-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.25s var(--anim-space);
+        }
+        .control-btn:hover {
+            background: #fff;
+            color: #060614;
+            transform: scale(1.05);
+        }
+        .control-btn.play-btn {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
+        }
+        .control-btn.play-btn:hover {
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+            color: #060614;
+        }
+
+        /* VISUALIZADOR DE ONDAS AUDIO */
+        .visualizer-container {
+            flex-grow: 1;
+            min-width: 150px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+        #audio-visualizer {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        @keyframes spinVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         @keyframes fadeInHUD {
             from { opacity: 0; transform: translateY(15px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -393,6 +522,56 @@
         </div>
 
         <main class="apps-grid" id="apps-container"></main>
+
+        <div class="phonk-player-card">
+            <div class="player-body">
+                <div class="track-info-block">
+                    <div class="vinyl-art" id="player-vinyl">💿</div>
+                    <div class="track-text">
+                        <span class="track-title" id="track-title">DRIFT HELL PROD</span>
+                        <span class="track-genre" id="track-author">PHONK / BEAT GENERATOR</span>
+                    </div>
+                </div>
+                
+                <div class="visualizer-container">
+                    <canvas id="audio-visualizer"></canvas>
+                </div>
+
+                <div class="player-controls">
+                    <button class="control-btn" id="btn-prev" onclick="changeTrack(-1)">⏮</button>
+                    <button class="control-btn play-btn" id="btn-play" onclick="toggleMusic()">▶</button>
+                    <button class="control-btn" id="btn-next" onclick="changeTrack(1)">⏭</button>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 0;">
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; background: rgba(255,255,255,0.02); padding: 6px 14px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                Sistemas Activos: <span id="app-counter" style="color: var(--accent-cyan);">0</span> Módulos
+            </span>
+            <span style="font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; font-weight: 600; text-transform: uppercase; text-shadow: 0 0 8px rgba(255,255,255,0.05);">
+                THE ORIGIN © 2026
+            </span>
+        </div>
+    </div> ```
+
+---
+
+### 2. La línea de JavaScript para activar el contador automático
+Para que calcule el total de tu array `originApps` de forma automática sin romper nada, ve a la sección final de tu `<script>` donde inicializas todo y añade la línea de `document.getElementById...`:
+
+```javascript
+        // INICIALIZACIÓN GENERAL
+        loadPointsSystem();
+        renderApps();
+        updateHUD();
+        initParticles();
+        animateParticles();
+        initVisualizer();
+        
+        // ESTA LÍNEA ES LA QUE DEBES AÑADIR:
+        document.getElementById('app-counter').innerText = originApps.length;
+
+        setInterval(updateHUD, 1000);
     </div>
 
     <script>
@@ -575,12 +754,165 @@
             requestAnimationFrame(animateParticles);
         }
 
-        // INICIALIZACIÓN
+        // ========================================================
+        // MOTOR DE LOGICA Y SINTETIZADOR SÓNICO PHONK 
+        // ========================================================
+        const phonkTracks = [
+            { title: "DRIFT HELL SOUL", author: "PROD. BY ORIGIN" },
+            { title: "NEON GLOW RIDER", author: "LXST CENTURY STYLE" },
+            { title: "KILLER TRACK V8", author: "KORDHELL INSPIRED" }
+        ];
+        let currentTrackIdx = 0;
+        let isMusicPlaying = false;
+        let soundInterval = null;
+        let visualizerAnalyser = null;
+        let canvasVis, ctxVis;
+
+        // Inicia el canvas del visualizador
+        function initVisualizer() {
+            canvasVis = document.getElementById('audio-visualizer');
+            ctxVis = canvasVis.getContext('2d');
+            canvasVis.width = canvasVis.parentElement.clientWidth;
+            canvasVis.height = 40;
+            
+            // Dibujar estado en reposo
+            ctxVis.clearRect(0, 0, canvasVis.width, canvasVis.height);
+            ctxVis.fillStyle = "rgba(100, 116, 139, 0.3)";
+            for(let i=0; i < canvasVis.width; i+=6) {
+                ctxVis.fillRect(i, 18, 3, 4);
+            }
+        }
+
+        function toggleMusic() {
+            playInterfaceSound('click');
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const btnPlay = document.getElementById('btn-play');
+            const vinyl = document.getElementById('player-vinyl');
+
+            if (!isMusicPlaying) {
+                isMusicPlaying = true;
+                btnPlay.innerText = "⏸";
+                vinyl.classList.add('playing');
+                startPhonkSequencer();
+                animateVisualizer();
+            } else {
+                isMusicPlaying = false;
+                btnPlay.innerText = "▶";
+                vinyl.classList.remove('playing');
+                clearInterval(soundInterval);
+            }
+        }
+
+        function changeTrack(direction) {
+            playInterfaceSound('click');
+            currentTrackIdx = (currentTrackIdx + direction + phonkTracks.length) % phonkTracks.length;
+            document.getElementById('track-title').innerText = phonkTracks[currentTrackIdx].title;
+            document.getElementById('track-author').innerText = phonkTracks[currentTrackIdx].author;
+            
+            if (isMusicPlaying) {
+                clearInterval(soundInterval);
+                startPhonkSequencer();
+            }
+        }
+
+        // Secuenciador procedural que crea el ritmo Phonk/Drift
+        function startPhonkSequencer() {
+            if(!visualizerAnalyser) {
+                visualizerAnalyser = audioCtx.createAnalyser();
+                visualizerAnalyser.fftSize = 32;
+            }
+
+            let beatCount = 0;
+            // Un tempo rápido de 130 BPM aprox.
+            soundInterval = setInterval(() => {
+                const now = audioCtx.currentTime;
+                
+                // 1. Kick/Sub-Bass pesado (Esencial en el Phonk)
+                if (beatCount % 2 === 0) {
+                    const oscBass = audioCtx.createOscillator();
+                    const gainBass = audioCtx.createGain();
+                    oscBass.type = 'sawtooth'; 
+                    oscBass.frequency.setValueAtTime(55, now); // Nota La (A1) muy baja
+                    oscBass.frequency.exponentialRampToValueAtTime(30, now + 0.2);
+                    
+                    // Distorsión suave
+                    gainBass.gain.setValueAtTime(0.3, now);
+                    gainBass.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                    
+                    oscBass.connect(gainBass);
+                    gainBass.connect(visualizerAnalyser);
+                    visualizerAnalyser.connect(audioCtx.destination);
+                    oscBass.start(now);
+                    oscBass.stop(now + 0.25);
+                }
+
+                // 2. Cowbell rítmico o sintetizador agudo distorsionado (La firma del Phonk)
+                if (beatCount % 4 === 1 || beatCount % 7 === 3) {
+                    const oscCowbell = audioCtx.createOscillator();
+                    const gainCowbell = audioCtx.createGain();
+                    oscCowbell.type = 'triangle';
+                    
+                    // Varía notas basado en la pista activa
+                    let freq = 659.25; // Mi5
+                    if(currentTrackIdx === 1) freq = 587.33; // Re5
+                    if(currentTrackIdx === 2) freq = 783.99; // Sol5
+                    
+                    oscCowbell.frequency.setValueAtTime(freq, now);
+                    gainCowbell.gain.setValueAtTime(0.06, now);
+                    gainCowbell.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    
+                    oscCowbell.connect(gainCowbell);
+                    gainCowbell.connect(visualizerAnalyser);
+                    oscCowbell.start(now);
+                    oscCowbell.stop(now + 0.15);
+                }
+
+                beatCount++;
+            }, 220); 
+        }
+
+        // Renderizado del ecualizador visual dinámico
+        function animateVisualizer() {
+            if (!isMusicPlaying) return;
+            requestAnimationFrame(animateVisualizer);
+
+            const bufferLength = visualizerAnalyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            visualizerAnalyser.getByteFrequencyData(dataArray);
+
+            ctxVis.clearRect(0, 0, canvasVis.width, canvasVis.height);
+
+            const barWidth = 4;
+            const barGap = 3;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                // Mapeo de potencia del sonido a altura
+                let percent = dataArray[i] / 255;
+                let barHeight = (percent * canvasVis.height) + 3;
+
+                // Gradiente del color neón cian al morado según el ritmo
+                ctxVis.fillStyle = i % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-purple)';
+                
+                // Centrar barras verticalmente
+                let y = (canvasVis.height - barHeight) / 2;
+
+                ctxVis.fillRect(x, y, barWidth, barHeight);
+                x += barWidth + barGap;
+                if (x > canvasVis.width) break;
+            }
+        }
+
+        // INICIALIZACIÓN GENERAL
         loadPointsSystem();
         renderApps();
         updateHUD();
         initParticles();
         animateParticles();
+        initVisualizer();
         setInterval(updateHUD, 1000); 
     </script>
 </body>
