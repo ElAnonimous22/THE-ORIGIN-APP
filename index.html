@@ -41,18 +41,12 @@
 
         #stars-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
         }
 
         .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
+            position: absolute; background: white; border-radius: 50%;
             animation: blink 3s infinite ease-in-out;
         }
 
@@ -67,32 +61,16 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Indicador Permanente de Desarrollo Lateral */
         .dev-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255, 118, 117, 0.15);
-            border: 1px solid rgba(255, 118, 117, 0.4);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 5;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: absolute; top: 15px; left: 15px;
+            background: rgba(255, 118, 117, 0.15); border: 1px solid rgba(255, 118, 117, 0.4);
+            color: var(--primary); padding: 6px 12px; border-radius: 30px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; z-index: 5; backdrop-filter: blur(5px);
         }
 
-        /* Contenedor Principal */
         .welcome-container {
-            z-index: 1;
-            text-align: center;
-            max-width: 900px;
-            width: 100%;
-            margin: auto 0;
+            z-index: 1; text-align: center; max-width: 1000px; width: 100%; margin: auto 0;
             animation: containerEntry 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -101,396 +79,145 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Etiqueta Beta sobre el Título */
         .beta-tag {
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--secondary);
-            background: rgba(116, 185, 255, 0.1);
-            padding: 4px 16px;
-            border-radius: 20px;
-            margin-bottom: 5px;
-            border: 1px solid rgba(116, 185, 255, 0.25);
-            text-shadow: 0 0 10px rgba(116, 185, 255, 0.4);
+            display: inline-block; font-size: 0.85rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 3px; color: var(--secondary); background: rgba(116, 185, 255, 0.1);
+            padding: 4px 16px; border-radius: 20px; margin-bottom: 5px;
+            border: 1px solid rgba(116, 185, 255, 0.25); text-shadow: 0 0 10px rgba(116, 185, 255, 0.4);
         }
 
         header h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
+            font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px;
             background: linear-gradient(135deg, #ffffff, #74b9ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(116, 185, 255, 0.2);
-            line-height: 1.1;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        header p {
-            color: #cbd5e1;
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+        header p { color: #cbd5e1; font-size: 1.1rem; margin-bottom: 35px; font-weight: 500; }
+
+        /* --- PERFIL PRINCIPAL DE MATHEO (EN GRANDE) --- */
+        .admin-section {
+            display: flex; justify-content: center; margin-bottom: 40px;
         }
 
-        /* Grid de Perfiles */
+        .profile-card.admin-card {
+            max-width: 380px; width: 100%; padding: 40px;
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 50px rgba(116, 185, 255, 0.25);
+        }
+        
+        .profile-card.admin-card .avatar { font-size: 5rem; }
+        .profile-card.admin-card h3 { font-size: 1.8rem; color: #fff; }
+
+        /* Grid de Perfiles Secundarios */
         .profiles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            width: 100%;
-            perspective: 1000px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px; width: 100%; perspective: 1000px;
         }
 
         .profile-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: 35px 25px;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px var(--glass-shadow);
-            cursor: pointer;
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); padding: 25px 20px; border-radius: 24px;
+            box-shadow: 0 10px 40px var(--glass-shadow); cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;
         }
 
         .profile-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: 0.5s;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: 0.5s;
         }
 
-        .profile-card:hover::before {
-            left: 100%;
-        }
+        .profile-card:hover::before { left: 100%; }
 
         .profile-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.35);
-            box-shadow: 0 15px 45px rgba(116, 185, 255, 0.2);
+            transform: translateY(-8px) scale(1.03); background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.35); box-shadow: 0 15px 45px rgba(116, 185, 255, 0.2);
         }
 
-        .avatar {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.3));
-            transition: transform 0.3s ease;
-        }
+        .avatar { font-size: 3.2rem; margin-bottom: 12px; transition: transform 0.3s ease; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.3));}
+        .profile-card:hover .avatar { transform: scale(1.15) rotate(5deg); }
+        .profile-card h3 { font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+        .profile-card p { font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        .profile-card:hover .avatar {
-            transform: scale(1.15) rotate(5deg);
-        }
-
-        .profile-card h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .profile-card p {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Modales / Paneles Emergentes */
+        /* Modales */
         .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 10; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
 
-        .overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .overlay.active { opacity: 1; pointer-events: auto; }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 460px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            text-align: center;
-            transform: scale(0.85);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.07); border: 1px solid var(--glass-border);
+            padding: 30px; border-radius: 24px; width: 100%; max-width: 460px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            text-align: center; transform: scale(0.85); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Estilización de scroll interno de los modales */
-        .glass-panel::-webkit-scrollbar {
-            width: 6px;
-        }
-        .glass-panel::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-        }
+        .glass-panel::-webkit-scrollbar { width: 6px; }
+        .glass-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .overlay.active .glass-panel { transform: scale(1); }
+        .glass-panel h2 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 800; }
 
-        .overlay.active .glass-panel {
-            transform: scale(1);
-        }
-
-        .glass-panel h2 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            font-weight: 800;
-        }
-
-        /* Inputs y Teclado Numérico */
+        /* Teclado y Inputs */
         .pin-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 14px;
-            font-size: 1.4rem;
-            letter-spacing: 4px;
-            text-align: center;
-            color: white;
-            font-weight: 700;
-            margin-bottom: 15px;
-            outline: none;
+            width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 14px;
+            font-size: 1.4rem; letter-spacing: 4px; text-align: center; color: white; margin-bottom: 15px; outline: none;
         }
 
-        .pin-input:focus {
-            border-color: var(--secondary);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Rejilla Teclado Táctil */
-        .keyboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
+        .keyboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
         .btn-key {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            padding: 12px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white; padding: 12px; font-size: 1.2rem; font-weight: 700; border-radius: 12px;
+            cursor: pointer; transition: all 0.15s ease;
         }
+        .btn-key:hover { background: rgba(255, 255, 255, 0.25); transform: scale(1.05); }
+        .btn-key:active { background: var(--secondary); color: var(--text-dark); }
 
-        .btn-key:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
+        .btn-panel { width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
+        .btn-confirm { background: linear-gradient(135deg, var(--secondary), #0984e3); color: white; }
+        .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(9, 132, 227, 0.4); }
+        .btn-hint { background: rgba(255, 234, 167, 0.15); color: var(--warning); border: 1px solid rgba(255, 234, 167, 0.3); font-size: 0.85rem; padding: 8px; border-radius: 10px; margin-bottom: 12px; width: 100%; cursor: pointer; font-weight: 600; }
+        .btn-close { background: rgba(255, 255, 255, 0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-close:hover { background: rgba(255, 255, 255, 0.2); color: white; }
+
+        /* Estadísticas e Info Extendida */
+        .stat-box { display: flex; justify-content: space-around; margin: 20px 0; gap: 15px; }
+        .stat-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 16px; flex: 1; }
+        .stat-item .label { font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 5px; }
+        .stat-item .val { font-size: 1.8rem; font-weight: 800; }
+        .val-mp { color: var(--success); }
+        .val-xp { color: var(--secondary); }
+
+        .family-extended-content { margin-top: 20px; border-top: 2px dashed rgba(255,255,255,0.15); padding-top: 20px; text-align: left; }
+        .family-extended-content h4 { font-size: 0.95rem; color: var(--secondary); margin: 15px 0 8px 0; text-transform: uppercase; }
+        .log-item { font-size: 0.8rem; color: #cbd5e1; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; border-left: 3px solid var(--success); display: flex; justify-content: space-between; align-items: center; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .info-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 10px; border-radius: 12px; }
+        .info-card .title { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+        .info-card .data { font-size: 1rem; font-weight: 700; color: #ffffff; }
+
+        /* --- BOTONES EXCLUSIVOS DE DANNA --- */
+        .danna-links-container { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+        .danna-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.1rem;
+            font-weight: 700; text-decoration: none; transition: all 0.3s ease;
         }
+        .danna-btn:hover { background: linear-gradient(135deg, #fd79a8, #e84393); transform: translateY(-3px); border-color: transparent; box-shadow: 0 8px 20px rgba(232, 67, 147, 0.4); }
 
-        .btn-key:active {
-            background: var(--secondary);
-            color: var(--text-dark);
-        }
-
-        .btn-panel {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 8px;
-        }
-
-        .btn-confirm {
-            background: linear-gradient(135deg, var(--secondary), #0984e3);
-            color: white;
-        }
-
-        .btn-confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.4);
-        }
-
-        .btn-hint {
-            background: rgba(255, 234, 167, 0.15);
-            color: var(--warning);
-            border: 1px solid rgba(255, 234, 167, 0.3);
-            font-size: 0.85rem;
-            padding: 8px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .btn-hint:hover {
-            background: rgba(255, 234, 167, 0.25);
-        }
-
-        .btn-close {
-            background: rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        /* Marcadores de Estadísticas */
-        .stat-box {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            gap: 15px;
-        }
-
-        .stat-item {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 16px;
-            flex: 1;
-        }
-
-        .stat-item .label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: 700;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-item .val {
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        .val-mp { color: var(--success); text-shadow: 0 0 10px rgba(85, 239, 180, 0.3); }
-        .val-xp { color: var(--secondary); text-shadow: 0 0 10px rgba(116, 185, 255, 0.3); }
-
-        /* Contenido Avanzado Exclusivo de Familia */
-        .family-extended-content {
-            margin-top: 20px;
-            border-top: 2px dashed rgba(255,255,255,0.15);
-            padding-top: 20px;
-            text-align: left;
-        }
-
-        .family-extended-content h4 {
-            font-size: 0.95rem;
-            color: var(--secondary);
-            margin: 15px 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .family-extended-content h4:first-of-type {
-            margin-top: 0;
-        }
-
-        .log-item {
-            font-size: 0.8rem;
-            color: #cbd5e1;
-            background: rgba(255,255,255,0.03);
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            border-left: 3px solid var(--success);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .info-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 10px;
-            border-radius: 12px;
-        }
-
-        .info-card .title {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .info-card .data {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .timestamp {
-            font-size: 0.7rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        /* Footer de Autor */
-        footer {
-            z-index: 1;
-            text-align: center;
-            padding-top: 30px;
-            width: 100%;
-        }
-
-        footer p {
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.4);
-            text-transform: uppercase;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
+        footer { z-index: 1; text-align: center; padding-top: 30px; width: 100%; }
+        footer p { font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div id="stars-container"></div>
-    
     <div class="dev-badge">En Desarrollo</div>
 
     <div class="welcome-container">
@@ -500,22 +227,42 @@
             <p>La vida en una sola app</p>
         </header>
 
-        <div class="profiles-grid">
-            <div class="profile-card" onclick="solicitarAcceso('Matheo')">
+        <div class="admin-section">
+            <div class="profile-card admin-card" onclick="solicitarAcceso('Matheo', 6)">
                 <div class="avatar">👑</div>
                 <h3>Matheo</h3>
-                <p>Administrador</p>
+                <p>Administrador Principal</p>
+            </div>
+        </div>
+
+        <div class="profiles-grid">
+            <div class="profile-card" onclick="solicitarAcceso('Danna', 4)">
+                <div class="avatar">🌸</div>
+                <h3>Danna</h3>
+                <p>Acceso Privado</p>
             </div>
 
-            <div class="profile-card" onclick="solicitarAcceso('Familia')">
-                <div class="avatar">🏠</div>
-                <h3>Familia</h3>
-                <p>Acceso Protegido</p>
+            <div class="profile-card" onclick="solicitarAcceso('Mama', 6)">
+                <div class="avatar">👩‍🦰</div>
+                <h3>Mama</h3>
+                <p>Filtro Familiar</p>
+            </div>
+
+            <div class="profile-card" onclick="solicitarAcceso('Yaya', 6)">
+                <div class="avatar">👵</div>
+                <h3>Yaya</h3>
+                <p>Filtro Familiar</p>
+            </div>
+
+            <div class="profile-card" onclick="solicitarAcceso('Yayo', 6)">
+                <div class="avatar">👴</div>
+                <h3>Yayo</h3>
+                <p>Filtro Familiar</p>
             </div>
 
             <div class="profile-card" onclick="abrirInvitados()">
                 <div class="avatar">✨</div>
-                <h3>Invitados</h3>
+                <h3>Invitado</h3>
                 <p>Modo Consulta</p>
             </div>
         </div>
@@ -527,12 +274,12 @@
 
     <div class="overlay" id="modal-auth">
         <div class="glass-panel">
-            <h2 id="auth-title">Acceso de Administrador</h2>
+            <h2 id="auth-title">Control de Acceso</h2>
             <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 15px;">Introduce el código PIN de seguridad</p>
             
             <button id="hint-button" class="btn-hint" onclick="mostrarPista()" style="display: none;">Ver Pista</button>
             
-            <input type="password" id="pin-field" class="pin-input" maxlength="6" placeholder="******" readonly>
+            <input type="password" id="pin-field" class="pin-input" placeholder="******" readonly>
             
             <div class="keyboard-grid">
                 <button class="btn-key" onclick="pressKey('1')">1</button>
@@ -571,58 +318,42 @@
             </div>
 
             <div id="family-bonus" class="family-extended-content" style="display: none;">
-                
                 <h4>📊 Resumen de Hábitos</h4>
                 <div class="info-grid">
-                    <div class="info-card">
-                        <div class="title">Agua Registrada</div>
-                        <div class="data" id="family-water">0.0 L</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="title">Pasos Totales</div>
-                        <div class="data" id="family-steps">0</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="title">Horas de Sueño</div>
-                        <div class="data" id="family-sleep">0.0h</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="title">Rango de Usuario</div>
-                        <div class="data" id="family-rank" style="color: var(--secondary); font-size: 0.9rem; padding-top:2px;">Recluta</div>
-                    </div>
+                    <div class="info-card"><div class="title">Agua Registrada</div><div class="data" id="family-water">0.0 L</div></div>
+                    <div class="info-card"><div class="title">Pasos Totales</div><div class="data" id="family-steps">0</div></div>
+                    <div class="info-card"><div class="title">Horas de Sueño</div><div class="data" id="family-sleep">0.0h</div></div>
+                    <div class="info-card"><div class="title">Rango de Usuario</div><div class="data" id="family-rank" style="color: var(--secondary);">Recluta</div></div>
                 </div>
 
                 <h4>🛠️ Estado de Módulos Core</h4>
                 <div class="log-item"><span>✔ Rastreador de Hábitos de Salud</span> <span style="color: var(--success); font-weight:700;">Activo</span></div>
                 <div class="log-item"><span>✔ Monitor de Sueño Profundo</span> <span style="color: var(--success); font-weight:700;">Operativo</span></div>
-                <div class="log-item"><span>✔ Banco Central Estelar (MP)</span> <span style="color: var(--success); font-weight:700;">En Línea</span></div>
                 <div class="log-item" style="border-left-color: var(--warning)"><span>⚡ Sincronización Global</span> <span style="color: var(--warning); font-weight:700;">Éxito</span></div>
-
-                <h4>📜 Auditoría de Eventos Recientes</h4>
-                <div class="log-item" style="border-left-color: #64748b; flex-direction:column; align-items:flex-start; gap:2px;">
-                    <div style="width:100%; display:flex; justify-content:space-between;">
-                        <span style="font-weight:600;">Acceso solicitado al Panel</span>
-                        <span class="timestamp" id="time-log-1">Hace un momento</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Filtro de seguridad Familiar verificado mediante PIN.</p>
-                </div>
-                <div class="log-item" style="border-left-color: #64748b; flex-direction:column; align-items:flex-start; gap:2px;">
-                    <div style="width:100%; display:flex; justify-content:space-between;">
-                        <span style="font-weight:600;">Base de datos de métricas</span>
-                        <span class="timestamp">Hoy, automática</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:#94a3b8;">Extracción exitosa de variables desde LocalStorage local.</p>
-                </div>
             </div>
 
             <button class="btn-panel btn-close" onclick="cerrarModales()">Volver al Inicio</button>
         </div>
     </div>
 
+    <div class="overlay" id="modal-danna">
+        <div class="glass-panel">
+            <h2>Portal de Danna 🌸</h2>
+            <p style="color: #cbd5e1; font-size: 0.9rem;">Selecciona el ecosistema al que deseas ingresar:</p>
+            
+            <div class="danna-links-container">
+                <a href="https://elanonimous22.github.io/juegos-de-mesa/" target="_blank" class="danna-btn">🎲 Entrar a Juegos</a>
+                <a href="https://elanonimous22.github.io/math-app/" target="_blank" class="danna-btn">📐 Ir a Academia</a>
+            </div>
+
+            <button class="btn-panel btn-close" onclick="cerrarModales()" style="margin-top: 20px;">Volver al Inicio</button>
+        </div>
+    </div>
+
     <script>
-        // --- SINTETIZADOR DE AUDIO ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let perfilActualSesion = ""; 
+        let maxPinLength = 6;
 
         function playSound(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -638,7 +369,6 @@
                 osc.start(); osc.stop(audioCtx.currentTime + 0.12);
             } else if (tipo === 'click') {
                 osc.type = 'triangle'; osc.frequency.setValueAtTime(580, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(200, audioCtx.currentTime + 0.05);
                 gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.08);
@@ -654,7 +384,6 @@
             elem.addEventListener('mouseenter', () => playSound('hover'));
         });
 
-        // --- SISTEMA DE ESTRELLAS ANIMADAS ---
         function crearEstrellas() {
             const contenedor = document.getElementById('stars-container');
             for (let i = 0; i < 90; i++) {
@@ -669,20 +398,20 @@
         }
         crearEstrellas();
 
-        // --- MANEJO DEL TECLADO ---
         const pinField = document.getElementById('pin-field');
         function pressKey(key) {
             playSound('click');
             if (key === 'clear') { pinField.value = ''; } 
             else if (key === 'back') { pinField.value = pinField.value.slice(0, -1); } 
-            else { if (pinField.value.length < 6) pinField.value += key; }
+            else { if (pinField.value.length < maxPinLength) pinField.value += key; }
         }
 
-        // --- CONTROL DE FLUJO Y VERIFICACIONES ---
-        function solicitarAcceso(perfil) {
+        function solicitarAcceso(perfil, digitos) {
             playSound('click');
             perfilActualSesion = perfil;
+            maxPinLength = digitos;
             pinField.value = "";
+            pinField.placeholder = "*".repeat(digitos);
             
             const modalAuth = document.getElementById('modal-auth');
             const authTitle = document.getElementById('auth-title');
@@ -692,9 +421,11 @@
             
             if(perfil === 'Matheo') {
                 authTitle.innerText = "Acceso Administrador: Matheo";
-            } else if (perfil === 'Familia') {
-                authTitle.innerText = "Filtro Familiar Requerido";
+            } else if (['Mama', 'Yaya', 'Yayo'].includes(perfil)) {
+                authTitle.innerText = `Filtro Familiar: ${perfil}`;
                 hintBtn.style.display = "block";
+            } else if (perfil === 'Danna') {
+                authTitle.innerText = "Acceso Privado: Danna";
             }
             modalAuth.classList.add('active');
         }
@@ -713,18 +444,25 @@
                     window.location.href = "menuprincipal.html";
                 } else { fallbackError(); }
             } 
-            else if (perfilActualSesion === "Familia") {
+            else if (['Mama', 'Yaya', 'Yayo'].includes(perfilActualSesion)) {
                 if (pinIntroducido === "220412") {
                     playSound('click');
                     document.getElementById('modal-auth').classList.remove('active');
-                    mostrarDataReal('Familia', true);
+                    mostrarDataReal(perfilActualSesion, true);
+                } else { fallbackError(); }
+            }
+            else if (perfilActualSesion === "Danna") {
+                if (pinIntroducido === "4001") {
+                    playSound('click');
+                    document.getElementById('modal-auth').classList.remove('active');
+                    document.getElementById('modal-danna').classList.add('active');
                 } else { fallbackError(); }
             }
         }
 
         function abrirInvitados() {
             playSound('click');
-            mostrarDataReal('Invitados', false);
+            mostrarDataReal('Invitado', false);
         }
 
         function fallbackError() {
@@ -733,39 +471,29 @@
             pinField.value = "";
         }
 
-        // --- RENDERIZADO DE DATOS REALES EXTRAÍDOS DEL LOCALSTORAGE ---
         function mostrarDataReal(nombrePerfil, esFamiliaAvanzado) {
             document.getElementById('display-title').innerText = `Visualizador: ${nombrePerfil}`;
             
-            // Lectura de LocalStorage
             const aguaGuardada = parseInt(localStorage.getItem('trackerAgua')) || 0;
             const pasosGuardados = parseInt(localStorage.getItem('health-pasos')) || 0;
             const suenoGuardado = parseFloat(localStorage.getItem('health-sueno')) || 0;
 
-            // Fórmulas de conversión matemáticas internas
             const mpReal = 50 + (aguaGuardada * 20); 
             const xpReal = (pasosGuardados * 0.4) + (suenoGuardado * 100);
 
-            // Inserción en contadores globales superiores
             document.getElementById('stat-mp').innerText = Math.floor(mpReal);
             document.getElementById('stat-xp').innerText = Math.floor(xpReal).toLocaleString();
 
             const panelBonus = document.getElementById('family-bonus');
             if (esFamiliaAvanzado) {
-                // Inserción de campos detallados específicos para padres
                 document.getElementById('family-water').innerText = (aguaGuardada * 0.25).toFixed(2) + " L";
                 document.getElementById('family-steps').innerText = pasosGuardados.toLocaleString();
                 document.getElementById('family-sleep').innerText = suenoGuardado.toFixed(1) + " h";
                 
-                // Cálculo automático del Rango basado en XP acumulada
                 let rango = "Principiante Novato";
                 if(xpReal > 5000) rango = "Explorador Élite";
                 if(xpReal > 15000) rango = "Comandante Supremo";
                 document.getElementById('family-rank').innerText = rango;
-
-                // Actualizar marca de hora exacta de la consulta
-                const ahora = new Date();
-                document.getElementById('time-log-1').innerText = ahora.getHours().toString().padStart(2, '0') + ":" + ahora.getMinutes().toString().padStart(2, '0');
 
                 panelBonus.style.display = "block";
             } else {
@@ -785,7 +513,7 @@
             const modalAuth = document.getElementById('modal-auth');
             if (modalAuth.classList.contains('active')) {
                 if (e.key >= '0' && e.key <= '9') {
-                    if (pinField.value.length < 6) pinField.value += e.key;
+                    if (pinField.value.length < maxPinLength) pinField.value += e.key;
                     playSound('click');
                 } else if (e.key === 'Backspace') {
                     pinField.value = pinField.value.slice(0, -1);
