@@ -202,6 +202,24 @@
             gap: 8px;
         }
 
+        .exercise-list-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Personalización de la barra de desplazamiento */
+        .exercise-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .exercise-list-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .exercise-list-container::-webkit-scrollbar-thumb {
+            background: rgba(253, 121, 168, 0.3);
+            border-radius: 10px;
+        }
+
         .exercise-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -345,52 +363,126 @@
         <div class="glass-card">
             <div class="section-title">⚔️ Misiones de Entrenamiento</div>
             
-            <div class="exercise-card">
-                <div class="exercise-info">
-                    <div class="exercise-title">Orden: "Sentada" (Sit)</div>
-                    <div class="exercise-desc">Sostén un premio sobre su nariz y muévelo hacia atrás sobre su cabeza. Su colita bajará de forma natural.</div>
-                    <div class="rewards-tag">
-                        <span class="badge-reward" style="color: var(--primary);">+15 XP</span>
-                        <span class="badge-reward" style="color: var(--warning);">+5 MP</span>
+            <div class="exercise-list-container">
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Sentada" (Sit)</div>
+                        <div class="exercise-desc">Sostén un premio sobre su nariz y muévelo hacia atrás sobre su cabeza. Su colita bajará de forma natural.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+15 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+5 MP</span>
+                        </div>
                     </div>
+                    <button class="btn-complete" onclick="completarTruco(15, 5)">¡Hecho! 🐾</button>
                 </div>
-                <button class="btn-complete" onclick="completarTruco(15, 5)">¡Hecho! 🐾</button>
-            </div>
 
-            <div class="exercise-card">
-                <div class="exercise-info">
-                    <div class="exercise-title">Orden: "Tumbada" (Down)</div>
-                    <div class="exercise-desc">Con Nala sentada, guía un premio desde su hocico directamente en línea recta hacia el suelo.</div>
-                    <div class="rewards-tag">
-                        <span class="badge-reward" style="color: var(--primary);">+20 XP</span>
-                        <span class="badge-reward" style="color: var(--warning);">+10 MP</span>
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Tumbada" (Down)</div>
+                        <div class="exercise-desc">Con Nala sentada, guía un premio desde su hocico directamente en línea recta hacia el suelo.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+20 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+10 MP</span>
+                        </div>
                     </div>
+                    <button class="btn-complete" onclick="completarTruco(20, 10)">¡Hecho! 🐾</button>
                 </div>
-                <button class="btn-complete" onclick="completarTruco(20, 10)">¡Hecho! 🐾</button>
-            </div>
 
-            <div class="exercise-card">
-                <div class="exercise-info">
-                    <div class="exercise-title">Orden: "Dar la Pata" (Paw)</div>
-                    <div class="exercise-desc">Esconde un premio en tu puño cerrado frente a ella. Cuando intente tocar tu mano con su pata, premia al instante.</div>
-                    <div class="rewards-tag">
-                        <span class="badge-reward" style="color: var(--primary);">+25 XP</span>
-                        <span class="badge-reward" style="color: var(--warning);">+15 MP</span>
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Dar la Pata" (Paw)</div>
+                        <div class="exercise-desc">Esconde un premio en tu puño cerrado frente a ella. Cuando intente tocar tu mano con su pata, premia al instante.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+25 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+15 MP</span>
+                        </div>
                     </div>
+                    <button class="btn-complete" onclick="completarTruco(25, 15)">¡Hecho! 🐾</button>
                 </div>
-                <button class="btn-complete" onclick="completarTruco(25, 15)">¡Hecho! 🐾</button>
-            </div>
 
-            <div class="exercise-card">
-                <div class="exercise-info">
-                    <div class="exercise-title">Orden: "Quieta" (Stay)</div>
-                    <div class="exercise-desc">Pídele que se siente, haz una señal de "alto" con la mano y da un paso atrás. Vuelve y premia si no se movió.</div>
-                    <div class="rewards-tag">
-                        <span class="badge-reward" style="color: var(--primary);">+35 XP</span>
-                        <span class="badge-reward" style="color: var(--warning);">+25 MP</span>
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Quieta" (Stay)</div>
+                        <div class="exercise-desc">Pídele que se siente, haz una señal de "alto" con la mano y da un paso atrás. Vuelve y premia si no se movió.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+35 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+25 MP</span>
+                        </div>
                     </div>
+                    <button class="btn-complete" onclick="completarTruco(35, 25)">¡Hecho! 🐾</button>
                 </div>
-                <button class="btn-complete" onclick="completarTruco(35, 25)">¡Hecho! 🐾</button>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Aquí" (Recall)</div>
+                        <div class="exercise-desc">Aléjate unos pasos, llámala con entusiasmo diciendo "¡Nala, aquí!" y abre tus brazos. Premia cuando llegue corriendo.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+30 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+20 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(30, 20)">¡Hecho! 🐾</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Orden: "Suelta" (Drop It)</div>
+                        <div class="exercise-desc">Cuando tenga un juguete en la boca, ofrécele un premio irresistible. En cuanto suelte el juguete por comerse el premio, di "suelta".</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+40 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+30 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(40, 30)">¡Hecho! 🐾</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Truco: "Dar una Vuelta" (Spin)</div>
+                        <div class="exercise-desc">Sostén un premio cerca de su hocico y dibuja un círculo amplio en el aire para que gire sobre sí misma siguiendo tu mano.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+25 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+15 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(25, 15)">¡Hecho! 🐾</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Truco: "Hacerse el Muerto" (Bang!)</div>
+                        <div class="exercise-desc">Con Nala tumbada, lleva el premio suavemente hacia su hombro para obligarla a volcarse de lado. Di "¡Bang!".</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+50 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+40 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(50, 40)">¡Hecho! 🐾</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Truco: "Saludar" (Wave)</div>
+                        <div class="exercise-desc">Pídele que te dé la pata, pero retira tu mano un poco hacia arriba. Cuando agite la pata en el aire intentando alcanzarte, prémiala.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+35 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+20 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(35, 20)">¡Hecho! 🐾</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Desafío: "Control del Premio" (Leave It)</div>
+                        <div class="exercise-desc">Pon un premio en el suelo cerca de ella y cúbrelo con tu mano si intenta cogerlo. Premia solo cuando te mire a los ojos ignorando el dulce.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: var(--primary);">+60 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+50 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarTruco(60, 50)">¡Hecho! 🐾</button>
+                </div>
             </div>
         </div>
 
