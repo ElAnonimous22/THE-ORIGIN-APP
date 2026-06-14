@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Centro de Meditación</title>
+    <style>
+        :root {
+            --primary: #a29bfe; /* Violeta Espacial / Meditación */
+            --secondary: #74b9ff; /* Azul Zen */
+            --success: #55efc4;
+            --warning: #ffeaa7;
+            --dark: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(125deg, #020205, #080911, #0e021a, #16032b);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        #stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: blink 4s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.1; transform: scale(0.6); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(-3px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- DASHBOARD GRID --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px var(--glass-shadow);
+            height: fit-content;
+        }
+
+        /* --- ESTADO DE RECOMPENSAS --- */
+        .meditation-status-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .zen-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(162, 155, 254, 0.4);
+        }
+
+        .currency-box {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.15);
+            padding: 12px;
+            border-radius: 16px;
+            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item-display {
+            text-align: center;
+        }
+        .stat-item-display span {
+            display: block;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+        .stat-item-display .num {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        /* --- LISTA DE EJERCICIOS --- */
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-list-container {
+            max-height: 72vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .exercise-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .exercise-list-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .exercise-list-container::-webkit-scrollbar-thumb {
+            background: rgba(116, 185, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .exercise-card:hover {
+            border-color: rgba(116, 185, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .exercise-info {
+            flex-grow: 1;
+        }
+
+        .exercise-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .exercise-duration {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .exercise-desc {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.4;
+            margin-top: 5px;
+        }
+
+        .rewards-tag {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .badge-reward {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, var(--primary), #6c5ce7);
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-complete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(162, 155, 254, 0.3);
+        }
+
+        /* --- CONTROL DE MÚSICA FLOTANTE --- */
+        .music-controller {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+        .music-btn {
+            background: none; border: none; color: #ffffff; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .music-info { font-size: 0.75rem; font-weight: 600; color: #94a3b8; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <div class="music-controller">
+        <button class="music-btn" id="btn-play-music" onclick="toggleMúsica()">🎵</button>
+        <button class="music-btn" onclick="siguienteCancion()">⏭️</button>
+        <span class="music-info" id="track-title">Pista 1</span>
+    </div>
+
+    <div class="nav-header">
+        <a href="menuprincipal.html" class="btn-back">← Volver</a>
+        <h1>Templo de Meditación</h1>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="glass-card">
+            <div class="meditation-status-header">
+                <div class="zen-avatar">🧘</div>
+                <h2 style="margin-bottom: 5px; color: white;">Tu Estado Zen</h2>
+                <p style="font-size: 0.8rem; color: #94a3b8;">Sincronizado con tu cuenta principal</p>
+            </div>
+
+            <div class="currency-box">
+                <div class="stat-item-display">
+                    <span>PUNTOS TOTALES (XP)</span>
+                    <div class="num" id="total-xp-display" style="color: var(--primary);">0</div>
+                </div>
+                <div class="stat-item-display">
+                    <span>NALA MONEDAS (MP)</span>
+                    <div class="num" id="total-mp-display">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="section-title">✨ Sesiones de Conexión y Enfoque</div>
+            
+            <div class="exercise-list-container">
+                
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Respiración Fugaz <span class="exercise-duration">1 min</span></div>
+                        <div class="exercise-desc">Inhala en 4 segundos, mantén 4 segundos y exhala en 4 segundos. Ideal para calibrar la mente rápido antes de estudiar.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: #fd79a8;">+10 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+2 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarMeditacion(10, 2)">¡Hecho! 🌌</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Anclaje del Presente <span class="exercise-duration">3 min</span></div>
+                        <div class="exercise-desc">Cierra los ojos y busca identificar 3 sonidos lejanos y tu propio latido del corazón. Vuelve al aquí y al ahora.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: #fd79a8;">+25 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+8 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarMeditacion(25, 8)">¡Hecho! 🌌</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Reset Mental Completo <span class="exercise-duration">5 min</span></div>
+                        <div class="exercise-desc">Visualiza tus pensamientos como nubes que cruzan el cielo espacial. No te enganches a ninguna, solo déjalas pasar.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: #fd79a8;">+45 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+15 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarMeditacion(45, 15)">¡Hecho! 🌌</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Escaneo Corporal "Bio-Link" <span class="exercise-duration">10 min</span></div>
+                        <div class="exercise-desc">Recorre mentalmente cada músculo de tu cuerpo desde la punta de los pies hasta la cabeza, liberando tensión en cada exhalación.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: #fd79a8;">+80 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+35 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarMeditacion(80, 35)">¡Hecho! 🌌</button>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-info">
+                        <div class="exercise-title">Inmersión en el Vacío Cósmico <span class="exercise-duration">20 min</span></div>
+                        <div class="exercise-desc">El reto definitivo. Mantén el enfoque absoluto en el flujo de aire de tu nariz en completo silencio. Alta resistencia mental requerida.</div>
+                        <div class="rewards-tag">
+                            <span class="badge-reward" style="color: #fd79a8;">+180 XP</span>
+                            <span class="badge-reward" style="color: var(--warning);">+80 MP</span>
+                        </div>
+                    </div>
+                    <button class="btn-complete" onclick="completarMeditacion(180, 80)">¡Hecho! 🌌</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- MANEJO DE VARIABLES LOCALSTORAGE (Unificado con perfil y nala) ---
+        let totalXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
+        let totalMP = parseInt(localStorage.getItem('nala-total-mp')) || 0;
+
+        function completarMeditacion(xpGanada, mpGanado) {
+            totalXP += xpGanada;
+            totalMP += mpGanado;
+
+            // Guardado idéntico para que impacte en tu perfil.html
+            localStorage.setItem('nala-total-xp', totalXP);
+            localStorage.setItem('nala-total-mp', totalMP);
+
+            playSound('zen');
+            renderizarEstado();
+        }
+
+        function renderizarEstado() {
+            document.getElementById('total-xp-display').innerText = totalXP;
+            document.getElementById('total-mp-display').innerText = totalMP;
+        }
+
+        // --- AUDIO FX (Efecto de sonido tipo campana tibetana / Zen) ---
+        function playSound(tipo) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+
+            if (tipo === 'zen') {
+                osc.type = 'sine';
+                // Una frecuencia armónica y baja para dar paz (Nota La / 440Hz y un segundo armónico largo)
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2); // Sonido prolongado y relajante
+                osc.start(); osc.stop(audioCtx.currentTime + 1.2);
+            }
+        }
+
+        // --- FONDO DE ESTRELLAS ---
+        function crearEstrellas() {
+            const contenedor = document.getElementById('stars-container');
+            for (let i = 0; i < 60; i++) {
+                const estrella = document.createElement('div');
+                estrella.classList.add('star');
+                const tam = Math.random() * 2 + 0.5;
+                estrella.style.width = `${tam}px`; estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`; estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.animationDelay = `${Math.random() * 5}s`;
+                contenedor.appendChild(estrella);
+            }
+        }
+
+        // --- REPRODUCTOR DE MÚSICA LO-FI / AMBIENT ---
+        const listaCanciones = [
+            { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { titulo: "Retro Pulse", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+        let indiceCancionActual = 1; // Arrancamos en Space Lounge que va más con meditar
+        const reproductorMusica = new Audio();
+        reproductorMusica.volume = 0.15; // Un poco más bajito para relajarse mejor
+
+        function cargarCancion(index) {
+            reproductorMusica.src = listaCanciones[index].url;
+            document.getElementById('track-title').innerText = listaCanciones[index].titulo;
+        }
+        function toggleMúsica() {
+            if (reproductorMusica.paused) {
+                reproductorMusica.play().catch(() => {});
+                document.getElementById('btn-play-music').innerText = "⏸️";
+            } else {
+                reproductorMusica.pause();
+                document.getElementById('btn-play-music').innerText = "▶️";
+            }
+        }
+        function siguienteCancion() {
+            indiceCancionActual = (indiceCancionActual + 1) % listaCanciones.length;
+            cargarCancion(indiceCancionActual);
+            reproductorMusica.play().catch(() => {});
+            document.getElementById('btn-play-music').innerText = "⏸️";
+        }
+        reproductorMusica.addEventListener('ended', siguienteCancion);
+
+        document.body.addEventListener('click', () => {
+            if (reproductorMusica.paused && document.getElementById('btn-play-music').innerText === "🎵") {
+                reproductorMusica.play().then(() => { document.getElementById('btn-play-music').innerText = "⏸️"; }).catch(() => {});
+            }
+        }, { once: true });
+
+        // Inicialización de la escena
+        crearEstrellas();
+        cargarCancion(indiceCancionActual);
+        renderizarEstado();
+    </script>
+</body>
+</html>
