@@ -12,6 +12,7 @@
             --glass-border: rgba(255, 255, 255, 0.06);
             --accent-purple: #c084fc; 
             --accent-cyan: #22d3ee;   
+            --accent-pink: #fd79a8; /* Color de Nala */
             --text-main: #f8fafc;
             --text-muted: #64748b;
         }
@@ -113,7 +114,7 @@
         .info-label { color: var(--text-muted); }
         
         /* EFECTO CAMUFLAJE PRIVADO */
-        .private-mode .info-value, .private-mode .bio-text, .private-mode #chartCanvas { 
+        .private-mode .info-value, .private-mode .bio-text, .private-mode #chartCanvas, .private-mode .pet-sincronizada { 
             filter: blur(12px); 
             opacity: 0.2; 
             pointer-events: none;
@@ -187,6 +188,10 @@
         .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
         input, textarea { width: 100%; padding: 10px; background: #090911; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s; }
         input:focus, textarea:focus { outline: none; border-color: var(--accent-purple); }
+
+        /* EXTRA ESTILO: MONITOR MASCOTA */
+        .pet-sincronizada { margin-top: 15px; background: rgba(253, 121, 168, 0.04); border: 1px solid rgba(253, 121, 168, 0.15); border-radius: 16px; padding: 12px; display: flex; align-items: center; gap: 12px; }
+        .pet-avatar-mini { font-size: 1.8rem; background: rgba(253, 121, 168, 0.2); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(253, 121, 168, 0.2); }
     </style>
 </head>
 <body>
@@ -219,6 +224,17 @@
                 <p class="bio-text" id="disp-descripcion" style="margin-top: 15px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">
                     Soy un chico al que le gusta probar cosas nuevas y contar nuevas ideas. La verdad no soy una de esas personas que se rinden.
                 </p>
+
+                <div class="pet-sincronizada">
+                    <div class="pet-avatar-mini">🐶</div>
+                    <div style="flex-grow: 1;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:bold; color:#fff;">
+                            <span>Nala</span>
+                            <span id="nala-rango-sidebar" style="color:var(--accent-pink);">Nivel 1</span>
+                        </div>
+                        <p style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">Sincronizada con pets.html</p>
+                    </div>
+                </div>
             </div>
 
             <div class="panel">
@@ -380,14 +396,13 @@
             if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
             if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
 
-            // Seleccionamos también la clase .btn-back para que haga el clic de sonido cyberpunk al volver
             document.querySelectorAll('.btn, .btn-back, .action-card, .switch input').forEach(el => {
                 el.addEventListener('click', soundClick);
             });
 
             checkRacha();
             render();
-            initBgAnimation(); // Iniciar fondo animado
+            initBgAnimation(); 
         }
 
         function checkRacha() {
@@ -414,20 +429,32 @@
         }
 
         function render() {
-            const xp = localStorage.getItem(KEY_XP);
-            const mp = localStorage.getItem(KEY_MP);
+            // INTEGRACIÓN: Leemos datos globales + datos ganados entrenando a Nala
+            const baseXP = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            const baseMP = parseInt(localStorage.getItem(KEY_MP)) || 0;
             const racha = localStorage.getItem(KEY_RACHA);
 
-            document.getElementById('val-xp').innerText = xp;
-            document.getElementById('val-mp').innerText = mp;
+            const nalaXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
+            const nalaMP = parseInt(localStorage.getItem('nala-total-mp')) || 0;
+
+            // El total combinado de puntos que se muestra y afecta a los rangos
+            const totalXP = baseXP + nalaXP;
+            const totalMP = baseMP + nalaMP;
+
+            document.getElementById('val-xp').innerText = totalXP;
+            document.getElementById('val-mp').innerText = totalMP;
             document.getElementById('val-racha').innerText = racha;
+
+            // Actualizar nivel de Nala en el recuadro lateral
+            let nalaNivelCalculado = Math.floor(nalaXP / 100) + 1;
+            document.getElementById('nala-rango-sidebar').innerText = `Nivel ${nalaNivelCalculado}`;
 
             const container = document.getElementById('ligasContainer');
             container.innerHTML = "";
             let currentRange = LIGAS[0].name;
 
             LIGAS.forEach(l => {
-                const unlocked = parseInt(xp) >= l.req;
+                const unlocked = totalXP >= l.req;
                 if(unlocked) currentRange = l.name;
                 container.innerHTML += `
                     <div class="liga-item ${unlocked ? 'unlocked' : ''}">
@@ -438,7 +465,7 @@
             });
             document.getElementById('disp-liga-tag').innerText = currentRange;
 
-            drawChart(parseInt(xp), parseInt(mp), parseInt(racha));
+            drawChart(totalXP, totalMP, parseInt(racha));
         }
 
         // --- RENDERIZADO DEL GRÁFICO CYBERPUNK EN CANVAS ---
@@ -517,7 +544,6 @@
             window.addEventListener('resize', resize);
             resize();
 
-            // Crear 70 partículas cibernéticas flotantes
             for(let i = 0; i < 70; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
@@ -533,14 +559,12 @@
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Redibujar degradado de fondo base
                 let grad = ctx.createRadialGradient(canvas.width/2, 0, 10, canvas.width/2, 0, canvas.height);
                 grad.addColorStop(0, '#1c1437');
                 grad.addColorStop(1, '#060614');
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Mover y dibujar partículas virtuales
                 particles.forEach(p => {
                     p.x += p.vx;
                     p.y += p.vy;
@@ -560,14 +584,16 @@
         }
 
         function calcularFracaso() {
-            const xp = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            const baseXP = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            const nalaXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
+            const xp = baseXP + nalaXP;
+            
             const racha = parseInt(localStorage.getItem(KEY_RACHA)) || 0;
             let prob = 100 - (xp * 0.15 + racha * 6);
             if(prob < 1) prob = 1;
             if(prob > 99) prob = 99;
             document.getElementById('fracaso-txt').innerText = `Probabilidad de fracaso calculada: ${prob.toFixed(1)}%. ¡Mantén la disciplina!`;
             soundSuccess();
-            var render;
         }
 
         function accederSalaVip() {
@@ -587,7 +613,6 @@
             else sidebar.classList.remove('private-mode');
         }
 
-        // CONTROL DEL MODAL DE EDICIÓN COMPLETA
         function openModal() {
             document.getElementById('input-nombre').value = document.getElementById('disp-nombre').innerText;
             document.getElementById('input-segundo').value = document.getElementById('disp-segundo').innerText;
