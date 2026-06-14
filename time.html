@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE ORIGIN - Quantum Time Control</title>
+    <title>THE ORIGIN - Control de Tiempo</title>
     <style>
         :root {
             --bg-main: #04040c; 
@@ -30,11 +30,339 @@
             overflow-x: hidden;
         }
 
-        /* FONDO INTERACTIVO 4K */
         #spaceCanvas {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
+        }
+
+        /* DISEÑO DE CUADRÍCULA ORGANIZADA */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            z-index: 1;
+        }
+        @media(max-width: 850px) { .container { grid-template-columns: 1fr; } }
+
+        .panel-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* COMPONENTES CARD GLASS */
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 22px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        h2 { 
+            font-size: 0.9rem; 
+            color: var(--accent-purple); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 8px; 
+        }
+
+        /* SECCIÓN RELOJ PRINCIPAL */
+        .clock-display {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            font-family: monospace;
+            padding: 15px 0;
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.25);
+        }
+        .clock-display span { font-size: 1.6rem; color: var(--accent-cyan); }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .metric-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 14px;
+            text-align: center;
+        }
+        .metric-val { font-size: 1.4rem; font-weight: bold; color: var(--accent-gold); margin-top: 4px; }
+        .metric-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+
+        .date-badge {
+            background: rgba(192, 132, 252, 0.08);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            text-align: center;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* ENTORNO DE HERRAMIENTAS Y BOTONES */
+        .tool-display { font-size: 2.2rem; font-weight: bold; text-align: center; font-family: monospace; margin: 8px 0; color: #fff; }
+        .btn-row { display: flex; gap: 10px; justify-content: center; }
+        
+        button, select, input {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        button:hover { background: var(--accent-purple); color: #000; border-color: transparent; transform: translateY(-1px); }
+        
+        /* COCHE DE HORAS MUNDIALES */
+        .world-list { display: flex; flex-direction: column; gap: 8px; }
+        .world-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+        .world-name { font-size: 0.85rem; font-weight: bold; }
+        .world-time { font-family: monospace; color: var(--accent-cyan); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+
+    <div class="container">
+        
+        <div class="panel-column">
+            
+            <div class="panel">
+                <h2>🌍 Matriz Horaria: Barcelona Core</h2>
+                <div class="clock-display" id="barcelonaClock">00:00:00<span>.000</span></div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-lbl">Día del Año</div>
+                        <div class="metric-val" id="valDiaAno">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-lbl">Semana del Año</div>
+                        <div class="metric-val" id="valSemana">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-lbl">Mes Digital</div>
+                        <div class="metric-val" id="valMes">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-lbl">Año en Curso</div>
+                        <div class="metric-val">2026</div>
+                    </div>
+                </div>
+
+                <div class="date-badge" id="valFechaCompleta">XX-XX-XXXX</div>
+            </div>
+
+            <div class="panel">
+                <h2>🌐 Red Horaria Mundial</h2>
+                <div class="world-list">
+                    <div class="world-item"><span class="world-name">🇺🇸 Nueva York (EST)</span><span class="world-time" id="zoneNY">00:00:00</span></div>
+                    <div class="world-item"><span class="world-name">🇬🇧 Londres (GMT)</span><span class="world-time" id="zoneLondon">00:00:00</span></div>
+                    <div class="world-item"><span class="world-name">🇦🇪 Dubái (GST)</span><span class="world-time" id="zoneDubai">00:00:00</span></div>
+                    <div class="world-item"><span class="world-name">🇯🇵 Tokio (JST)</span><span class="world-time" id="zoneTokyo">00:00:00</span></div>
+                </div>
+            </div>
+
+            <a href="menuprincipal.html" style="text-decoration:none;">
+                <button style="width:100%; background:rgba(255,255,255,0.02); padding: 14px;">🏠 Volver al Núcleo Central</button>
+            </a>
+        </div>
+
+        <div class="panel-column">
+            
+            <div class="panel">
+                <h2>⏱️ Cronómetro</h2>
+                <div class="tool-display" id="chronoDisplay">00:00:00.00</div>
+                <div class="btn-row">
+                    <button onclick="controlChrono('start')">Iniciar</button>
+                    <button onclick="controlChrono('pause')">Pausar</button>
+                    <button onclick="controlChrono('reset')">Reiniciar</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>⏳ Temporizador Cuántico</h2>
+                <div class="tool-display" id="timerDisplay">05:00</div>
+                <div class="btn-row">
+                    <input type="number" id="timerMinutes" value="5" min="1" max="180" style="width: 70px; text-align:center;">
+                    <button onclick="setCustomTimer()">Set</button>
+                    <button onclick="controlTimer('start')">Iniciar</button>
+                    <button onclick="controlTimer('pause')">Pausar</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>🎯 Módulo Pomodoro <span id="pomoStatus" style="color:var(--accent-gold); font-size:0.75rem; float:right;">[ESTUDIO]</span></h2>
+                <div class="tool-display" id="pomoDisplay">25:00</div>
+                <div class="btn-row">
+                    <button onclick="controlPomo('start')">Enfocar</button>
+                    <button onclick="controlPomo('pause')">Pausar</button>
+                    <button onclick="controlPomo('reset')">Reiniciar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+
+        // --- SISTEMA DE AUDIO ---
+        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playAlert() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        }
+        function playClick() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // --- DINÁMICA DEL RELOJ MAESTRO ---
+        function runMasterClock() {
+            const ahora = new Date();
+            
+            // Renderizado Hora Barcelona
+            const bcnTime = ahora.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false });
+            const ms = String(ahora.getMilliseconds()).padStart(3, '0');
+            document.getElementById('barcelonaClock').innerHTML = `${bcnTime}<span>.${ms}</span>`;
+
+            // Métricas de Calendario Exactas
+            const inicioAno = new Date(ahora.getFullYear(), 0, 1);
+            const diaDelAno = Math.floor((ahora - inicioAno) / (1000 * 60 * 60 * 24)) + 1;
+            document.getElementById('valDiaAno').innerText = diaDelAno;
+
+            const diaSemanaInicio = inicioAno.getDay() || 7;
+            document.getElementById('valSemana').innerText = Math.ceil((diaDelAno + diaSemanaInicio - 1) / 7);
+            document.getElementById('valMes').innerText = ahora.getMonth() + 1;
+            
+            const d = String(ahora.getDate()).padStart(2, '0');
+            const m = String(ahora.getMonth() + 1).padStart(2, '0');
+            document.getElementById('valFechaCompleta').innerText = `${d}-${m}-${ahora.getFullYear()}`;
+
+            // Actualización de zonas horarias mundiales
+            const zones = { zoneNY: 'America/New_York', zoneLondon: 'Europe/London', zoneDubai: 'Asia/Dubai', zoneTokyo: 'Asia/Tokyo' };
+            Object.keys(zones).forEach(id => {
+                document.getElementById(id).innerText = ahora.toLocaleTimeString('es-ES', { timeZone: zones[id], hour12: false });
+            });
+
+            requestAnimationFrame(runMasterClock);
+        }
+
+        // --- OPERACIONES CRONÓMETRO ---
+        let chronoTime = 0, chronoInterval = null;
+        function controlChrono(action) {
+            playClick();
+            if (action === 'start' && !chronoInterval) {
+                let start = Date.now() - chronoTime;
+                chronoInterval = setInterval(() => {
+                    chronoTime = Date.now() - start;
+                    let ms = Math.floor((chronoTime % 1000) / 10);
+                    let s = Math.floor((chronoTime / 1000) % 60);
+                    let m = Math.floor((chronoTime / 60000) % 60);
+                    let h = Math.floor(chronoTime / 3600000);
+                    document.getElementById('chronoDisplay').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(2,'0')}`;
+                }, 10);
+            } else if (action === 'pause') {
+                clearInterval(chronoInterval); chronoInterval = null;
+            } else if (action === 'reset') {
+                clearInterval(chronoInterval); chronoInterval = null; chronoTime = 0;
+                document.getElementById('chronoDisplay').innerText = "00:00:00.00";
+            }
+        }
+
+        // --- OPERACIONES TEMPORIZADOR ---
+        let timerSeconds = 300, timerInterval = null;
+        function setCustomTimer() { playClick(); timerSeconds = document.getElementById('timerMinutes').value * 60; renderTimer(); }
+        function renderTimer() {
+            let m = Math.floor(timerSeconds / 60); let s = timerSeconds % 60;
+            document.getElementById('timerDisplay').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+        function controlTimer(action) {
+            playClick();
+            if (action === 'start' && !timerInterval) {
+                timerInterval = setInterval(() => {
+                    if(timerSeconds <= 0) {
+                        clearInterval(timerInterval); timerInterval = null; playAlert(); alert("⏳ ¡Tiempo completado!");
+                    } else { timerSeconds--; renderTimer(); }
+                }, 1000);
+            } else if (action === 'pause') { clearInterval(timerInterval); timerInterval = null; }
+        }
+
+        // --- OPERACIONES POMODORO ---
+        let pomoSeconds = 1500, pomoInterval = null, isBreak = false;
+        function renderPomo() {
+            let m = Math.floor(pomoSeconds / 60); let s = pomoSeconds % 60;
+            document.getElementById('pomoDisplay').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+        function controlPomo(action) {
+            playClick();
+            if (action === 'start' && !pomoInterval) {
+                pomoInterval = setInterval(() => {
+                    if(pomoSeconds <= 0) {
+                        clearInterval(pomoInterval); pomoInterval = null; playAlert();
+                        isBreak = !isBreak; pomoSeconds = isBreak ? 300 : 1500;
+                        document.getElementById('pomoStatus').innerText = isBreak ? "[DESCANSO]" : "[ESTUDIO]";
+                        renderPomo();
+                        alert(isBreak ? "☕ ¡Foco terminado! Descanso de 5 min." : "⚡ Volvemos al trabajo.");
+                    } else { pomoSeconds--; renderPomo(); }
+                }, 1000);
+            } else if (action === 'pause') { clearInterval(pomoInterval); pomoInterval = null; }
+            else if (action === 'reset') { clearInterval(pomoInterval); pomoInterval = null; isBreak = false; pomoSeconds = 1500; document.getElementById('pomoStatus').innerText = "[ESTUDIO]"; renderPomo(); }
+        }
+
+        // --- FONDO CINÉTICO ESTRELLAS ---
+        function initStars() {
+            const canvas = document.getElementById('spaceCanvas'); const ctx = canvas.getContext('2d');
+            let stars = [];
+            function resize() {
+                canvas.width = window.innerWidth * window.devicePixelRatio; canvas.height = window.innerHeight * window.devicePixelRatio;
+                canvas.style.width = window.innerWidth + "px"; canvas.style.height = window.innerHeight + "px";
+            }
+            window.addEventListener('resize', resize); resize();
+            for(let i=0; i<90; i++) { stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5+0.5, speed: Math.random()*0.15+0.05 }); }
+            function loop() {
+                ctx.clearRect(0,0, canvas.width, canvas.height); ctx.fillStyle = "rgba(255,255,255,0.25)";
+                stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = canvas.height; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill(); });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        window.onload = function() {
+            initStars();
+            requestAnimationFrame(runMasterClock);
+            window.addEventListener('click', initAudio, { once: true });
+        }
+    </script>
+</body>
+</html>            z-index: -2;
             background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
         }
 
