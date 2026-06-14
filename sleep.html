@@ -60,7 +60,7 @@
 
         .nav-header {
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -96,13 +96,16 @@
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 1fr 0.9fr;
             gap: 25px;
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
             z-index: 1;
         }
 
+        @media (max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 768px) {
             .dashboard-grid { grid-template-columns: 1fr; }
         }
@@ -112,13 +115,15 @@
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 30px;
+            padding: 25px;
             border-radius: 24px;
             box-shadow: 0 10px 40px var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
         }
 
         h2 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
             color: var(--secondary);
             display: flex;
@@ -132,7 +137,7 @@
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             margin-bottom: 8px;
             color: #cbd5e1;
@@ -192,6 +197,7 @@
             background: linear-gradient(135deg, var(--secondary), #0984e3);
             cursor: pointer;
             transition: all 0.3s;
+            margin-top: auto;
         }
 
         .btn-submit:hover {
@@ -249,6 +255,74 @@
 
         .history-stars { color: var(--warning); font-size: 0.8rem; }
         .history-note { color: #94a3b8; font-size: 0.8rem; font-style: italic; margin-top: 4px; }
+
+        .btn-danger {
+            background: none;
+            border: 1px solid rgba(255, 118, 117, 0.3);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            align-self: flex-end;
+        }
+        .btn-danger:hover {
+            background: rgba(255, 118, 117, 0.15);
+        }
+
+        /* Tarjeta de Consejos y Tips */
+        .tip-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .tip-title {
+            font-weight: 700;
+            color: var(--warning);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-next-tip {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #white;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+            color: white;
+        }
+        .btn-next-tip:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .static-tips-list {
+            list-style: none;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+        .static-tips-list li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+        }
+        .static-tips-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
 
         /* Control de Música Flotante */
         .music-controller {
@@ -327,14 +401,51 @@
             </div>
 
             <h2>📜 Historial de Registros</h2>
-            <div class="history-list" id="history-container">
-                </div>
+            <div class="history-list" id="history-container"></div>
+            
+            <button class="btn-danger" onclick="limpiarHistorial()">Borrar Historial</button>
+        </div>
+
+        <div class="glass-card">
+            <h2>💡 Hacks de Descanso</h2>
+            
+            <label style="margin-bottom: 10px;">Tip del Ciclo Actual</label>
+            <div class="tip-box">
+                <div class="tip-title" id="tip-title">Cargando consejos...</div>
+                <p id="tip-text" style="color: #cbd5e1; font-size: 0.85rem;"></p>
+            </div>
+            <button class="btn-next-tip" onclick="mostrarSiguienteTip()">Siguiente Consejo ⚡</button>
+
+            <h2 style="margin-top: 25px; margin-bottom: 15px; font-size: 1.1rem; color: var(--success);">🌲 Higiene del Sueño</h2>
+            <ul class="static-tips-list">
+                <li><strong>Regla 10-3-2-1:</strong> 10h antes sin cafeína, 3h antes sin comida pesada, 2h antes sin trabajo, 1h antes sin pantallas.</li>
+                <li><strong>Glow down:</strong> Reduce gradualmente las luces de tu habitación una hora antes de acostarte.</li>
+                <li><strong>Ventilación:</strong> La temperatura ideal del cerebro para dormir ronda los 18°C.</li>
+            </ul>
         </div>
     </div>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let ratingSeleccionado = 0;
+
+        // --- BASE DE DATOS DE CONSEJOS ---
+        const consejosSueño = [
+            { titulo: "📱 Filtro de luz azul", texto: "Las pantallas bloquean la melatonina (la hormona del sueño). Activa el modo noche si vas a programar tarde." },
+            { titulo: "🧘 El truco del 4-7-8", texto: "Inhala por 4 segundos, retén el aire por 7 y exhala lentamente durante 8 segundos para calmar el sistema nervioso." },
+            { titulo: "⏰ Ritmo Circadiano", texto: "Despertarse y acostarse exactamente a la misma hora reprograma tu reloj biológico de forma automática." },
+            { titulo: "☕ Vida media de la cafeína", texto: "La cafeína se queda hasta 6 horas en tu cuerpo. Evita las bebidas estimulantes por la tarde." },
+            { titulo: "🌌 Ruido Blanco", texto: "Si hay ruidos molestos, los sonidos ambientales en reproducción baja aíslan el cerebro y mejoran la fase profunda." }
+        ];
+        let indiceTipActual = 0;
+
+        function mostrarSiguienteTip() {
+            playSound('click');
+            const tip = consejosSueño[indiceTipActual];
+            document.getElementById('tip-title').innerText = tip.titulo;
+            document.getElementById('tip-text').innerText = tip.texto;
+            indiceTipActual = (indiceTipActual + 1) % consejosSueño.length;
+        }
 
         // --- FX AUDIO ---
         function playSound(tipo) {
@@ -371,7 +482,7 @@
             });
         }
 
-        // --- LÓGICA CORE: CÁLCULOS Y LOCALSTORAGE ---
+        // --- LÓGICA CORE ---
         function calcularDiferenciaHoras(inicio, fin) {
             const [horasInicio, minsInicio] = inicio.split(':').map(Number);
             const [horasFin, minsFin] = fin.split(':').map(Number);
@@ -379,7 +490,6 @@
             let totalMinsInicio = horasInicio * 60 + minsInicio;
             let totalMinsFin = horasFin * 60 + minsFin;
 
-            // Si la hora de fin es menor que la de inicio, significa que pasó al día siguiente
             if (totalMinsFin < totalMinsInicio) {
                 totalMinsFin += 24 * 60;
             }
@@ -409,23 +519,28 @@
                 notas
             };
 
-            // Guardar en el array general de historial de sueño
             let historial = JSON.parse(localStorage.getItem('historialSueño')) || [];
-            historial.unshift(nuevoRegistro); // Añadir al inicio
+            historial.unshift(nuevoRegistro);
             localStorage.setItem('historialSueño', JSON.stringify(historial));
-
-            // COMPATIBILIDAD CON INDEX.HTML: Guardar el último valor bruto de horas para tu menú principal
             localStorage.setItem('health-sueno', horasTotales);
 
             playSound('success');
 
-            // Limpiar formulario
             document.getElementById('sleep-time').value = "";
             document.getElementById('wake-time').value = "";
             document.getElementById('sleep-notes').value = "";
             setRating(0);
 
             actualizarPantalla();
+        }
+
+        function limpiarHistorial() {
+            if(confirm("¿Seguro que deseas reiniciar tu base de datos de sueño?")) {
+                localStorage.removeItem('historialSueño');
+                localStorage.removeItem('health-sueno');
+                playSound('click');
+                actualizarPantalla();
+            }
         }
 
         function actualizarPantalla() {
@@ -462,11 +577,9 @@
                 contenedor.appendChild(item);
             });
 
-            // Actualizar tarjetas de métricas superiores
             const promedioHoras = (sumaHoras / historial.length).toFixed(1);
             document.getElementById('avg-hours').innerText = `${promedioHoras}h`;
 
-            // Algoritmo para calcular eficiencia (Basado en Horas ideales (8h = 100%) y Calidad de estrellas)
             const factorHoras = Math.min(promedioHoras / 8, 1); 
             const factorCalidad = (sumaCalidad / historial.length) / 5;
             const eficienciaTotal = Math.round(((factorHoras + factorCalidad) / 2) * 100);
@@ -488,7 +601,7 @@
             }
         }
 
-        // --- MÚSICA REUTILIZADA (IGUAL A INDEX.HTML) ---
+        // --- MÚSICA REUTILIZADA ---
         const listaCanciones = [
             { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -519,7 +632,6 @@
         }
         reproductorMusica.addEventListener('ended', siguienteCancion);
 
-        // Auto-reproducir si viene de otra ventana con interacción previa
         document.body.addEventListener('click', () => {
             if (reproductorMusica.paused && document.getElementById('btn-play-music').innerText === "🎵") {
                 reproductorMusica.play().then(() => { document.getElementById('btn-play-music').innerText = "⏸️"; }).catch(() => {});
@@ -529,6 +641,7 @@
         // Inicialización
         crearEstrellas();
         cargarCancion(indiceCancionActual);
+        mostrarSiguienteTip();
         actualizarPantalla();
     </script>
 </body>
