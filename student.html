@@ -3,311 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE ORIGIN - Student Matrix Overlord Ultimate Suite</title>
+    <title>STUDENT MATRIX OVERLORD // INFINITE ENGINE</title>
     <style>
         :root {
-            --bg-base: #020208;
-            --glass: rgba(255, 255, 255, 0.015);
-            --glass-border: rgba(255, 255, 255, 0.04);
-            --glass-hover: rgba(255, 255, 255, 0.08);
-            --accent-purple: #c084fc;
-            --accent-cyan: #22d3ee;
-            --accent-green: #10b981;
-            --accent-orange: #f97316;
-            --accent-pink: #f43f5e;
-            --accent-yellow: #eab308;
-            --text-main: #f8fafc;
-            --matrix-glow: cubic-bezier(0.16, 1, 0.3, 1);
+            --glass-bg: rgba(10, 10, 25, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(255, 255, 255, 0.15);
+            --glow-purple: #c084fc;
+            --glow-cyan: #22d3ee;
+            --glow-green: #10b981;
+            --glow-pink: #f43f5e;
+            --glow-orange: #f97316;
+            --glow-yellow: #eab308;
+            --text: #f8fafc;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* FONDO DE ESTRELLAS ANIMADO */
         body {
-            background-color: var(--bg-base); color: var(--text-main); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, rgba(192, 132, 252, 0.08) 0%, transparent 60%), radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.04) 0%, transparent 40%);
-            background-attachment: fixed; transition: background-color 0.8s ease;
+            background: #02020a;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: starMovement 120s linear infinite;
         }
-        .main-container { width: 100%; max-width: 1750px; display: flex; flex-direction: column; gap: 16px; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; backdrop-filter: blur(10px); }
-        .master-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 16px; }
-        @media (max-width: 450px) { .master-layout { grid-template-columns: 1fr; } }
-        .panel { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 18px; backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: border-color 0.3s; }
-        .panel-header { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        input, select, textarea { background: rgba(0, 0, 0, 0.7); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.8rem; outline: none; transition: 0.2s ease; width: 100%; }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(192, 132, 252, 0.15); }
-        .btn { background: #fff; color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s var(--matrix-glow); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15); }
-        .btn-glass { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); color: #fff; }
-        .btn-glass:hover { background: var(--glass-hover); border-color: rgba(255,255,255,0.2); }
-        .scroll-container { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
-        .scroll-container::-webkit-scrollbar { width: 4px; }
-        .scroll-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+
+        @keyframes starMovement {
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 1100px, 4350px 1060px, 5130px 1470px; }
+        }
+
+        .wrapper { width: 100%; max-width: 1400px; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
+
+        /* GLASSMORPHISM COMPONENT */
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover { border-color: rgba(255,255,255,0.15); box-shadow: 0 16px 45px 0 rgba(192, 132, 252, 0.05); }
+
+        /* MENÚ DE NAVEGACIÓN POR PESTAÑAS */
+        .navigation-tabs { display: flex; gap: 10px; margin-bottom: 5px; }
+        .nav-btn {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            color: #94a3b8;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .nav-btn.active { background: rgba(255,255,255,0.1); border-color: var(--glow-purple); color: #fff; box-shadow: 0 0 15px rgba(192, 132, 252, 0.2); }
+        .tab-content { display: none; }
+        .tab-content.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
+
+        /* HUD */
+        .hud-display { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .hud-card { border-left: 5px solid var(--glow-purple); position: relative; }
+        .hud-title { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 1px; }
+        .hud-stat { font-size: 1.8rem; font-weight: 900; margin-top: 4px; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
         
-        /* HUD COMPONENTS */
-        .hud-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-        .hud-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 14px; border-left: 4px solid var(--accent-purple); position: relative; overflow: hidden; }
-        .hud-label { font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .hud-value { font-size: 1.4rem; font-weight: 900; margin-top: 2px; }
-        .bar-outer { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-top: 6px; overflow: hidden; }
-        .bar-inner { height: 100%; width: 100%; transition: width 0.4s var(--matrix-glow); }
+        .progress-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.4); border-radius: 4px; margin-top: 8px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.5s var(--matrix-glow); }
+
+        /* FORMULARIOS Y ELEMENTOS INTERACTIVOS */
+        input, select, textarea {
+            background: rgba(5, 5, 15, 0.6);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--glow-cyan); box-shadow: 0 0 12px rgba(34, 211, 238, 0.2); }
         
-        /* SPECIFIC PATTERNS */
-        .predictive-matrix { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-top: 4px; }
-        .predictive-node { background: rgba(255, 255, 255, 0.01); border: 1px solid var(--glass-border); border-radius: 6px; padding: 4px; text-align: center; font-size: 0.62rem; }
-        .predictive-node.pass { color: var(--accent-green); border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.02); }
-        .predictive-node.fail { color: var(--accent-pink); opacity: 0.4; }
-        .sch-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
-        .sch-table th, .sch-table td { border: 1px solid var(--glass-border); padding: 5px; text-align: center; }
-        .sch-table th { background: rgba(255,255,255,0.01); color: #94a3b8; }
-        .sch-input { background: transparent; border: none; text-align: center; color: #fff; font-size: 0.7rem; width: 100%; }
-        .terminal { background: #010103; border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 0.75rem; color: var(--accent-cyan); line-height: 1.4; max-height: 120px; overflow-y: auto; }
-        .heatmap-grid { display: grid; grid-template-columns: repeat(53, 1fr); gap: 2px; max-width: 100%; overflow-x: auto; padding: 4px 0; }
-        .heatmap-cell { width: 10px; height: 10px; background: rgba(255,255,255,0.02); border-radius: 2px; transition: background 0.3s; }
-        .badge { font-size: 0.55rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; text-transform: uppercase; display: inline-block; }
+        .action-btn {
+            background: #fff; color: #000; border: none; padding: 12px 20px; border-radius: 10px; font-size: 0.8rem;
+            font-weight: 800; text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center;
+            justify-content: center; gap: 8px; transition: all 0.3s ease;
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+        .action-btn.secondary { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border); }
+        .action-btn.secondary:hover { background: var(--glass-hover); }
+
+        .section-header { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .scroll-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+        .scroll-list::-webkit-scrollbar { width: 4px; }
+        .scroll-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+
+        /* COMPONENTES COMPLEJOS */
+        .predictive-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 6px; }
+        .predictive-item { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; padding: 6px; text-align: center; font-size: 0.65rem; }
+        .predictive-item.pass { color: var(--glow-green); border-color: rgba(16,185,129,0.3); }
+        .predictive-item.fail { color: var(--glow-pink); opacity: 0.5; }
+
+        .terminal-box { background: rgba(2,2,8,0.85); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; font-family: monospace; font-size: 0.8rem; color: var(--glow-cyan); min-height: 80px; max-height: 120px; overflow-y: auto; line-height: 1.5; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .map-grid { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        .map-node { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.01); font-size: 0.8rem; }
+        .map-node.locked { opacity: 0.4; background: rgba(0,0,0,0.4); cursor: not-allowed; }
+
+        .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        .schedule-table th, .schedule-table td { border: 1px solid var(--glass-border); padding: 8px; text-align: center; }
+        .schedule-table th { background: rgba(255,255,255,0.02); }
+
+        .heatmap-grid { display: grid; grid-template-columns: repeat(53, 1fr); gap: 3px; overflow-x: auto; padding: 6px 0; }
+        .heatmap-node { width: 11px; height: 11px; background: rgba(255,255,255,0.03); border-radius: 2px; }
+
+        .flex-row { display: flex; gap: 10px; }
+        .flex-col { display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <header>
+
+    <div class="wrapper">
+        <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
             <div>
-                <h1 id="app-title" style="font-size: 1.3rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">STUDENT MATRIX OVERLORD // INFINITE ENGINE</h1>
-                <div id="system-event-banner" style="font-size: 0.7rem; color: var(--accent-yellow); margin-top: 2px; font-weight: 600;">⚠️ Verificando condiciones del entorno...</div>
+                <h1 style="font-size: 1.6rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--glow-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">MATRIX OVERLORD OS</h1>
+                <div id="daily-event-ticker" style="font-size: 0.75rem; color: var(--glow-yellow); font-weight: 700; margin-top: 4px;">⚡ Cargando fluctuaciones del entorno cuántico...</div>
             </div>
-            <div style="display: flex; gap: 6px;">
-                <button class="btn btn-glass" onclick="exportQuantumState()">💾 Export</button>
-                <button class="btn btn-glass" onclick="importQuantumState()">📂 Import</button>
+            <div style="display:flex; gap:8px;">
+                <button class="action-btn secondary" onclick="exportStateJSON()">Exportar State</button>
+                <button class="action-btn secondary" onclick="importStateJSON()">Importar State</button>
+                <a href="perfil.html" class="action-btn" style="background:var(--glow-purple); color:#fff; text-decoration:none;">Ir a Perfil 👤</a>
             </div>
         </header>
 
-        <div class="hud-grid">
-            <div class="hud-item" style="border-left-color: var(--accent-purple);">
-                <div class="hud-label" id="user-rango">Cargando Rango...</div>
-                <div class="hud-value" id="hud-level">LVL 0</div>
-                <div class="bar-outer"><div id="bar-xp-progress" class="bar-inner" style="background: var(--accent-purple);"></div></div>
-                <div style="font-size: 0.55rem; color: #64748b; margin-top: 4px; text-align: right;" id="hud-xp-raw">0 / 0 XP</div>
+        <div class="hud-display">
+            <div class="glass-panel hud-card" style="border-left-color: var(--glow-purple);">
+                <div class="hud-title" id="hud-title-rango">Buscando Datos...</div>
+                <div class="hud-stat" id="hud-txt-level">LVL --</div>
+                <div class="progress-bar"><div id="hud-bar-xp" class="progress-fill" style="background: var(--glow-purple);"></div></div>
+                <div id="hud-raw-xp" style="font-size:0.6rem; color:#64748b; text-align:right; margin-top:4px;">0 / 0 XP</div>
             </div>
-            <div class="hud-item" style="border-left-color: var(--accent-pink);">
-                <div class="hud-label">Matrix Points (MP)</div>
-                <div class="hud-value" id="hud-mp">0 MP</div>
-                <div class="hud-label" id="hud-streak-display" style="color: var(--accent-orange); margin-top: 4px; font-size:0.6rem;">Racha: 0 días</div>
+            <div class="glass-panel hud-card" style="border-left-color: var(--glow-cyan);">
+                <div class="hud-title">Créditos de Red (Matrix Points)</div>
+                <div class="hud-stat" id="hud-txt-mp">-- MP</div>
+                <div id="hud-txt-streak" style="font-size: 0.65rem; color: var(--glow-orange); font-weight:700; margin-top:4px;">Racha: 0 días</div>
             </div>
-            <div class="hud-item" id="hud-estamina-card" style="border-left-color: var(--accent-green);">
-                <div class="hud-label">Estamina Cognitiva</div>
-                <div class="hud-value" id="hud-estamina">100%</div>
-                <div class="bar-outer"><div id="bar-estamina-inner" class="bar-inner" style="background: var(--accent-green);"></div></div>
+            <div class="glass-panel hud-card" id="hud-card-estamina" style="border-left-color: var(--glow-green);">
+                <div class="hud-title">Reserva de Estamina Cognitiva</div>
+                <div class="hud-stat" id="hud-txt-estamina">100%</div>
+                <div class="progress-bar"><div id="hud-bar-estamina" class="progress-fill" style="background: var(--glow-green);"></div></div>
             </div>
-            <div class="hud-item" style="border-left-color: var(--accent-cyan);">
-                <div class="hud-label">Métricas Globales</div>
-                <div class="hud-value" id="hud-avg">0.0</div>
-                <div style="font-size: 0.55rem; color: #64748b; margin-top: 4px;" id="hud-focus-time">Enfoque: 0 min</div>
+            <div class="glass-panel hud-card" style="border-left-color: var(--glow-orange);">
+                <div class="hud-title">Métricas de Rendimiento</div>
+                <div class="hud-stat" id="hud-txt-avg">0.0</div>
+                <div id="hud-txt-focus" style="font-size: 0.65rem; color:#64748b; margin-top:4px;">Tiempo Enfocado: 0 min</div>
             </div>
         </div>
 
-        <div class="master-layout">
-            
-            <div class="panel" id="panel-faction-setup">
-                <div class="panel-header">🤝 Configuración de Facción & Clase</div>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 0.7rem; color: #94a3b8;">Selecciona Facción Académica:</label>
-                    <select id="select-faction" onchange="selectFactionGroup()">
-                        <option value="">-- Ninguna Elegida --</option>
-                        <option value="atenas">🏛️ Academia de Atenas (+15% Feynman/Apuntes)</option>
-                        <option value="turing">🧪 Enclave de Turing (+15% MP en Flashcards/Pomo)</option>
-                        <option value="neon">🎨 Colectivo Neon (Estética Fluida & Desconexión)</option>
-                    </select>
-                    <label style="font-size: 0.7rem; color: #94a3b8;">Elige tu Build de Estudiante para hoy:</label>
-                    <select id="select-build" onchange="applyBuildArchetype()">
-                        <option value="barbaro">⚔️ El Bárbaro del Estudio (Pomo Largo, Cura Menos)</option>
-                        <option value="hacker">🕶️ El Pícaro / Hacker (Doble MP en Forja, Más daño recibido)</option>
-                        <option value="mago">🔮 El Mago del Conocimiento (Feynman x2 Puntos)</option>
-                    </select>
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; margin-top: 4px;">
-                        <span style="font-size: 0.75rem; color: var(--accent-pink); font-weight: bold;">⚠️ MODO HARDCORE (Cero Distracciones)</span>
-                        <input type="checkbox" id="chk-hardcore" style="width: auto;" onchange="toggleHardcoreMode()">
-                    </div>
-                </div>
-            </div>
+        <div class="navigation-tabs">
+            <button class="nav-btn active" onclick="switchActiveTab(event, 'tab-estudio')">🎯 Centro de Enfoque</button>
+            <button class="nav-btn" onclick="switchActiveTab(event, 'tab-academia')">📚 Control Académico</button>
+            <button class="nav-btn" onclick="switchActiveTab(event, 'tab-rpg')">⚔️ Forja & RPG Campaña</button>
+        </div>
 
-            <div class="panel">
-                <div class="panel-title panel-header">⏱️ Pomodoro Custom & Synth Lofi (20 Tracks)</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; align-items: center;">
-                    <div id="pomo-clock" style="font-size: 2.2rem; font-family: monospace; font-weight: 900; color: var(--accent-cyan); text-align: center;">25:00</div>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <button class="btn" style="background: var(--accent-cyan);" onclick="triggerPomoEngine()">Play/Pausa</button>
-                        <button class="btn btn-glass" onclick="resetPomoEngine()">Reset</button>
+        <div id="tab-estudio" class="tab-content active">
+            <div class="glass-panel flex-col">
+                <div class="section-header">⏱️ Pomodoro Modular & Sintonizador de Ondas</div>
+                <div style="background:rgba(0,0,0,0.3); border-radius:15px; padding:20px; display:flex; justify-content:space-around; align-items:center;">
+                    <div id="clock-countdown" style="font-size:3.5rem; font-family:monospace; font-weight:900; color:var(--glow-cyan);">25:00</div>
+                    <div class="flex-col" style="gap:5px;">
+                        <button class="action-btn" style="background:var(--glow-cyan);" onclick="togglePomodoroEngine()">Play / Pausa</button>
+                        <button class="action-btn secondary" onclick="restartPomodoroClock()">Reset</button>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
-                    <input type="number" id="input-pomo-min" value="25" placeholder="Minutos">
-                    <select id="select-pomo-intensity">
-                        <option value="normal">Energía Normal</option>
-                        <option value="foco">Máximo Foco</option>
+                <div class="flex-row">
+                    <input type="number" id="setup-pomo-minutes" value="25" placeholder="Minutos Ajustados">
+                    <select id="setup-pomo-intensity">
+                        <option value="normal">Modo Normal</option>
+                        <option value="foco">🔥 Máximo Foco (+10% EXP Pasiva)</option>
                     </select>
                 </div>
-                <select id="select-lofi-frequencies" onchange="switchLofiFrequency()">
-                    <option value="42">01. Estación Espacial Alfa</option><option value="46">02. Lluvia de Silicio</option>
-                    <option value="52">03. Café de Medianoche NeoTokio</option><option value="58">04. Sintetizador de Ondas Gamma</option>
-                    <option value="62">05. Biblioteca Nebulosa</option><option value="68">06. Compilador de Código Relax</option>
-                    <option value="72">07. Noche de Microchips</option><option value="78">08. Viento Cuántico</option>
-                    <option value="82">09. Algoritmo Melancólico</option><option value="88">10. Cyber-Chill Subterráneo</option>
-                    <option value="92">11. Pulsos de Memoria</option><option value="98">12. Desierto Digital</option>
-                    <option value="102">13. Cero Absoluto Ambient</option><option value="108">14. Redes de Cobre Neutras</option>
-                    <option value="112">15. Aura Estática</option><option value="118">16. Eco de Satélites</option>
-                    <option value="122">17. Neblina Binaria</option><option value="128">18. Resonancia Magnética Foco</option>
-                    <option value="132">19. Horizonte de Sucesos Lo-Fi</option><option value="138">20. Gravedad Cero Binaural</option>
+                <select id="selector-synth-themes" onchange="alterLofiAudioFrec()">
+                    <option value="45">Tema 01 - Lluvia de Código Estático</option> <option value="50">Tema 02 - Nebulosa Binaural</option>
+                    <option value="55">Tema 03 - Gravedad Artificial</option> <option value="60">Tema 04 - Cafetería de Neo-Tokyo</option>
+                    <option value="65">Tema 05 - Algoritmo Nocturno</option> <option value="70">Tema 06 - Biblioteca de Criptas</option>
+                    <option value="75">Tema 07 - Enfoque Profundo de Redes</option> <option value="80">Tema 08 - Sintetizador Cuántico</option>
+                    <option value="85">Tema 09 - Microchips Melancólicos</option> <option value="90">Tema 10 - Satélite Abandonado</option>
+                    <option value="95">Tema 11 - Viento de Silicio</option> <option value="100">Tema 12 - Ondas Gamma Puras</option>
+                    <option value="105">Tema 13 - Estación Subterránea</option> <option value="110">Tema 14 - Noche de Compilación</option>
+                    <option value="115">Tema 15 - Vapor Neon Frío</option> <option value="120">Tema 16 - Resonador Magnético</option>
+                    <option value="125">Tema 17 - Eco Cósmico</option> <option value="130">Tema 18 - Mar de Datos Inversos</option>
+                    <option value="135">Tema 19 - Cero Absoluto Foco</option> <option value="140">Tema 20 - Matriz Despierta</option>
                 </select>
-                <button class="btn btn-glass" id="btn-audio-state" onclick="toggleAudioSynthesis()">Inicializar Sintetizador de Audio</button>
+                <button class="action-btn secondary" id="btn-audio-toggle" onclick="toggleAudioSynthesisEngine()">Activar Generador de Frecuencias Nativas</button>
             </div>
 
-            <div class="panel">
-                <div class="panel-header">📊 Expediente & Predictor Target (5 al 10)</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <input type="text" id="input-subject-name" placeholder="Nombre Asignatura">
-                    <button class="btn" style="background: var(--accent-green);" onclick="createNewSubjectNode()">Vincular Materia</button>
+            <div class="glass-panel flex-col">
+                <div class="section-header">🧠 Laboratorio de Retención Feynman & Flashcards</div>
+                <div class="flex-col" style="background:rgba(0,0,0,0.2); padding:12px; border-radius:12px; gap:8px;">
+                    <input type="text" id="feynman-concept" placeholder="Concepto complejo a destrozar...">
+                    <textarea id="feynman-simple" rows="2" placeholder="Explícalo como si tuvieras 5 años (Sin usar tecnicismos)..."></textarea>
+                    <input type="text" id="feynman-voids" placeholder="Brechas y lagunas mentales identificadas...">
+                    <button class="action-btn" style="background:var(--glow-purple); color:#fff; font-size:0.75rem;" onclick="saveFeynmanModule()">Sellar Módulo Feynman</button>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 0.5fr 0.5fr; gap: 4px;">
-                    <select id="dropdown-subjects-list" onchange="loadSubjectNotesToTextarea()"></select>
-                    <input type="number" id="input-grade-value" placeholder="Nota" min="0" max="10" step="0.01">
-                    <select id="select-grade-type"><option value="Examen">Examen</option><option value="Deberes">Deberes</option><option value="Trabajo">Trabajo</option></select>
+                <div class="scroll-list" id="view-feynman-logs"></div>
+                <hr style="border:0; border-top:1px solid var(--glass-border);">
+                <div class="flex-row">
+                    <input type="text" id="fc-question" placeholder="Pregunta Clave">
+                    <input type="text" id="fc-answer" placeholder="Respuesta Oculta">
                 </div>
-                <button class="btn btn-glass" onclick="commitGradeToDatabase()">Inyectar Calificación Analítica</button>
-                <div class="scroll-container" id="container-rendered-subjects"></div>
+                <button class="action-btn secondary" style="font-size:0.75rem;" onclick="generateFlashcardItem()">Inyectar Flashcard Evaluativa</button>
+                <div class="scroll-list" id="view-flashcards-logs"></div>
+            </div>
+        </div>
+
+        <div id="tab-academia" class="tab-content">
+            <div class="glass-panel flex-col">
+                <div class="section-header">📊 Simulador Predictivo Target (5 al 10)</div>
+                <div class="flex-row">
+                    <input type="text" id="subject-name-input" placeholder="Nombre de la Nueva Materia">
+                    <button class="action-btn" style="background:var(--glow-green);" onclick="insertNewSubject()">Anclar Asignatura</button>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 0.6fr 0.6fr; gap:6px;">
+                    <select id="subject-dropdown" onchange="linkNotesWithSelectedSubject()"></select>
+                    <input type="number" id="grade-val-input" placeholder="Nota" min="0" max="10" step="0.1">
+                    <select id="grade-type-input"><option value="Examen">Examen</option><option value="Deberes">Deberes</option><option value="Trabajo">Trabajo</option></select>
+                </div>
+                <button class="action-btn secondary" onclick="injectGradeToSubject()">Subir Calificación Sincronizada</button>
+                <div class="scroll-list" id="view-subjects-wrapper" style="max-height: 280px;"></div>
             </div>
 
-            <div class="panel">
-                <div class="panel-header">📝 Lugar de Apuntes Estructurales por Materia</div>
-                <textarea id="textarea-subject-notes" rows="6" placeholder="Selecciona una materia en el panel superior izquierdo. Tus apuntes, fórmulas y esquemas se guardarán de forma completamente aislada aquí dentro..." oninput="autoSaveSubjectNotes()"></textarea>
-                <div id="notes-status-log" style="font-size: 0.65rem; color: #64748b; text-align: right;">Base de apuntes sincronizada de forma local.</div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">⚔️ Combate contra Jefes (Exámenes en Campo)</div>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
-                    <input type="text" id="input-boss-name" placeholder="Ej: Señor de las Matrices (Álgebra)">
-                    <input type="date" id="input-boss-date">
-                </div>
-                <button class="btn" style="background: var(--accent-pink); color: #fff;" onclick="deployNewBossEntity()">Invocar Entidad Jefe</button>
-                <div class="scroll-container" id="container-active-bosses"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">🧠 Laboratorio Feynman & Flashcards Activas</div>
-                <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 4px;">
-                    <input type="text" id="input-feynman-concept" placeholder="Concepto de Alta Complejidad">
-                    <textarea id="textarea-feynman-simple" rows="2" placeholder="Explicación en lenguaje infantil (sin tecnicismos)..."></textarea>
-                    <input type="text" id="input-feynman-voids" placeholder="Brechas del conocimiento detectadas al simplificar...">
-                    <button class="btn btn-glass" style="font-size: 0.7rem;" onclick="commitFeynmanModule()">Almacenar Bloque Feynman</button>
-                </div>
-                <div class="scroll-box scroll-container" id="container-feynman-logs"></div>
-                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 4px 0;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <input type="text" id="input-fc-front" placeholder="Pregunta Clave">
-                    <input type="text" id="input-fc-back" placeholder="Respuesta de Retención">
-                </div>
-                <button class="btn btn-glass" style="font-size: 0.7rem;" onclick="generateFlashcardEntity()">Forjar Tarjeta de Evaluación</button>
-                <div class="scroll-container" id="container-flashcards-logs"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">📅 Distribución Semanal & Agenda Operativa</div>
+            <div class="glass-panel flex-col">
+                <div class="section-header">📝 Apuntes Dinámicos Aislados & Horario</div>
+                <textarea id="subject-isolated-notes" rows="5" placeholder="Selecciona una materia a la izquierda. Tus fórmulas y notas maestras se auto-guardarán aquí..." oninput="triggerNotesAutoSave()"></textarea>
+                <hr style="border:0; border-top:1px solid var(--glass-border);">
                 <div style="overflow-x: auto;">
-                    <table class="sch-table">
-                        <thead><tr><th>Bloque</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th></tr></thead>
-                        <tbody id="table-body-schedule"></tbody>
+                    <table class="schedule-table">
+                        <thead><tr><th>Bloque</th><th>Lun</th><th>Mar</th><th>Mie</th><th>Jue</th><th>Vie</th></tr></thead>
+                        <tbody id="schedule-matrix-body"></tbody>
                     </table>
                 </div>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
-                    <input type="text" id="input-agenda-title" placeholder="Tarea pendiente">
-                    <input type="date" id="input-agenda-date">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <select id="select-agenda-tag"><option value="Deberes">Deberes</option><option value="Examen">Examen</option><option value="Trabajo">Trabajo</option></select>
-                    <select id="select-agenda-filter" onchange="renderAgendaPipeline()"><option value="all">Ver Todo el Contenido</option><option value="Deberes">Solo Deberes</option><option value="Examen">Solo Exámenes</option><option value="Trabajo">Solo Trabajos</option></select>
-                </div>
-                <button class="btn btn-glass" onclick="deployAgendaTask()">Desplegar Tarea en Agenda</button>
-                <div class="scroll-container" id="container-agenda-tasks"></div>
             </div>
-
-            <div class="panel">
-                <div class="panel-header">🤖 Consultor Analítico Oracle IA</div>
-                <div class="terminal" id="console-oracle-terminal">ORACLE NODE // Inicializando diagnósticos estructurales... Introduce tu consulta.</div>
-                <input type="text" id="input-oracle-query" placeholder="Escribe 'media', 'consejo', 'feynman' o solicita auditorías...">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <button class="btn" style="background: var(--accent-purple); color:#fff;" onclick="executeOracleQuery()">Interrogar IA</button>
-                    <button class="btn btn-glass" onclick="triggerOracleScientificTip()">💡 Inyectar Consejo</button>
-                </div>
-                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 2px 0;">
-                <button class="btn" style="background: var(--accent-yellow);" onclick="spinQuantumRoulette()">🎰 Ruleta de Descanso Cuántico</button>
-                <div id="log-roulette-outcome" style="font-size:0.7rem; color:var(--accent-yellow); text-align:center; font-weight:700;"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">🏆 Forge Quest & Mercado Matrix</div>
-                <div style="display: grid; grid-template-columns: 1fr 0.5fr 0.5fr; gap: 4px;">
-                    <input type="text" id="input-custom-q-text" placeholder="Objetivo Operativo Autónomo">
-                    <input type="number" id="input-custom-q-xp" value="100" placeholder="XP">
-                    <input type="number" id="input-custom-q-mp" value="25" placeholder="MP">
-                </div>
-                <button class="btn btn-glass" onclick="injectForgeQuest()">Forjar e Instalar Misión</button>
-                <div class="scroll-container" id="container-forge-quests"></div>
-                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 4px 0;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                    <button class="btn" style="background: #cd7f32; color:#fff;" onclick="purchaseLootBox('bronze')">📦 Cofre Bronce (100 MP)</button>
-                    <button class="btn" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink)); color:#fff;" onclick="purchaseLootBox('epic')">💎 Cofre Épico (500 MP)</button>
-                </div>
-                <div id="log-store-outcome" style="font-size: 0.65rem; color: var(--accent-cyan); text-align: center;"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">🎛️ Árbol de Habilidades Pasivas <span id="span-talent-points" style="color:var(--accent-yellow);">[0 Pts]</span></div>
-                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.72rem;">
-                    <div style="background: rgba(255,255,255,0.01); padding: 6px; border-radius: 6px; border: 1px solid var(--glass-border);">
-                        <b>Rama Enfoque (Pomodoro)</b>
-                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
-                            <span>1. Resistencia al Ruido (+5% MP en Pomo)</span>
-                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-f1" onclick="buyPassiveTalent('f1')">Adquirir [Lvl 0/3]</button>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
-                            <span>2. Hiperfoco (+10% EXP en Modo Foco)</span>
-                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-f2" onclick="buyPassiveTalent('f2')">Adquirir [Lvl 0/1]</button>
-                        </div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.01); padding: 6px; border-radius: 6px; border: 1px solid var(--glass-border);">
-                        <b>Rama Retención (Feynman/Flashcards)</b>
-                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
-                            <span>1. Memoria de Silicio (15% Prob Prob Doble MP)</span>
-                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-r1" onclick="buyPassiveTalent('r1')">Adquirir [Lvl 0/1]</button>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
-                            <span>2. Mente Clara (Mitad fatiga en Feynman)</span>
-                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-r2" onclick="buyPassiveTalent('r2')">Adquirir [Lvl 0/1]</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <div class="panel">
-            <div class="panel-header">📊 Matriz de Rendimiento Anual (Heatmap Consistencia Estilo GitHub)</div>
-            <div class="heatmap-grid" id="container-year-heatmap"></div>
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
-                <div style="font-size: 0.65rem; color: #64748b;">Cada nodo registra la intensidad de ciclos de estudio ejecutados por día de calendario.</div>
-                <div style="display: flex; gap: 4px;">
-                    <button class="btn" style="background: var(--accent-pink); color: #fff;" onclick="hardResetQuantumDatabase()">🚨 Reset Absoluto</button>
-                    <button class="btn btn-glass" onclick="purgeSpecificModule('agenda')">Limpiar Agenda</button>
-                    <button class="btn btn-glass" onclick="purgeSpecificModule('misiones')">Limpiar Misiones</button>
-                    <button class="btn btn-glass" onclick="purgeSpecificModule('calificaciones')">Limpiar Notas</button>
+        <div id="tab-rpg" class="tab-content">
+            <div class="glass-panel flex-col">
+                <div class="section-header">⚔️ Boss Fight: Exámenes de Campaña Inminentes</div>
+                <div class="flex-row">
+                    <input type="text" id="boss-name" placeholder="Ej: Titán del Cálculo Directo">
+                    <input type="date" id="boss-deadline">
                 </div>
+                <button class="action-btn" style="background:var(--glow-pink); color:#fff;" onclick="summonBossEntity()">Invocar Entidad Jefe</button>
+                <div class="scroll-list" id="view-bosses-wrapper"></div>
+                <hr style="border:0; border-top:1px solid var(--glass-border);">
+                <div class="section-header">🗺️ Mapa de Campaña Histórica (Modo Historia)</div>
+                <div class="map-grid" id="story-campaign-map"></div>
+            </div>
+
+            <div class="glass-panel flex-col">
+                <div class="section-header">🤖 Consultor Oracle IA & Ruleta Cuántica</div>
+                <div class="terminal-box" id="oracle-console">ORACLE V2026 // Nodos estables. Escribe 'media', 'feynman' o 'consejo' para auditoría directa de datos.</div>
+                <div class="flex-row">
+                    <input type="text" id="oracle-terminal-query" placeholder="Sondear la IA...">
+                    <button class="action-btn" style="background:var(--glow-purple); color:#fff;" onclick="consultOracleCore()">Interrogar</button>
+                </div>
+                <button class="action-btn" style="background:var(--glow-yellow); font-size:0.75rem;" onclick="executeQuantumRouletteSpin()">🎰 Lanzar Ruleta de Descanso Cuántico</button>
+                <div id="roulette-feedback" style="font-size:0.75rem; color:var(--glow-yellow); text-align:center; font-weight:700;"></div>
+                <hr style="border:0; border-top:1px solid var(--glass-border);">
+                <div class="section-header">🏆 Forja de Misiones Diarias & Mercado Negro</div>
+                <div style="display:grid; grid-template-columns:1fr 0.5fr 0.5fr; gap:4px;">
+                    <input type="text" id="quest-txt" placeholder="Nueva Misión Personalizada...">
+                    <input type="number" id="quest-xp" value="120" placeholder="XP">
+                    <input type="number" id="quest-mp" value="30" placeholder="MP">
+                </div>
+                <button class="action-btn secondary" style="font-size:0.72rem;" onclick="forgeCustomQuest()">Compilar Quest</button>
+                <div class="scroll-list" id="view-quests-wrapper"></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:5px;">
+                    <button class="action-btn" style="background:#cd7f32; color:#fff;" onclick="openLootBox('bronze')">📦 Caja Bronce (100 MP)</button>
+                    <button class="action-btn" style="background:linear-gradient(45deg, var(--glow-purple), var(--glow-pink)); color:#fff;" onclick="openLootBox('epic')">💎 Caja Épica (500 MP)</button>
+                </div>
+                <div id="lootbox-feedback" style="font-size:0.7rem; color:var(--glow-cyan); text-align:center; font-weight:700;"></div>
+            </div>
+        </div>
+
+        <div class="glass-panel" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:15px;">
+            <div class="flex-col">
+                <label style="font-size:0.75rem; font-weight:700; color:#94a3b8;">Gremio / Facción Activa:</label>
+                <select id="user-faction-selector" onchange="changeUserFaction()">
+                    <option value="">-- Sin Afiliación --</option>
+                    <option value="atenas">🏛️ Academia de Atenas (+15% Feynman / Apuntes)</option>
+                    <option value="turing">🧪 Enclave de Turing (+15% MP en Flashcards / Pomodoro)</option>
+                    <option value="neon">🎨 Colectivo Neon (Desconexión Rápida & Estética)</option>
+                </select>
+            </div>
+            <div class="flex-col">
+                <label style="font-size:0.75rem; font-weight:700; color:#94a3b8;">Build Operativa de Clase:</label>
+                <select id="user-build-selector" onchange="changeUserBuildArchetype()">
+                    <option value="barbaro">⚔️ Bárbaro del Estudio (Pomo Largo Extremo / Menos Cura)</option>
+                    <option value="hacker">🕶️ Pícaro Hacker (Doble MP en Forja / Más Daño de Jefes)</option>
+                    <option value="mago">🔮 Mago del Conocimiento (Feynman x2 Recompensa)</option>
+                </select>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(244,63,94,0.05); border:1px solid rgba(244,63,94,0.15); padding:12px; border-radius:12px;">
+                <span style="font-size:0.75rem; color:var(--glow-pink); font-weight:800;">☠️ MODO HARDCORE IMPLACABLE</span>
+                <input type="checkbox" id="hardcore-toggle-switch" style="width:auto;" onchange="alterHardcoreState()">
+            </div>
+        </div>
+
+        <div class="glass-panel flex-col">
+            <div class="section-header">📊 Registro de Consistencia Cuántica Anual (Frecuencia de Estudio)</div>
+            <div class="heatmap-grid" id="annual-heatmap-canvas"></div>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:4px;">
+                <button class="action-btn" style="background:var(--glow-pink); color:#fff; padding:6px 12px; font-size:0.7rem;" onclick="hardWipeAllData()">Purga Absoluta del Sistema</button>
+                <span style="font-size:0.65rem; color:#64748b; align-self:center;">Matriz Autónoma de Datos Locales Encriptada por Navegador.</span>
             </div>
         </div>
     </div>
 
     <script>
         // CORE CENTRAL DATABASE STRUCTURE
-        let db = {
+        let state = {
             xp: parseInt(localStorage.getItem('mo_xp') || '0'),
             mp: parseInt(localStorage.getItem('mo_mp') || '0'),
             level: parseInt(localStorage.getItem('mo_lvl') || '1'),
-            talentPoints: parseInt(localStorage.getItem('mo_tp') || '0'),
             estamina: parseInt(localStorage.getItem('mo_est') || '100'),
             focusMinutes: parseInt(localStorage.getItem('mo_fmin') || '0'),
             streak: parseInt(localStorage.getItem('mo_strk') || '0'),
@@ -322,453 +356,364 @@
             quests: JSON.parse(localStorage.getItem('mo_qsts') || '[]'),
             bosses: JSON.parse(localStorage.getItem('mo_boss') || '[]'),
             schedule: JSON.parse(localStorage.getItem('mo_sch') || '{}'),
-            talents: JSON.parse(localStorage.getItem('mo_tlnts') || '{"f1":0,"f2":0,"r1":0,"r2":0}'),
             heatmap: JSON.parse(localStorage.getItem('mo_htmp') || '{}'),
-            currentEvent: { name: "Ninguno", type: "neutral", desc: "Condiciones estables." }
+            currentEvent: { name: "Estable", desc: "Red sin interferencias." }
         };
 
-        const hoursBlocks = ["08:00-09:30", "09:30-11:00", "11:30-13:00", "13:00-14:30", "15:30-17:00"];
+        const timeBlocks = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00"];
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let lofiOscillator = null; let lofiGain = null; let isAudioSynthesizing = false;
-        let pomoInterval = null; let pomoIsRunning = false; let pomoTimeRemaining = 25 * 60;
+        let regularOscillator = null; let baseVolumeGain = null; let isAudioPlaying = false;
+        let pomoIntervalLoop = null; let pomoRunningState = false; let pomoTimeLeft = 25 * 60;
 
-        function syncQuantumDatabase() {
-            localStorage.setItem('mo_xp', db.xp); localStorage.setItem('mo_mp', db.mp);
-            localStorage.setItem('mo_lvl', db.level); localStorage.setItem('mo_tp', db.talentPoints);
-            localStorage.setItem('mo_est', db.estamina); localStorage.setItem('mo_fmin', db.focusMinutes);
-            localStorage.setItem('mo_strk', db.streak); localStorage.setItem('mo_lld', db.lastLoginDate);
-            localStorage.setItem('mo_fac', db.faction); localStorage.setItem('mo_bld', db.build);
-            localStorage.setItem('mo_hdc', db.hardcore); localStorage.setItem('mo_subjs', JSON.stringify(db.subjects));
-            localStorage.setItem('mo_agd', JSON.stringify(db.agenda)); localStorage.setItem('mo_fey', JSON.stringify(db.feynman));
-            localStorage.setItem('mo_fcs', JSON.stringify(db.flashcards)); localStorage.setItem('mo_qsts', JSON.stringify(db.quests));
-            localStorage.setItem('mo_boss', JSON.stringify(db.bosses)); localStorage.setItem('mo_sch', JSON.stringify(db.schedule));
-            localStorage.setItem('mo_tlnts', JSON.stringify(db.talents)); localStorage.setItem('mo_htmp', JSON.stringify(db.heatmap));
+        function saveStateToBrowser() {
+            localStorage.setItem('mo_xp', state.xp); localStorage.setItem('mo_mp', state.mp);
+            localStorage.setItem('mo_lvl', state.level); localStorage.setItem('mo_est', state.estamina);
+            localStorage.setItem('mo_fmin', state.focusMinutes); localStorage.setItem('mo_strk', state.streak);
+            localStorage.setItem('mo_lld', state.lastLoginDate); localStorage.setItem('mo_fac', state.faction);
+            localStorage.setItem('mo_bld', state.build); localStorage.setItem('mo_hdc', state.hardcore);
+            localStorage.setItem('mo_subjs', JSON.stringify(state.subjects)); localStorage.setItem('mo_agd', JSON.stringify(state.agenda));
+            localStorage.setItem('mo_fey', JSON.stringify(state.feynman)); localStorage.setItem('mo_fcs', JSON.stringify(state.flashcards));
+            localStorage.setItem('mo_qsts', JSON.stringify(state.quests)); localStorage.setItem('mo_boss', JSON.stringify(state.bosses));
+            localStorage.setItem('mo_sch', JSON.stringify(state.schedule)); localStorage.setItem('mo_htmp', JSON.stringify(state.heatmap));
         }
 
-        function triggerFrequencyBeep(freq, duration) {
+        function triggerAudioChirp(freq, duration) {
             try {
                 let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
                 osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.02, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + duration);
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + duration);
             } catch(e){}
         }
 
-        // REWARDS DISPATCHER (MANAGES BOOSTS, DEBUFFS & TALENTS)
-        function dispatchRecompense(baseXp, baseMp) {
-            let finalXp = baseXp; let finalMp = baseMp;
-            
-            // Apply Stamina Penalties
-            if (db.estamina < 20) { finalXp *= 0.5; finalMp *= 0.5; }
+        function distributeRecompensePoints(baseXp, baseMp) {
+            let modXp = baseXp; let modMp = baseMp;
+            if (state.estamina < 20) { modXp *= 0.5; modMp *= 0.5; }
+            if (state.faction === 'atenas') modXp *= 1.15;
+            if (state.faction === 'turing') modMp *= 1.15;
+            if (state.streak > 5) modXp *= 1.20;
+            if (state.currentEvent.name === "Tormenta Electrónica") modXp *= 1.20;
+            if (state.currentEvent.name === "Día de la Auditoría") modXp *= 2.0;
+            if (state.build === 'hacker') modMp *= 1.25;
 
-            // Faction Modifiers
-            if (db.faction === 'atenas') finalXp *= 1.15;
-            if (db.faction === 'turing') finalMp *= 1.15;
-
-            // Racha / Quantum Fire Modifiers
-            if (db.streak > 5) { finalXp *= 1.20; }
-
-            // Environmental System Modifiers
-            if (db.currentEvent.name === "Tormenta Electrónica") { finalXp *= 1.20; }
-            if (db.currentEvent.name === "Día de la Auditoría") { finalXp *= 1.50; }
-
-            // Build Archetype Modifiers
-            if (db.build === 'hacker') finalMp *= 1.30;
-
-            db.xp += Math.round(finalXp); db.mp += Math.round(finalMp);
-            processLevelCurveEvaluation(); incrementTodayHeatmapValue(); syncQuantumDatabase(); updateInterfaceHUD();
+            state.xp += Math.round(modXp); state.mp += Math.round(modMp);
+            processLevelCurve(); registerTodayHeatmapAction(); saveStateToBrowser(); refreshUserInterfaceHUD();
         }
 
-        function processLevelCurveEvaluation() {
-            let xpNeeded = db.level * 1000;
-            while (db.xp >= xpNeeded) {
-                db.xp -= xpNeeded; db.level++; db.talentPoints++;
-                triggerFrequencyBeep(880, 0.4);
-                alert(`¡SUBIDA DE NIVEL DETECTADA! Has alcanzado el Nivel ${db.level}. Ganaste 1 Punto de Talento.`);
-                xpNeeded = db.level * 1000;
+        function processLevelCurve() {
+            let targetXp = state.level * 1000;
+            while(state.xp >= targetXp) {
+                state.xp -= targetXp; state.level++;
+                triggerAudioChirp(880, 0.35);
+                alert(`🎯 ¡SUBIDA DE RANGO ADQUIRIDA! Nivel del perfil escalado a: ${state.level}`);
+                targetXp = state.level * 1000;
             }
         }
 
-        function getDynamicRangoTitle(lvl) {
-            if (lvl <= 5) return "Esclavo del Sistema";
-            if (lvl <= 15) return "Hacker Novato";
-            if (lvl <= 30) return "Cyborg de Silicio";
+        function getRankDescriptor(lvl) {
+            if(lvl <= 5) return "Esclavo del Sistema";
+            if(lvl <= 15) return "Hacker Novato";
+            if(lvl <= 30) return "Cyborg de Silicio";
             return "Matrix Overlord";
         }
 
-        function updateInterfaceHUD() {
-            document.getElementById('hud-level').innerText = `LVL ${db.level}`;
-            document.getElementById('user-rango').innerText = getDynamicRangoTitle(db.level);
-            document.getElementById('hud-mp').innerText = `${db.mp} MP`;
-            document.getElementById('hud-estamina').innerText = `${db.estamina}%`;
-            document.getElementById('hud-xp-raw').innerText = `${db.xp} / ${db.level * 1000} XP`;
-            document.getElementById('hud-streak-display').innerText = `Racha: ${db.streak} días ${db.streak > 5 ? '🔥 FUEGO CUÁNTICO' : ''}`;
-            document.getElementById('span-talent-points').innerText = `[${db.talentPoints} Pts]`;
-            document.getElementById('hud-focus-time').innerText = `Enfoque: ${db.focusMinutes} min`;
+        function refreshUserInterfaceHUD() {
+            document.getElementById('hud-txt-level').innerText = `LVL ${state.level}`;
+            document.getElementById('hud-title-rango').innerText = getRankDescriptor(state.level);
+            document.getElementById('hud-txt-mp').innerText = `${state.mp} MP`;
+            document.getElementById('hud-txt-estamina').innerText = `${state.estamina}%`;
+            document.getElementById('hud-raw-xp').innerText = `${state.xp} / ${state.level * 1000} XP`;
+            document.getElementById('hud-txt-streak').innerText = `Racha: ${state.streak} días ${state.streak > 5 ? '🔥 FUEGO CUÁNTICO (+20% EXP)' : ''}`;
+            document.getElementById('hud-txt-focus').innerText = `Tiempo Enfocado: ${state.focusMinutes} min`;
 
-            // Calculate XP Bar percentage
-            let pctXp = (db.xp / (db.level * 1000)) * 100;
-            document.getElementById('bar-xp-progress').style.width = `${pctXp}%`;
+            document.getElementById('hud-bar-xp').style.width = `${(state.xp / (state.level * 1000)) * 100}%`;
+            document.getElementById('hud-bar-estamina').style.width = `${state.estamina}%`;
 
-            // Update Stamina graphical bar
-            let estBar = document.getElementById('bar-estamina-inner');
-            estBar.style.width = `${db.estamina}%`;
-            if (db.estamina < 20) {
-                estBar.style.background = varColor('--accent-pink');
-                document.getElementById('hud-estamina-card').style.borderLeftColor = varColor('--accent-pink');
+            if(state.estamina < 20) {
+                document.getElementById('hud-bar-estamina').style.background = 'var(--glow-pink)';
+                document.getElementById('hud-card-estamina').style.borderLeftColor = 'var(--glow-pink)';
             } else {
-                estBar.style.background = varColor('--accent-green');
-                document.getElementById('hud-estamina-card').style.borderLeftColor = varColor('--accent-green');
+                document.getElementById('hud-bar-estamina').style.background = 'var(--glow-green)';
+                document.getElementById('hud-card-estamina').style.borderLeftColor = 'var(--glow-green)';
             }
 
-            // Calculate global averages
-            let cumulativeSum = 0; let countedSubjects = 0;
-            db.subjects.forEach(s => { if(s.grades.length > 0) { cumulativeSum += (s.grades.reduce((a,b)=>a+b,0) / s.grades.length); countedSubjects++; } });
-            document.getElementById('hud-avg').innerText = countedSubjects > 0 ? (cumulativeSum / countedSubjects).toFixed(2) : "0.0";
+            let globalSum = 0; let counted = 0;
+            state.subjects.forEach(s => { if(s.grades.length > 0){ globalSum += (s.grades.reduce((a,b)=>a+b,0)/s.grades.length); counted++; } });
+            document.getElementById('hud-txt-avg').innerText = counted > 0 ? (globalSum / counted).toFixed(2) : "0.0";
             
-            // Dynamic theme modifications depending on level milestone
-            let hexHue = (db.level * 12) % 360;
-            document.body.style.backgroundColor = `hsl(${hexHue}, 30%, 2%)`;
+            let colorShiftAngle = (state.level * 15) % 360;
+            document.body.style.backgroundColor = `hsl(${colorShiftAngle}, 35%, 3%)`;
         }
 
-        function varColor(variableName) { return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim(); }
+        // NAV MECHANICS
+        function switchActiveTab(evt, tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+            triggerAudioChirp(400, 0.05);
+        }
 
-        // STREAK & ENVIRONMENTAL SCENARIO DAILY ALGORITHMS
-        function evaluateLoginStreakMechanics() {
-            let todayStr = new Date().toISOString().split('T')[0];
-            if (db.lastLoginDate === "") { db.streak = 1; } 
+        // DAILY SYSTEM STREAKS & DEBUFF WEATHER ENGINE
+        function bootDailyStreakAndClimate() {
+            let today = new Date().toISOString().split('T')[0];
+            if (!state.lastLoginDate) { state.streak = 1; }
             else {
-                let diffTime = Math.abs(new Date(todayStr) - new Date(db.lastLoginDate));
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays === 1) { db.streak++; } 
-                else if (diffDays > 1) {
-                    // Try to consume Streak Shield automatically if available
-                    if (db.mp >= 500) { db.mp -= 500; alert("🛡️ El Escudo de Racha se activó automáticamente por 500 MP. Tu racha fue salvada."); } 
-                    else { db.streak = 0; }
+                let diff = Math.ceil(Math.abs(new Date(today) - new Date(state.lastLoginDate)) / (1000 * 60 * 60 * 24));
+                if (diff === 1) { state.streak++; }
+                else if (diff > 1) {
+                    if(state.mp >= 500) { state.mp -= 500; alert("🛡️ ¡ESCUDO DE RACHA COMPRADO AUTOMÁTICAMENTE! Se han deducido 500 MP para salvar tu racha."); }
+                    else { state.streak = 0; }
                 }
             }
-            db.lastLoginDate = todayStr;
-            
-            // Build dynamic daily system events
-            const events = [
-                { name: "Tormenta Electrónica", type: "debuff", desc: "La fatiga aumenta. Pomodoros consumen +5% Estamina. Recompensas +20% EXP." },
-                { name: "Cielo Despejado", type: "buff", desc: "Estado mental óptimo. Doble probabilidad de drops críticos en descanso." },
-                { name: "Día de la Auditoría", type: "neutral", desc: "Oracle IA audita todo. Actualizar notas otorga un +50% de EXP base." }
+            state.lastLoginDate = today;
+
+            const systemWeathers = [
+                { name: "Tormenta Electrónica", desc: "⚡ Entorno inestable. Pomodoros consumen +5% Estamina, pero las Quests otorgan +20% EXP." },
+                { name: "Cielo Despejado", desc: "☀️ Canal limpio. La Ruleta de Descanso Cuántico dobla su probabilidad de Drop Crítico (60%)." },
+                { name: "Día de la Auditoría", desc: "💾 Servidores en revisión. Actualizar tus notas académicas otorga el doble de EXP." }
             ];
-            db.currentEvent = events[Math.floor(Math.random() * events.length)];
-            document.getElementById('system-event-banner').innerText = `[EVENTO DIARIO]: ${db.currentEvent.name} - ${db.currentEvent.desc}`;
-            syncQuantumDatabase();
+            state.currentEvent = systemWeathers[Math.floor(Math.random() * systemWeathers.length)];
+            document.getElementById('daily-event-ticker').innerText = `[SISTEMA AMBIENTAL]: ${state.currentEvent.name} -> ${state.currentEvent.desc}`;
+            saveStateToBrowser();
         }
 
-        // ACADEMIC MANAGEMENT ENGINE WITH PREDICTIVE TARGET SIMULATOR
-        function createNewSubjectNode() {
-            let name = document.getElementById('input-subject-name').value.trim(); if (!name) return;
-            if (!db.subjects.some(s => s.name === name)) {
-                db.subjects.push({ name, grades: [], notes: '' });
-                document.getElementById('input-subject-name').value = ''; syncQuantumDatabase(); renderAllModules();
-            }
-        }
-
-        function commitGradeToDatabase() {
-            let idx = document.getElementById('dropdown-subjects-list').value;
-            let grade = parseFloat(document.getElementById('input-grade-value').value);
-            let type = document.getElementById('select-grade-type').value;
-            if (idx === '' || isNaN(grade) || grade < 0 || grade > 10) return;
-            db.subjects[idx].grades.push(grade);
-            triggerFrequencyBeep(520, 0.15);
-            document.getElementById('input-grade-value').value = '';
-            dispatchRecompense(40, 10); renderAllModules();
-        }
-
-        function calculateTargetRequiredGrade(currentAvg, targetGoal) {
-            let output = (targetGoal * 2) - currentAvg;
-            return output <= 0 ? "OK" : (output > 10 ? "✖" : output.toFixed(2));
-        }
-
-        function loadSubjectNotesToTextarea() {
-            let idx = document.getElementById('dropdown-subjects-list').value;
-            if(idx !== '' && db.subjects[idx]) { document.getElementById('textarea-subject-notes').value = db.subjects[idx].notes; }
-        }
-
-        function autoSaveSubjectNotes() {
-            let idx = document.getElementById('dropdown-subjects-list').value;
-            if(idx !== '' && db.subjects[idx]) {
-                db.subjects[idx].notes = document.getElementById('textarea-subject-notes').value; syncQuantumDatabase();
-                document.getElementById('notes-status-log').innerText = "Apunte guardado automáticamente.";
-            }
-        }
-
-        // COMBATE CONTRA JEFES (BOSS FIGHTS ENGINE)
-        function deployNewBossEntity() {
-            let name = document.getElementById('input-boss-name').value.trim();
-            let date = document.getElementById('input-boss-date').value; if(!name || !date) return;
-            db.bosses.push({ id: Date.now(), name, date, hp: 100, absoluteHp: 100 });
-            document.getElementById('input-boss-name').value = ''; syncQuantumDatabase(); renderAllModules();
-        }
-
-        function checkBossDamageInjection(amount) {
-            db.bosses = db.bosses.map(b => {
-                if(b.hp > 0) {
-                    b.hp -= amount; if(b.hp <= 0) { b.hp = 0; dispatchRecompense(300, 150); alert(`⚔️ ¡JEFE DERROTADO! Has aniquilado al jefe '${b.name}'. Recompensas épicas añadidas.`); }
-                }
-                return b;
-            });
-            renderAllModules();
-        }
-
-        // METODOLOGIAS DE ESTUDIO ACTIVO (FEYNMAN & FLASHCARDS)
-        function commitFeynmanModule() {
-            let concept = document.getElementById('input-feynman-concept').value.trim();
-            let simple = document.getElementById('textarea-feynman-simple').value.trim();
-            let voids = document.getElementById('input-feynman-voids').value.trim();
-            if(!concept || !simple) return;
-            db.feynman.unshift({ concept, simple, voids });
-            let feynmanXp = db.build === 'mago' ? 160 : 80;
-            // Clear Stamina reduction talent check
-            if(db.talents.r2 === 1) { db.estamina = Math.min(100, db.estamina + 5); } 
-            else { db.estamina = Math.max(0, db.estamina - 10); }
-            document.getElementById('input-feynman-concept').value = ''; document.getElementById('textarea-feynman-simple').value = ''; document.getElementById('input-feynman-voids').value = '';
-            dispatchRecompense(feynmanXp, 20); renderAllModules();
-        }
-
-        function generateFlashcardEntity() {
-            let front = document.getElementById('input-fc-front').value.trim();
-            let back = document.getElementById('input-fc-back').value.trim(); if(!front || !back) return;
-            db.flashcards.push({ front, back }); document.getElementById('input-fc-front').value = ''; document.getElementById('input-fc-back').value = '';
-            syncQuantumDatabase(); renderAllModules();
-        }
-
-        function testFlashcardRetention(i) {
-            alert(`[RESPUESTA OFICIAL DE RETENCIÓN]:\n\n${db.flashcards[i].back}`);
-            let bonusMp = (db.talents.r1 === 1 && Math.random() < 0.15) ? 20 : 10;
-            dispatchRecompense(30, bonusMp);
-        }
-
-        // TIME ARCHITECTURE: POMODORO & SYNTHETIC FREQUENCIES
-        function triggerPomoEngine() {
-            if(pomoIsRunning) { clearInterval(pomoInterval); pomoIsRunning = false; } 
+        // CENTER OF FOCUS: POMODORO ENGINE
+        function togglePomodoroEngine() {
+            if(pomoRunningState) { clearInterval(pomoIntervalLoop); pomoRunningState = false; }
             else {
-                if(db.estamina < 25) { alert("🚨 Error: Estamina insuficiente para iniciar un ciclo productivo. Utiliza la ruleta de descanso o duerme."); return; }
-                pomoIsRunning = true;
-                pomoInterval = setInterval(() => {
-                    pomoTimeRemaining--;
-                    let m = Math.floor(pomoTimeRemaining/60).toString().padStart(2,'0');
-                    let s = (pomoTimeRemaining%60).toString().padStart(2,'0');
-                    document.getElementById('pomo-clock').innerText = `${m}:${s}`;
-                    if(pomoTimeRemaining % 60 === 0) { db.focusMinutes++; syncQuantumDatabase(); updateInterfaceHUD(); }
-                    if(pomoTimeRemaining <= 0) {
-                        clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60;
-                        let costEstamina = db.currentEvent.name === "Tormenta Electrónica" ? 30 : 25;
-                        db.estamina = Math.max(0, db.estamina - costEstamina);
-                        let bonusPomoMp = db.talents.f1 > 0 ? (40 + (db.talents.f1 * 2)) : 40;
-                        let bonusPomoXp = (db.talents.f2 === 1 && document.getElementById('select-pomo-intensity').value === 'foco') ? 165 : 150;
-                        checkBossDamageInjection(5); dispatchRecompense(bonusPomoXp, bonusPomoMp);
-                        triggerFrequencyBeep(650, 0.4); alert("Ciclo Pomodoro Finalizado con Éxito."); renderAllModules();
+                if(state.estamina < 25) { alert("⛔ Fatiga mental crítica (<25% Estamina). Ejecuta pausas cuánticas antes de colapsar."); return; }
+                pomoRunningState = true;
+                pomoIntervalLoop = setInterval(() => {
+                    pomoTimeLeft--;
+                    let min = Math.floor(pomoTimeLeft/60).toString().padStart(2,'0');
+                    let sec = (pomoTimeLeft%60).toString().padStart(2,'0');
+                    document.getElementById('clock-countdown').innerText = `${min}:${sec}`;
+                    
+                    if(pomoTimeLeft % 60 === 0) { state.focusMinutes++; saveStateToBrowser(); refreshUserInterfaceHUD(); }
+                    
+                    if(pomoTimeLeft <= 0) {
+                        clearInterval(pomoIntervalLoop); pomoRunningState = false; pomoTimeLeft = 25 * 60;
+                        let damageEstamina = state.currentEvent.name === "Tormenta Electrónica" ? 30 : 25;
+                        state.estamina = Math.max(0, state.estamina - damageEstamina);
+                        
+                        let baseRewardXp = (document.getElementById('setup-pomo-intensity').value === 'foco') ? 165 : 150;
+                        inflictDamageToActiveBosses(5);
+                        distributeRecompensePoints(baseRewardXp, 40);
+                        triggerAudioChirp(600, 0.5); alert("⚡ Ciclo Completado. Recompensas integradas.");
+                        restartPomodoroClock(); rebuildAllModuleLayouts();
                     }
                 }, 1000);
             }
         }
-
-        function resetPomoEngine() { clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60; document.getElementById('pomo-clock').innerText = "25:00"; }
-        function toggleAudioSynthesis() {
-            if(isAudioSynthesizing) { if(lofiOscillator) lofiOscillator.stop(); isAudioSynthesizing = false; document.getElementById('btn-audio-state').innerText = "Inicializar Sintetizador de Audio"; } 
-            else { isAudioSynthesizing = true; document.getElementById('btn-audio-state').innerText = "Detener Sintetizador"; switchLofiFrequency(); }
+        function restartPomodoroClock() { clearInterval(pomoIntervalLoop); pomoRunningState = false; pomoTimeLeft = parseInt(document.getElementById('setup-pomo-minutes').value || 25) * 60; document.getElementById('clock-countdown').innerText = `${Math.floor(pomoTimeLeft/60)}:00`; }
+        
+        function toggleAudioSynthesisEngine() {
+            if(isAudioPlaying) { if(regularOscillator) regularOscillator.stop(); isAudioPlaying = false; document.getElementById('btn-audio-toggle').innerText = "Activar Generador de Frecuencias Nativas"; }
+            else { isAudioPlaying = true; document.getElementById('btn-audio-toggle').innerText = "Detener Sintetizador"; alterLofiAudioFrec(); }
         }
-        function switchLofiFrequency() {
-            if(!isAudioSynthesizing) return; if(lofiOscillator) { try { lofiOscillator.stop(); } catch(e){} }
-            lofiOscillator = audioCtx.createOscillator(); lofiGain = audioCtx.createGain();
-            let basePitch = parseInt(document.getElementById('select-lofi-frequencies').value) * 3;
-            lofiOscillator.frequency.setValueAtTime(basePitch, audioCtx.currentTime); lofiOscillator.type = 'triangle';
-            lofiGain.gain.setValueAtTime(0.015, audioCtx.currentTime); lofiOscillator.connect(lofiGain); lofiGain.connect(audioCtx.destination);
-            lofiOscillator.start();
-        }
-
-        // INTERACTIVITY & AUX SYSTEMS
-        function spinQuantumRoulette() {
-            triggerFrequencyBeep(440, 0.08);
-            const pauseProtocols = ["Estiramiento completo de extremidades y respiración diafragmática (3 min)", "Hidratación: Bebe un vaso de agua mineral fría de inmediato.", "Enfoque infinito: Cierra los ojos y visualiza una matriz vacía."];
-            let out = pauseProtocols[Math.floor(Math.random() * pauseProtocols.length)];
-            db.estamina = Math.min(100, db.estamina + 15);
-            let dropProbability = db.currentEvent.name === "Cielo Despejado" ? 0.6 : 0.3;
-            if(Math.random() < dropProbability) { out += " 🎁 ¡DROP CRÍTICO EXTRA! +50 EXP y +15 MP."; dispatchRecompense(50, 15); }
-            document.getElementById('log-roulette-outcome').innerText = out; syncQuantumDatabase(); updateInterfaceHUD();
+        function alterLofiAudioFrec() {
+            if(!isAudioPlaying) return; if(regularOscillator) { try{ regularOscillator.stop(); }catch(e){} }
+            regularOscillator = audioCtx.createOscillator(); baseVolumeGain = audioCtx.createGain();
+            let tonePitch = parseInt(document.getElementById('selector-synth-themes').value) * 2.5;
+            regularOscillator.frequency.setValueAtTime(tonePitch, audioCtx.currentTime); regularOscillator.type = 'sine';
+            baseVolumeGain.gain.setValueAtTime(0.02, audioCtx.currentTime); regularOscillator.connect(baseVolumeGain); baseVolumeGain.connect(audioCtx.destination);
+            regularOscillator.start();
         }
 
-        function executeOracleQuery() {
-            let query = document.getElementById('input-oracle-query').value.toLowerCase(); if(!query) return;
-            let log = "ORACLE DIAGNOSTIC: Solicitud entrante no clasificada. Intente 'media' o 'feynman'.";
-            if(query.includes("media") || query.includes("notas")) {
-                log = db.subjects.map(s => `${s.name}: [${s.grades.length > 0 ? (s.grades.reduce((a,b)=>a+b,0)/s.grades.length).toFixed(2) : 'Sin Registros'}]`).join(" // ");
-            } else if(query.includes("feynman")) {
-                log = "EXPLICACIÓN METODOLÓGICA: Reducir la complejidad semántica a nivel de primaria expone instantáneamente las carencias del mapa mental.";
-            }
-            document.getElementById('console-oracle-terminal').innerText = log; document.getElementById('input-oracle-query').value = '';
-        }
-
-        function triggerOracleScientificTip() {
-            const tips = ["Efecto Zeigarnik: Las tareas interrumpidas generan tensión cognitiva; termínalas para liberar RAM mental.", "Ley de los 2 Minutos: Si una acción requiere menos de 120 segundos de ejecución, resuélvela inmediatamente."];
-            document.getElementById('console-oracle-terminal').innerText = tips[Math.floor(Math.random() * tips.length)];
-        }
-
-        // EXTRA QUESTS & TIENDA COFRES
-        function injectForgeQuest() {
-            let txt = document.getElementById('input-custom-q-text').value.trim();
-            let xp = parseInt(document.getElementById('input-custom-q-xp').value) || 0;
-            let mp = parseInt(document.getElementById('input-custom-q-mp').value) || 0; if(!txt) return;
-            db.quests.push({ id: Date.now(), txt, xp, mp, done: false });
-            document.getElementById('input-custom-q-text').value = ''; syncQuantumDatabase(); renderAllModules();
-        }
-
-        function checkQuestResolution(id, xp, mp) {
-            db.quests = db.quests.map(q => { if(q.id === id && !q.done) { q.done = true; dispatchRecompense(xp, mp); triggerFrequencyBeep(700, 0.1); } return q; });
-            renderAllModules();
-        }
-
-        function purchaseLootBox(tier) {
-            if(tier === 'bronze' && db.mp >= 100) {
-                db.mp -= 100; db.estamina = Math.min(100, db.estamina + 30);
-                document.getElementById('log-store-outcome').innerText = "📦 Cofre Bronce abierto: +30% de Estamina inyectada.";
-            } else if(tier === 'epic' && db.mp >= 500) {
-                db.mp -= 500; dispatchRecompense(1000, 0);
-                document.getElementById('log-store-outcome').innerText = "💎 Cofre Épico abierto: Dropeado tomo ancestral de experiencia (+1000 EXP).";
-            } else { alert("Fondos Matrix Points insuficientes."); }
-            renderAllModules();
-        }
-
-        function buyPassiveTalent(id) {
-            if(db.talentPoints > 0) {
-                if(id === 'f1' && db.talents.f1 < 3) { db.talents.f1++; db.talentPoints--; }
-                else if(id === 'f2' && db.talents.f2 < 1) { db.talents.f2++; db.talentPoints--; }
-                else if(id === 'r1' && db.talents.r1 < 1) { db.talents.r1++; db.talentPoints--; }
-                else if(id === 'r2' && db.talents.r2 < 1) { db.talents.r2++; db.talentPoints--; }
-                syncQuantumDatabase(); renderAllModules();
-            } else { alert("No posees Puntos de Talento disponibles."); }
-        }
-
-        // HARDCORE MODE TAB-VISIBILITY WATCHDOG
-        function toggleHardcoreMode() { db.hardcore = document.getElementById('chk-hardcore').checked; syncQuantumDatabase(); }
+        // HARDCORE LOOKOUT GUARDIAN
+        function alterHardcoreState() { state.hardcore = document.getElementById('hardcore-toggle-switch').checked; saveStateToBrowser(); }
         document.addEventListener('visibilitychange', () => {
-            if(document.hidden && db.hardcore && pomoIsRunning) {
-                clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60;
-                db.xp = Math.max(0, db.xp - 100); db.estamina = Math.max(0, db.estamina - 20);
-                document.getElementById('pomo-clock').innerText = "25:00"; syncQuantumDatabase(); renderAllModules();
-                alert("☠️ INFRAESTRUCTURA HARDCORE VIOLADA: Detectado cambio de pestaña activo. Penalización inyectada (-100 EXP / -20% Estamina).");
+            if (document.hidden && state.hardcore && pomoRunningState) {
+                clearInterval(pomoIntervalLoop); pomoRunningState = false; pomoTimeLeft = 25 * 60;
+                state.xp = Math.max(0, state.xp - 100); state.estamina = Math.max(0, state.estamina - 20);
+                document.getElementById('clock-countdown').innerText = "25:00"; saveStateToBrowser(); rebuildAllModuleLayouts();
+                alert("☠️ DETECTADA EVASIÓN DE PANTALLA: Modo Hardcore penaliza tu perfil con -100 EXP y -20% de Estamina.");
             }
         });
 
-        // RE-DOCK FACTIONS & RENDERS
-        function selectFactionGroup() { db.faction = document.getElementById('select-faction').value; syncQuantumDatabase(); updateInterfaceHUD(); }
-        function applyBuildArchetype() { db.build = document.getElementById('select-build').value; syncQuantumDatabase(); updateInterfaceHUD(); }
-
-        function setupScheduleTable() {
-            let body = document.getElementById('table-body-schedule'); body.innerHTML = '';
-            hoursBlocks.forEach((block, bIdx) => {
-                let tr = document.createElement('tr'); tr.innerHTML = `<td><b>${block.split('-')[0]}</b></td>`;
-                for(let d=0; d<5; d++) {
-                    let key = `${bIdx}-${d}`; let val = db.schedule[key] || '';
-                    tr.innerHTML += `<td><input type="text" class="sch-input" id="sch-${key}" value="${val}" oninput="db.schedule['${key}']=this.value; syncQuantumDatabase();"></td>`;
-                }
-                body.appendChild(tr);
-            });
+        // ACADEMIA: CALCULATOR & SIMULATOR TARGET
+        function insertNewSubject() {
+            let input = document.getElementById('subject-name-input').value.trim(); if(!input) return;
+            if(!state.subjects.some(x => x.name === input)) {
+                state.subjects.push({ name: input, grades: [], notes: '' });
+                document.getElementById('subject-name-input').value = ''; saveStateToBrowser(); rebuildAllModuleLayouts();
+            }
         }
-
-        function incrementTodayHeatmapValue() {
-            let todayStr = new Date().toISOString().split('T')[0];
-            db.heatmap[todayStr] = (db.heatmap[todayStr] || 0) + 1;
+        function injectGradeToSubject() {
+            let id = document.getElementById('subject-dropdown').value;
+            let val = parseFloat(document.getElementById('grade-val-input').value);
+            if(id === '' || isNaN(val) || val < 0 || val > 10) return;
+            state.subjects[id].grades.push(val);
+            document.getElementById('grade-val-input').value = '';
+            distributeRecompensePoints(40, 10); rebuildAllModuleLayouts();
         }
-
-        function renderYearlyHeatmapGrid() {
-            let container = document.getElementById('container-year-heatmap'); container.innerHTML = '';
-            for(let i=0; i<53 * 7; i++) {
-                let cell = document.createElement('div'); cell.className = 'heatmap-cell';
-                // Mock historical coloration calculation depending on active days
-                if (i % 9 === 0) cell.style.background = 'var(--accent-green)';
-                if (i % 23 === 0) cell.style.background = 'var(--accent-purple)';
-                container.appendChild(cell);
+        function linkNotesWithSelectedSubject() {
+            let id = document.getElementById('subject-dropdown').value;
+            if(id !== '' && state.subjects[id]) document.getElementById('subject-isolated-notes').value = state.subjects[id].notes;
+        }
+        function triggerNotesAutoSave() {
+            let id = document.getElementById('subject-dropdown').value;
+            if(id !== '' && state.subjects[id]) {
+                state.subjects[id].notes = document.getElementById('subject-isolated-notes').value; saveStateToBrowser();
             }
         }
 
-        function deployAgendaTask() {
-            let title = document.getElementById('input-agenda-title').value.trim();
-            let date = document.getElementById('input-agenda-date').value;
-            let tag = document.getElementById('select-agenda-tag').value; if(!title || !date) return;
-            db.agenda.push({ id: Date.now(), title, date, tag });
-            document.getElementById('input-agenda-title').value = ''; dispatchRecompense(30, 5); renderAllModules();
+        // RPG: BOSS EXAMS ENGINE
+        function summonBossEntity() {
+            let name = document.getElementById('boss-name').value.trim();
+            let date = document.getElementById('boss-deadline').value; if(!name || !date) return;
+            state.bosses.push({ name, date, hp: 100 });
+            document.getElementById('boss-name').value = ''; saveStateToBrowser(); rebuildAllModuleLayouts();
+        }
+        function inflictDamageToActiveBosses(val) {
+            state.bosses = state.bosses.map(b => {
+                if(b.hp > 0) { b.hp -= val; if(b.hp <= 0){ b.hp = 0; distributeRecompensePoints(400, 200); alert(`⚔️ ¡ENEMIGO CAÍDO! Has aniquilado el examen de '${b.name}'. +400 XP / +200 MP.`); } }
+                return b;
+            });
         }
 
-        function purgeSpecificModule(moduleName) {
-            if(moduleName === 'agenda') db.agenda = [];
-            if(moduleName === 'misiones') db.quests = [];
-            if(moduleName === 'calificaciones') db.subjects.forEach(s => s.grades = []);
-            syncQuantumDatabase(); renderAllModules();
+        // METHODOLOGIES: FEYNMAN & FLASHCARDS
+        function saveFeynmanModule() {
+            let c = document.getElementById('feynman-concept').value.trim();
+            let s = document.getElementById('feynman-simple').value.trim();
+            let v = document.getElementById('feynman-voids').value.trim(); if(!c || !s) return;
+            state.feynman.unshift({ concept: c, simple: s, voids: v });
+            state.estamina = Math.max(0, state.estamina - 8);
+            document.getElementById('feynman-concept').value = ''; document.getElementById('feynman-simple').value = ''; document.getElementById('feynman-voids').value = '';
+            distributeRecompensePoints(state.build === 'mago' ? 160 : 80, 20); rebuildAllModuleLayouts();
+        }
+        function generateFlashcardItem() {
+            let q = document.getElementById('fc-question').value.trim();
+            let a = document.getElementById('fc-answer').value.trim(); if(!q || !a) return;
+            state.flashcards.push({ q, a });
+            document.getElementById('fc-question').value = ''; document.getElementById('fc-answer').value = '';
+            saveStateToBrowser(); rebuildAllModuleLayouts();
         }
 
-        function hardResetQuantumDatabase() { if(confirm("¿Ejecutar purga atómica total?")) { localStorage.clear(); location.reload(); } }
-        function exportQuantumState() { window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage))); }
-        function importQuantumState() { try { let input = JSON.parse(prompt("Inyecte el flujo JSON de respaldo:")); if(input) { Object.keys(input).forEach(k => localStorage.setItem(k, input[k])); location.reload(); } } catch(e){} }
+        // DIALOGS & ORACLE AUXILIARIES
+        function consultOracleCore() {
+            let cmd = document.getElementById('oracle-terminal-query').value.toLowerCase();
+            let out = "ORACLE NODE // Comando no válido. Pruebe 'media' o 'consejo'.";
+            if(cmd.includes('media') || cmd.includes('notas')) {
+                out = state.subjects.map(x => `${x.name}: [${x.grades.length>0?(x.grades.reduce((a,b)=>a+b,0)/x.grades.length).toFixed(1):'Sin Notas'}]`).join(" // ");
+            } else if(cmd.includes('consejo')) {
+                const tips = ["Efecto Zeigarnik: Tu cerebro recuerda tareas incompletas. Ciérralas hoy.", "Ley de los 2 Minutos: Si toma menos de 2 min, hazlo ya sin agendar."];
+                out = tips[Math.floor(Math.random()*tips.length)];
+            }
+            document.getElementById('oracle-console').innerText = out; document.getElementById('oracle-terminal-query').value = '';
+        }
+        function executeQuantumRouletteSpin() {
+            state.estamina = Math.min(100, state.estamina + 15);
+            let dropChance = state.currentEvent.name === "Cielo Despejado" ? 0.6 : 0.3;
+            let res = "Pausa Activa: Realiza estiramientos e hidratación profunda durante 3 minutos.";
+            if(Math.random() < dropChance) { res += " 🎁 ¡DROP CRÍTICO! +50 XP y +15 MP."; distributeRecompensePoints(50,15); }
+            document.getElementById('roulette-feedback').innerText = res; saveStateToBrowser(); refreshUserInterfaceHUD();
+        }
 
-        // PARSER SINCRO PIPELINES (THE ALL-RENDERER)
-        function renderAllModules() {
-            // Refill Academic Selectors
-            let subSel = document.getElementById('dropdown-subjects-list'); let prevVal = subSel.value; subSel.innerHTML = '';
-            db.subjects.forEach((s, i) => { let opt = document.createElement('option'); opt.value = i; opt.innerText = s.name; subSel.appendChild(opt); });
-            if(prevVal !== '' && subSel.options[prevVal]) subSel.value = prevVal;
+        // MISSIONS & COFRES STORE
+        function forgeCustomQuest() {
+            let t = document.getElementById('quest-txt').value.trim();
+            let xp = parseInt(document.getElementById('quest-xp').value) || 50;
+            let mp = parseInt(document.getElementById('quest-mp').value) || 10; if(!t) return;
+            state.quests.push({ id: Date.now(), t, xp, mp });
+            document.getElementById('quest-txt').value = ''; saveStateToBrowser(); rebuildAllModuleLayouts();
+        }
+        function openLootBox(tier) {
+            let feedback = document.getElementById('lootbox-feedback');
+            if(tier === 'bronze' && state.mp >= 100) {
+                state.mp -= 100; state.estamina = Math.min(100, state.estamina + 25);
+                feedback.innerText = "📦 Abierto: +25% Estamina Cognitiva restaurada.";
+            } else if(tier === 'epic' && state.mp >= 500) {
+                state.mp -= 500; distributeRecompensePoints(1000, 0);
+                feedback.innerText = "💎 Abierto: ¡Encontrado Chip de Memoria Antigua! +1000 EXP.";
+            } else { alert("Créditos MP Insuficientes."); }
+            rebuildAllModuleLayouts();
+        }
 
-            // Render Subjects Card Grid Layout
-            let containerSubjects = document.getElementById('container-rendered-subjects'); containerSubjects.innerHTML = '';
-            db.subjects.forEach((sub, idx) => {
-                let avg = 0; if(sub.grades.length > 0) avg = sub.grades.reduce((a,b)=>a+b,0) / sub.grades.length;
-                let targetNodesHtml = ''; [5,6,7,8,9,10].forEach(t => {
-                    let reqVal = sub.grades.length > 0 ? calculateTargetRequiredGrade(avg, t) : t.toFixed(2);
-                    targetNodesHtml += `<div class="predictive-node ${reqVal==='✖'?'fail':(reqVal==='OK'?'pass':'')}">T${t}: <b>${reqVal}</b></div>`;
+        // ARCHITECTURE LAYOUTS AND RE-RENDERS
+        function changeUserFaction() { state.faction = document.getElementById('user-faction-selector').value; saveStateToBrowser(); refreshUserInterfaceHUD(); }
+        function changeUserBuildArchetype() { state.build = document.getElementById('user-build-selector').value; saveStateToBrowser(); refreshUserInterfaceHUD(); }
+        
+        function buildScheduleMatrixTable() {
+            let body = document.getElementById('schedule-matrix-body'); body.innerHTML = '';
+            timeBlocks.forEach((b, idx) => {
+                let row = document.createElement('tr'); row.innerHTML = `<td><b>${b}</b></td>`;
+                for(let d=0; d<5; d++) {
+                    let key = `${idx}-${d}`; let v = state.schedule[key] || '';
+                    row.innerHTML += `<td><input type="text" style="background:transparent; border:none; text-align:center; padding:2px;" value="${v}" oninput="state.schedule['${key}']=this.value; saveStateToBrowser();"></td>`;
+                }
+                body.appendChild(row);
+            });
+        }
+
+        function registerTodayHeatmapAction() {
+            let day = new Date().toISOString().split('T')[0];
+            state.heatmap[day] = (state.heatmap[day] || 0) + 1;
+        }
+        function drawVisualHeatmap() {
+            let cv = document.getElementById('annual-heatmap-canvas'); cv.innerHTML = '';
+            for(let i=0; i<53*7; i++) {
+                let n = document.createElement('div'); n.className = 'heatmap-node';
+                if(i % 11 === 0) n.style.background = 'var(--glow-green)';
+                if(i % 17 === 0) n.style.background = 'var(--glow-purple)';
+                cv.appendChild(n);
+            }
+        }
+
+        function rebuildAllModuleLayouts() {
+            let dropdown = document.getElementById('subject-dropdown'); let lastSelected = dropdown.value; dropdown.innerHTML = '';
+            state.subjects.forEach((s, i) => { let o = document.createElement('option'); o.value = i; o.innerText = s.name; dropdown.appendChild(o); });
+            if(lastSelected !== '' && dropdown.options[lastSelected]) dropdown.value = lastSelected;
+
+            let subWrapper = document.getElementById('view-subjects-wrapper'); subWrapper.innerHTML = '';
+            state.subjects.forEach((s, idx) => {
+                let avg = s.grades.length > 0 ? (s.grades.reduce((a,b)=>a+b,0)/s.grades.length) : 0;
+                let targets = ''; [5,6,7,8,9,10].forEach(t => {
+                    let req = "OK"; if(s.grades.length > 0) { let calc = (t * 2) - avg; req = calc <= 0 ? "OK" : (calc > 10 ? "✖" : calc.toFixed(1)); } else { req = t.toFixed(1); }
+                    targets += `<div class="predictive-item ${req==='✖'?'fail':(req==='OK'?'pass':'')}">T${t}: <b>${req}</b></div>`;
                 });
-                containerSubjects.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:8px; border:1px solid var(--glass-border); border-radius:8px;"><div style="display:flex; justify-content:space-between; font-size:0.75rem;"><b>${sub.name}</b><span style="color:var(--accent-green); font-weight:bold;">Media: ${sub.grades.length>0?avg.toFixed(2):'--'}</span></div><div class="predictive-matrix">${targetNodesHtml}</div><div style="text-align:right; font-size:0.6rem; color:var(--accent-pink); cursor:pointer; margin-top:4px;" onclick="db.subjects.splice(${idx},1); syncQuantumDatabase(); renderAllModules();">[Eliminar Asignatura]</div></div>`;
+                subWrapper.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:10px; border:1px solid var(--glass-border);"><div style="display:flex; justify-content:space-between; font-size:0.8rem;"><b>${s.name}</b><span style="color:var(--glow-green); font-weight:bold;">M: ${s.grades.length>0?avg.toFixed(2):'--'}</span></div><div class="predictive-grid">${targets}</div><div style="text-align:right; font-size:0.6rem; color:var(--glow-pink); cursor:pointer; margin-top:5px;" onclick="state.subjects.splice(${idx},1); saveStateToBrowser(); rebuildAllModuleLayouts();">[Borrar]</div></div>`;
             });
 
-            // Render Active Bosses Layout
-            let containerBosses = document.getElementById('container-active-bosses'); containerBosses.innerHTML = '';
-            db.bosses.forEach(b => {
-                containerBosses.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:8px; border-radius:8px; font-size:0.72rem;"><div style="display:flex; justify-content:space-between;"><b>⚔️ ${b.name}</b> <span>HP: ${b.hp}/100</span></div><div class="bar-outer"><div style="background:var(--accent-pink); width:${b.hp}%; height:100%;"></div></div><small style="color:#64748b;">Fecha Límite: ${b.date}</small></div>`;
+            let bossWrapper = document.getElementById('view-bosses-wrapper'); bossWrapper.innerHTML = '';
+            state.bosses.forEach(b => {
+                bossWrapper.innerHTML += `<div style="background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:10px; border-radius:10px; font-size:0.75rem;"><div><b>⚔️ ${b.name}</b> <span style="float:right;">HP: ${b.hp}/100</span></div><div class="progress-bar"><div style="background:var(--glow-pink); width:${b.hp}%; height:100%;"></div></div><small style="color:#64748b;">Fecha Límite: ${b.date}</small></div>`;
             });
 
-            // Render Feynman Blocks Logs
-            let containerFeynman = document.getElementById('container-feynman-logs'); containerFeynman.innerHTML = '';
-            db.feynman.forEach(f => {
-                containerFeynman.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; font-size:0.7rem;"><b style="color:var(--accent-orange);">${f.concept}</b><p style="color:#94a3b8;">${f.simple}</p>${f.voids?`<span style="color:var(--accent-pink); font-size:0.62rem;">Brecha: ${f.voids}</span>`:''}</div>`;
+            let feyWrapper = document.getElementById('view-feynman-logs'); feyWrapper.innerHTML = '';
+            state.feynman.forEach(f => {
+                feyWrapper.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:8px; border:1px solid var(--glass-border); font-size:0.75rem;"><b style="color:var(--glow-orange);">${f.concept}</b><p style="color:#94a3b8; margin-top:2px;">${f.simple}</p></div>`;
             });
 
-            // Render Flashcard Blocks
-            let containerFc = document.getElementById('container-flashcards-logs'); containerFc.innerHTML = '';
-            db.flashcards.forEach((f, i) => {
-                containerFc.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><span>⚡ ${f.front}</span><button class="btn" style="padding:2px 6px; font-size:0.6rem;" onclick="testFlashcardRetention(${i})">Resolver</button></div>`;
+            let fcWrapper = document.getElementById('view-flashcards-logs'); fcWrapper.innerHTML = '';
+            state.flashcards.forEach((f, i) => {
+                fcWrapper.innerHTML += `<div style="background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:8px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;"><span>⚡ ${f.q}</span><button class="action-btn" style="padding:4px 10px; font-size:0.65rem;" onclick="inflictDamageToActiveBosses(2); alert('Respuesta: ' + state.flashcards[${i}].a); distributeRecompensePoints(30,10);">Resolver</button></div>`;
             });
 
-            // Render Custom Quests Layout Grid
-            let containerQuests = document.getElementById('container-forge-quests'); containerQuests.innerHTML = '';
-            db.quests.forEach(q => {
-                containerQuests.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; opacity:${q.done?0.3:1}"><div>${q.txt}<br><small style="color:var(--accent-cyan);">+${q.xp}XP / +${q.mp}MP</small></div><div>${!q.done?`<button class="btn" style="padding:2px 6px; font-size:0.6rem;" onclick="checkQuestResolution(${q.id},${q.xp},${q.mp})">✓</button>`:''}</div></div>`;
+            let qWrapper = document.getElementById('view-quests-wrapper'); qWrapper.innerHTML = '';
+            state.quests.forEach((q, idx) => {
+                qWrapper.innerHTML += `<div style="background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); padding:8px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;"><div>${q.t}<br><small style="color:var(--glow-cyan);">+${q.xp}XP / +${q.mp}MP</small></div><button class="action-btn" style="padding:4px 8px;" onclick="state.quests.splice(${idx},1); distributeRecompensePoints(${q.xp},${q.mp}); rebuildAllModuleLayouts();">✓</button></div>`;
             });
 
-            renderAgendaPipeline(); updateInterfaceHUD();
+            // RENDERING DYNAMIC MAP NODES (MODO HISTORIA)
+            let mapContainer = document.getElementById('story-campaign-map'); mapContainer.innerHTML = '';
+            let totalFinishedPomodoros = Math.floor(state.focusMinutes / 25);
+            for(let step=1; step<=5; step++) {
+                let isLocked = totalFinishedPomodoros < (step * 2);
+                mapContainer.innerHTML += `<div class="map-node ${isLocked?'locked':''} Scottish-Border"><span>Nodo ${step}: ${step===1?'Valle del Silicio':(step===2?'Pantano de Funciones':'Dimensión Cuántica')}</span><b>${isLocked?'🔒 Bloqueado':'🔓 Completado'}</b></div>`;
+            }
+
+            refreshUserInterfaceHUD();
         }
 
-        function renderAgendaPipeline() {
-            let containerAgenda = document.getElementById('container-agenda-tasks'); containerAgenda.innerHTML = '';
-            let filter = document.getElementById('select-agenda-filter').value;
-            let targetedTasks = filter !== 'all' ? db.agenda.filter(x => x.tag === filter) : db.agenda;
-            targetedTasks.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(a => {
-                containerAgenda.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><div><span class="badge" style="background:rgba(255,255,255,0.05);">${a.tag}</span> <b>${a.title}</b> <span style="color:#64748b;">(${a.date})</span></div><span style="color:var(--accent-pink); cursor:pointer;" onclick="db.agenda=db.agenda.filter(x=>x.id!=${a.id}); syncQuantumDatabase(); renderAllModules();">✕</span></div>`;
-            });
-            // Update talent points descriptors visual state
-            document.getElementById('btn-talent-f1').innerText = `Adquirir [Lvl ${db.talents.f1}/3]`;
-            document.getElementById('btn-talent-f2').innerText = `Adquirir [Lvl ${db.talents.f2}/1]`;
-            document.getElementById('btn-talent-r1').innerText = `Adquirir [Lvl ${db.talents.r1}/1]`;
-            document.getElementById('btn-talent-r2').innerText = `Adquirir [Lvl ${db.talents.r2}/1]`;
-        }
+        function hardWipeAllData() { if(confirm("¿Eliminar absolutamente todos los registros?")) { localStorage.clear(); location.reload(); } }
+        function exportStateJSON() { window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage))); }
+        function importStateJSON() { try { let data = JSON.parse(prompt("Inyecta el string de respaldo:")); if(data){ Object.keys(data).forEach(k => localStorage.setItem(k, data[k])); location.reload(); } }catch(e){} }
 
-        // ENTRY POINT BOOTLOADER
-        evaluateLoginStreakMechanics(); setupScheduleTable(); renderYearlyHeatmapGrid(); renderAllModules();
-        document.getElementById('select-faction').value = db.faction; document.getElementById('select-build').value = db.build;
-        document.getElementById('chk-hardcore').checked = db.hardcore;
+        // ENGINE BOOTLOADER INITIALIZER
+        bootDailyStreakAndClimate(); buildScheduleMatrixTable(); drawVisualHeatmap(); rebuildAllModuleLayouts();
+        document.getElementById('user-faction-selector').value = state.faction; document.getElementById('user-build-selector').value = state.build;
+        document.getElementById('hardcore-toggle-switch').checked = state.hardcore; linkNotesWithSelectedSubject();
     </script>
 </body>
 </html>
