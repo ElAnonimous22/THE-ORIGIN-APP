@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Núcleo de Hábitos</title>
+    <style>
+        :root {
+            --bg-main: #060614; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-easy: #2ed573;
+            --accent-medium: #ffa500;
+            --accent-hard: #ff4757;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        body {
+            background: #060614;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 30%, #131130 0%, #060614 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 25px;
+            z-index: 1;
+        }
+        @media(max-width: 800px) { .container { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            height: fit-content;
+        }
+
+        h2 { font-size: 1.2rem; color: var(--accent-purple); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+        input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 12px; font-size: 0.9rem; transition: border-color 0.2s; }
+        input:focus, select:focus { outline: none; border-color: var(--accent-purple); }
+
+        .btn { background: var(--accent-purple); color: #000; border: none; padding: 14px 20px; border-radius: 14px; cursor: pointer; font-weight: 700; width: 100%; transition: all 0.2s ease; margin-top: 10px; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(192, 132, 252, 0.4); }
+        .btn-back { background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-top: 15px; transition: all 0.2s; }
+        .btn-back:hover { color: #fff; border-color: #fff; }
+
+        /* LISTA DE HÁBITOS */
+        .habits-list { display: flex; flex-direction: column; gap: 12px; }
+        
+        .habit-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        .habit-card:hover { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); }
+
+        .habit-info { display: flex; flex-direction: column; gap: 4px; }
+        .habit-name { font-weight: 700; font-size: 1rem; }
+        .habit-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
+        
+        .badge { padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .badge-cat { background: rgba(192, 132, 252, 0.1); color: var(--accent-purple); }
+        
+        /* COLORES DE DIFICULTAD */
+        .diff-easy { background: rgba(46, 213, 115, 0.1); color: var(--accent-easy); }
+        .diff-medium { background: rgba(255, 165, 0, 0.1); color: var(--accent-medium); }
+        .diff-hard { background: rgba(255, 71, 87, 0.1); color: var(--accent-hard); }
+
+        .streak-count { color: #f59e0b; font-weight: bold; font-size: 0.8rem; display: flex; align-items: center; gap: 3px; }
+
+        /* BOTÓN DE ACCIÓN DIARIA */
+        .action-container { display: flex; align-items: center; gap: 10px; }
+        .check-btn {
+            background: var(--accent-purple); color: #000; border: none;
+            padding: 8px 14px; border-radius: 10px; font-weight: bold;
+            font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+        }
+        .check-btn:hover { transform: scale(1.05); box-shadow: 0 0 10px rgba(192, 132, 252, 0.3); }
+        .check-btn.done { background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: not-allowed; }
+
+        .delete-btn { background: transparent; border: none; color: rgba(255,71,87,0.4); cursor: pointer; font-size: 0.9rem; padding: 4px; transition: color 0.2s; }
+        .delete-btn:hover { color: var(--accent-hard); }
+
+        .empty-msg { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 30px 0; }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        <div class="panel">
+            <h2>🧬 Codificar Hábito</h2>
+            
+            <div class="form-group">
+                <label>Nombre del Hábito</label>
+                <input type="text" id="habitName" placeholder="Ej: Leer 10 páginas / Beber agua">
+            </div>
+
+            <div class="form-group">
+                <label>Clasificación (Área)</label>
+                <select id="habitCategory" onchange="checkNuevaCategoria(this)">
+                    <option value="Personal">🔑 Personal</option>
+                    <option value="Dinero">💰 Dinero</option>
+                    <option value="Estudios">📚 Estudios</option>
+                    <option value="Salud">🍎 Salud</option>
+                    <option value="__NUEVA__">+ Crear Nueva Categoría...</option>
+                </select>
+                <input type="text" id="newCategoryInput" placeholder="Nombre de la nueva clasificación" style="display: none; margin-top: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Nivel de Dificultad</label>
+                <select id="habitDifficulty">
+                    <option value="easy">🟢 Fácil (+5 XP / +2 MP)</option>
+                    <option value="medium">🟡 Medio (+15 XP / +5 MP)</option>
+                    <option value="hard">🔴 Difícil (+30 XP / +10 MP)</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="crearHabito()">Desplegar Hábito</button>
+            <a href="menuprincipal.html" class="btn-back">⬅ Volver al Menú</a>
+        </div>
+
+        <div class="panel">
+            <h2>🔄 Bucles de Rutina Activos</h2>
+            <div class="habits-list" id="habitsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const KEY_HABITS = 'origin_habits_list';
+        const KEY_XP = 'origin_xp';
+        const KEY_MP = 'origin_mp';
+
+        let habitos = JSON.parse(localStorage.getItem(KEY_HABITS)) || [];
+        let audioCtx = null;
+
+        // --- AUDIO CENTRAL NATIVO ---
+        function playTone(freq, type, duration, vol) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function soundSuccess() { playTone(523.25, 'sine', 0.08, 0.12); setTimeout(() => playTone(659.25, 'sine', 0.08, 0.12), 60); setTimeout(() => playTone(783.99, 'sine', 0.15, 0.12), 120); }
+        function soundClick() { playTone(650, 'sine', 0.04, 0.08); }
+        function soundError() { playTone(200, 'sawtooth', 0.25, 0.15); }
+
+        function checkNuevaCategoria(select) {
+            document.getElementById('newCategoryInput').style.display = select.value === "__NUEVA__" ? "block" : "none";
+        }
+
+        // --- SISTEMA LOGIC ---
+        function crearHabito() {
+            const name = document.getElementById('habitName').value.trim();
+            let category = document.getElementById('habitCategory').value;
+            const difficulty = document.getElementById('habitDifficulty').value;
+
+            if(!name) { soundError(); alert("⚠️ Especifica el nombre de la rutina."); return; }
+
+            if(category === "__NUEVA__") {
+                const newCat = document.getElementById('newCategoryInput').value.trim();
+                if(!newCat) { soundError(); alert("⚠️ Escribe el nombre de la nueva categoría."); return; }
+                category = newCat;
+            }
+
+            const nuevoHabito = {
+                id: 'h-' + Date.now(),
+                nombre: name,
+                categoria: category,
+                dificultad: difficulty,
+                racha: 0,
+                ultimaFechaCumplido: null
+            };
+
+            habitos.push(nuevoHabito);
+            localStorage.setItem(KEY_HABITS, JSON.stringify(habitos));
+
+            document.getElementById('habitName').value = "";
+            document.getElementById('newCategoryInput').value = "";
+            
+            soundSuccess();
+            render();
+        }
+
+        function completarHabito(id) {
+            const hoy = new Date().toDateString();
+            const habit = habitos.find(h => h.id === id);
+
+            if(!habit || habit.ultimaFechaCumplido === hoy) return;
+
+            // Calcular recompensas basadas en tus reglas exactas
+            let xp = 5, mp = 2;
+            if(habit.dificultad === 'medium') { xp = 15; mp = 5; }
+            else if(habit.dificultad === 'hard') { xp = 30; mp = 10; }
+
+            // Actualizar Wallet global
+            let xpActual = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            let mpActual = parseInt(localStorage.getItem(KEY_MP)) || 0;
+            localStorage.setItem(KEY_XP, xpActual + xp);
+            localStorage.setItem(KEY_MP, mpActual + mp);
+
+            // Actualizar Racha interna del hábito
+            habit.racha += 1;
+            habit.ultimaFechaCumplido = hoy;
+
+            localStorage.setItem(KEY_HABITS, JSON.stringify(habitos));
+            soundSuccess();
+            render();
+        }
+
+        function eliminarHabito(id) {
+            if(confirm("¿Seguro que deseas eliminar este bucle de hábito?")) {
+                habitos = habitos.filter(h => h.id !== id);
+                localStorage.setItem(KEY_HABITS, JSON.stringify(habitos));
+                soundClick();
+                render();
+            }
+        }
+
+        function render() {
+            const container = document.getElementById('habitsContainer');
+            container.innerHTML = "";
+            const hoy = new Date().toDateString();
+
+            if(habitos.length === 0) {
+                container.innerHTML = `<p class="empty-msg">No hay bucles de rutina activos en este cuadrante.</p>`;
+                return;
+            }
+
+            habitos.forEach(h => {
+                const yaCumplidoHoy = h.ultimaFechaCumplido === hoy;
+                
+                // Mapear etiquetas de dificultad
+                let diffLabel = "Fácil", diffClass = "diff-easy";
+                if(h.dificultad === 'medium') { diffLabel = "Medio"; diffClass = "diff-medium"; }
+                else if(h.dificultad === 'hard') { diffLabel = "Difícil"; diffClass = "diff-hard"; }
+
+                container.innerHTML += `
+                    <div class="habit-card">
+                        <div class="habit-info">
+                            <span class="habit-name">${h.nombre}</span>
+                            <div class="habit-meta">
+                                <span class="badge badge-cat">${h.categoria}</span>
+                                <span class="badge ${diffClass}">${diffLabel}</span>
+                                <span class="streak-count">🔥 ${h.racha} d</span>
+                            </div>
+                        </div>
+                        <div class="action-container">
+                            <button class="check-btn ${yaCumplidoHoy ? 'done' : ''}" 
+                                    onclick="${yaCumplidoHoy ? '' : `completarHabito('${h.id}')`}">
+                                ${yaCumplidoHoy ? 'Sincronizado ✓' : 'Sincronizar'}
+                            </button>
+                            <button class="delete-btn" onclick="eliminarHabito('${h.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- FONDO MATRIZ ESTRELLAS ---
+        function initStars() {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx.fillStyle = 'rgba(255,255,255,0.12)';
+            for(let i=0; i<45; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1.2+0.5, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+
+        window.onload = function() {
+            initStars();
+            render();
+            document.querySelectorAll('select, button').forEach(el => el.addEventListener('click', soundClick));
+        };
+    </script>
+</body>
+</html>
