@@ -2,710 +2,419 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE ORIGIN - Student Matrix Supreme</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Student Matrix Overlord Ultimate</title>
     <style>
         :root {
-            --bg-main: #04040d; 
-            --glass-bg: rgba(255, 255, 255, 0.02);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-hover: rgba(255, 255, 255, 0.09);
-            --accent-purple: #c084fc; 
-            --accent-cyan: #22d3ee;   
-            --accent-orange: #f97316;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-pink: #f43f5e;
-            --text-main: #f8fafc;
-            --text-muted: #475569;
-            --anim-space: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --bg-main: #020208; --glass: rgba(255, 255, 255, 0.02); --border: rgba(255, 255, 255, 0.05);
+            --accent-purple: #c084fc; --accent-cyan: #22d3ee; --accent-green: #10b981; 
+            --accent-orange: #f97316; --accent-pink: #f43f5e; --accent-yellow: #eab308; --text: #f8fafc;
         }
-
-        * { 
-            box-sizing: border-box; 
-            margin: 0; padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body {
-            background-color: var(--bg-main);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(192, 132, 252, 0.06) 0%, transparent 45%),
-                radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 45%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 20px 16px 80px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            background-color: var(--bg-main); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center;
+            background-image: radial-gradient(circle at 50% 0%, rgba(192, 132, 252, 0.08) 0%, transparent 50%); background-attachment: fixed;
         }
-
-        #bg-particles {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; pointer-events: none;
-        }
-
-        .main-container {
-            width: 100%;
-            max-width: 1400px; 
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            animation: fadeIn 0.4s var(--anim-space);
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 10px 0;
-        }
-
-        .btn-back {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 10px 20px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s;
-        }
-        .btn-back:hover {
-            background: var(--glass-hover);
-            border-color: var(--accent-purple);
-            transform: scale(1.03);
-        }
-
-        .title-block h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* TOP HUD INFO */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-        }
-
-        .metric-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 16px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            position: relative;
-            transition: transform 0.2s;
-        }
-        .metric-card:hover { transform: translateY(-2px); }
-        .metric-label { font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .metric-val { font-size: 1.4rem; font-weight: 900; margin-top: 4px; }
-
-        /* MULTICOLUMNA SUPREMA */
-        .mega-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        @media (min-width: 1100px) {
-            .mega-layout { grid-template-columns: 1.2fr 1.2fr; }
-        }
-
-        .panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .panel-title {
-            font-size: 0.98rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 8px;
-            letter-spacing: -0.2px;
-        }
-
-        /* CONTROLES GLOBALES */
-        input, select, textarea {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--glass-border);
-            padding: 10px 12px;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.85rem;
-            outline: none;
-            width: 100%;
-            transition: border 0.2s;
-        }
+        .container { width: 100%; max-width: 1600px; display: flex; flex-direction: column; gap: 14px; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+        .panel { background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 14px; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 10px; }
+        .panel-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+        input, select, textarea { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--border); padding: 7px 10px; border-radius: 6px; color: #fff; font-size: 0.78rem; outline: none; width: 100%; }
         input:focus, select:focus, textarea:focus { border-color: var(--accent-purple); }
-
-        .btn-prime {
-            background: #fff; color: #04040d; border: none;
-            padding: 11px 16px; border-radius: 10px; font-size: 0.82rem;
-            font-weight: 700; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-prime:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
-
-        /* SCROLLBOX ELEMENT */
-        .scroll-box { 
-            max-height: 250px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 8px; 
-            padding-right: 4px; 
-        }
-        .scroll-box::-webkit-scrollbar { width: 4px; }
-        .scroll-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-        /* POMODORO */
-        .pomo-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
-            padding: 14px;
-            border-radius: 14px;
-        }
-        .pomo-time { font-size: 2.2rem; font-weight: 900; color: var(--accent-cyan); text-shadow: 0 0 8px rgba(34,211,238,0.2); }
-        .pomo-btns { display: flex; gap: 6px; }
-        .btn-pomo { background: var(--glass-bg); border: 1px solid var(--glass-border); color: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.72rem; font-weight: 700; }
-        
-        /* MATERIAS */
-        .subject-card {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .subject-header { display: flex; justify-content: space-between; align-items: center; }
-        .subject-title { font-weight: 700; font-size: 0.88rem; }
-        .subject-avg { font-weight: 900; font-size: 0.95rem; color: var(--accent-green); }
-        
-        .grades-pills { display: flex; flex-wrap: wrap; gap: 4px; }
-        .grade-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 2px 6px; border-radius: 6px; font-size: 0.7rem; }
-
-        /* TASK LOG */
-        .task-item {
-            background: rgba(255,255,255,0.01);
-            border: 1px solid var(--glass-border);
-            padding: 10px 12px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-item.done { opacity: 0.3; text-decoration: line-through; }
-        .task-meta h5 { font-size: 0.82rem; font-weight: 700; }
-        .task-meta span { font-size: 0.65rem; font-weight: 600; }
-        .prio-high { color: var(--accent-pink); }
-        .prio-mid { color: var(--accent-orange); }
-        .prio-low { color: var(--accent-cyan); }
-
-        /* SLEEP OPTIMIZER */
-        .sleep-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 8px;
-            margin-top: 6px;
-        }
-        .sleep-pill {
-            background: rgba(34, 211, 238, 0.04);
-            border: 1px solid rgba(34, 211, 238, 0.15);
-            padding: 8px; text-align: center; border-radius: 8px;
-            font-size: 0.75rem; font-weight: 800; color: var(--accent-cyan);
-        }
-
-        /* CHATBOT */
-        .ai-chatbox {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px; padding: 12px; font-size: 0.8rem;
-            line-height: 1.4; max-height: 120px; overflow-y: auto; color: #cbd5e1;
-        }
-
-        /* EXAMEN CARD */
-        .exam-item {
-            background: rgba(0,0,0,0.15);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px; padding: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* LOGROS GRID */
-        .quest-item {
-            background: rgba(255,255,255,0.01); border: 1px solid var(--glass-border);
-            border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .quest-item.completed { opacity: 0.25; text-decoration: line-through; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .btn { background: #fff; color: #000; border: none; padding: 7px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(255,255,255,0.1); }
+        .btn-sub { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: #fff; }
+        .btn-sub:hover { background: rgba(255,255,255,0.08); }
+        .scroll { max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 2px; }
+        .scroll::-webkit-scrollbar { width: 4px; }
+        .scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
+        .hud-card { background: var(--glass); border: 1px solid var(--border); border-radius: 10px; padding: 10px; border-left: 3px solid var(--accent-purple); }
+        .hud-num { font-size: 1.2rem; font-weight: 900; margin-top: 2px; }
+        .matrix-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-top: 4px; text-align: center; font-size: 0.6rem; }
+        .matrix-node { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 3px; border-radius: 4px; }
+        .matrix-node.ok { color: var(--accent-green); border-color: rgba(16,185,129,0.2); }
+        .matrix-node.ko { color: var(--accent-pink); opacity: 0.4; }
+        .sch-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; text-align: center; }
+        .sch-table th, .sch-table td { border: 1px solid var(--border); padding: 4px; }
+        .sch-input { background: transparent; border: none; text-align: center; color: #fff; font-size: 0.68rem; }
+        .terminal { background: #000; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: monospace; font-size: 0.72rem; color: var(--accent-cyan); min-height: 60px; max-height: 100px; overflow-y: auto; }
     </style>
 </head>
 <body>
-
-    <canvas id="bg-particles"></canvas>
-
-    <div class="main-container">
+    <div class="container">
         <header>
-            <a href="index.html" class="btn-back">⏮ Menú Principal</a>
-            <div class="title-block">
-                <h1>STUDENT MATRIX SUPREME</h1>
-            </div>
+            <h1 style="font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">STUDENT MATRIX OVERLORD: ULTIMATE EDITION</h1>
+            <div style="display: flex; gap: 4px;"><button class="btn btn-sub" onclick="exportState()">💾 Backup</button><button class="btn btn-sub" onclick="importState()">📂 Cargar</button></div>
         </header>
 
-        <div class="metrics-grid">
-            <div class="metric-card" style="border-left: 3px solid var(--accent-green)">
-                <div class="metric-label">Media General</div>
-                <div class="metric-val" id="global-avg" style="color: var(--accent-green)">0.0</div>
-            </div>
-            <div class="metric-card" style="border-left: 3px solid var(--accent-cyan)">
-                <div class="metric-label">Pomodoros Activos</div>
-                <div class="metric-val" id="pomo-count" style="color: var(--accent-cyan)">0</div>
-            </div>
-            <div class="metric-card" style="border-left: 3px solid var(--accent-purple)">
-                <div class="metric-label">Multiplicador Racha</div>
-                <div class="metric-val" id="streak-multiplier" style="color: var(--accent-purple)">x1.0</div>
-            </div>
-            <div class="metric-card" style="border-left: 3px solid var(--accent-orange)">
-                <div class="metric-label">Misiones Hechas</div>
-                <div class="metric-val" id="missions-count" style="color: var(--accent-orange)">0 / 10</div>
-            </div>
+        <div class="hud">
+            <div class="hud-card" style="border-color: var(--accent-purple)"><div style="font-size:0.6rem; color:#64748b;">EXP GLOBAL</div><div class="hud-num" id="hud-xp">0 XP</div></div>
+            <div class="hud-card" style="border-color: var(--accent-pink)"><div style="font-size:0.6rem; color:#64748b;">MATRIX POINTS</div><div class="hud-num" id="hud-mp">0 MP</div></div>
+            <div class="hud-card" style="border-color: var(--accent-green)"><div style="font-size:0.6rem; color:#64748b;">PROMEDIO DE MEDIAS</div><div class="hud-num" id="hud-avg">0.0</div></div>
+            <div class="hud-card" style="border-color: var(--accent-cyan)"><div style="font-size:0.6rem; color:#64748b;">FOCO ACUMULADO</div><div class="hud-num" id="hud-focus">0 min</div></div>
         </div>
 
-        <div class="mega-layout">
-            
+        <div class="grid-3">
             <div class="panel">
-                
-                <div class="panel-title">⏱️ Enfoque e Hiper-Foco (Pomodoro Node) <span id="racha-pomo-badge" style="font-size:0.7rem; color:var(--accent-orange)">Racha Hoy: 0</span></div>
-                <div class="pomo-wrap">
-                    <div class="pomo-time" id="timer-display">25:00</div>
-                    <div class="pomo-btns">
-                        <button class="btn-pomo" style="background:rgba(34,211,238,0.1); border-color:var(--accent-cyan);" onclick="toggleTimer()">Play/Pausa</button>
-                        <button class="btn-pomo" onclick="resetTimer()">Reset</button>
+                <div class="panel-title">⏱️ Pomodoro Modular Custom <span style="color:var(--accent-purple)">[+150 XP]</span></div>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
+                    <div id="pomo-display" style="font-size:1.8rem; font-family:monospace; font-weight:800; color:var(--accent-cyan)">25:00</div>
+                    <div style="display:flex; gap:4px;">
+                        <button class="btn" style="padding:4px 8px;" onclick="togglePomo()">Play/Pausa</button>
+                        <button class="btn btn-sub" style="padding:4px 8px;" onclick="resetPomo()">Reset</button>
                     </div>
                 </div>
-
-                <div class="panel-title">📚 Núcleo de Calificaciones</div>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px;">
-                    <input type="text" id="sub-name" placeholder="Materia (Ej: Física)">
-                    <select id="sub-risk">
-                        <option value="risk-low">🟢 Fácil (Easy)</option>
-                        <option value="risk-medium">🟡 Media (Medium)</option>
-                        <option value="risk-high">🔴 Crítica (Boss Fight)</option>
-                    </select>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
+                    <input type="number" id="pomo-custom-min" value="25" placeholder="Minutos">
+                    <button class="btn btn-sub" onclick="applyCustomPomo()">Set Tiempo</button>
                 </div>
-                <button class="btn-prime" onclick="addSubject()">Vincular Materia</button>
 
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px; margin-top: 4px; border-top: 1px dashed var(--glass-border); padding-top: 10px;">
-                    <select id="grade-sub-select"></select>
-                    <input type="number" id="new-grade-val" placeholder="Nota (0-10)" min="0" max="10" step="0.1">
-                </div>
-                <button class="btn-prime" style="background: var(--accent-green); color: #000;" onclick="addGradeToSubject()">Inyectar Nota Directa</button>
+                <div class="panel-title">🎵 Multiverso Lofi & Estudio (20 Temas)</div>
+                <select id="track-select" onchange="updateTrackChange()">
+                    <option value="40">01. Estación Espacial Alfa</option><option value="45">02. Lluvia de Silicio</option>
+                    <option value="50">03. Café de Medianoche NeoTokio</option><option value="55">04. Sintetizador de Ondas Gamma</option>
+                    <option value="60">05. Biblioteca Nebulosa</option><option value="65">06. Compilador de Código Relax</option>
+                    <option value="70">07. Noche de Microchips</option><option value="75">08. Viento Cuántico</option>
+                    <option value="80">09. Algoritmo Melancólico</option><option value="85">10. Cyber-Chill Subterráneo</option>
+                    <option value="90">11. Pulsos de Memoria</option><option value="95">12. Desierto Digital</option>
+                    <option value="100">13. Cero Absoluto Ambient</option><option value="105">14. Redes de Cobre Neutras</option>
+                    <option value="110">15. Aura Estática</option><option value="115">16. Eco de Satélites</option>
+                    <option value="120">17. Neblina Binaria</option><option value="125">18. Resonancia Magnética Foco</option>
+                    <option value="130">19. Horizonte de Sucesos Lo-Fi</option><option value="135">20. Gravedad Cero Binaural</option>
+                </select>
+                <button class="btn" id="btn-lofi" style="background:var(--accent-cyan);" onclick="toggleLofi()">Iniciar Transmisión Lofi</button>
 
-                <div class="scroll-box" id="subjects-container" style="max-height: 220px;"></div>
-
-                <div class="panel-title">🧮 Simulador de Nota de Emergencia (Final Boss)</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
-                    <input type="number" id="sim-current" placeholder="Nota Actual" min="0" max="10" step="0.1">
-                    <input type="number" id="sim-weight" placeholder="Peso Examen %" min="0" max="100">
-                    <input type="number" id="sim-target" placeholder="Nota Deseada" value="5.0" min="0" max="10">
-                </div>
-                <button class="btn-prime" style="background: rgba(249,115,22,0.1); color: var(--accent-orange); border: 1px solid rgba(249,115,22,0.3);" onclick="calculateNeededGrade()">Calcular Nota Necesaria</button>
-                <div id="sim-result-box" style="font-size:0.78rem; text-align:center; font-weight:700; color:var(--accent-cyan)"></div>
-
+                <div class="panel-title">🎰 Ruleta de Descanso Cuántico <span style="color:var(--accent-yellow)">[Probabilidad de Drop]</span></div>
+                <button class="btn btn-sub" onclick="spinRoulette()">Girar Ruleta de Micro-Descansos</button>
+                <div id="roulette-out" style="font-size:0.72rem; color:var(--accent-yellow); text-align:center; font-weight:700;"></div>
             </div>
 
             <div class="panel">
-                
-                <div class="panel-title">📝 Diario de Tareas (Daily Quests)</div>
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px;">
-                    <input type="text" id="task-input" placeholder="Ej: Terminar mapa conceptual de historia">
-                    <select id="task-prio">
-                        <option value="prio-high">🚨 Alta</option>
-                        <option value="prio-mid">⚡ Media</option>
-                        <option value="prio-low">💤 Baja</option>
-                    </select>
+                <div class="panel-title">📊 Calificaciones, Notas e Inyección Predictiva</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+                    <input type="text" id="subject-name" placeholder="Materia (Ej: Mates)">
+                    <button class="btn" style="background:var(--accent-green);" onclick="createSubject()">Crear Materia</button>
                 </div>
-                <button class="btn-prime" style="background:var(--accent-purple); color:#fff;" onclick="addTask()">Desplegar Tarea</button>
-                <div class="scroll-box" id="tasks-container" style="max-height: 160px;"></div>
+                <div style="display:grid; grid-template-columns:1fr 0.6fr 0.6fr; gap:4px;">
+                    <select id="subject-dropdown"></select>
+                    <input type="number" id="grade-value" placeholder="Nota" min="0" max="10" step="0.1">
+                    <select id="grade-type"><option value="examen">⚔️ Examen</option><option value="deberes">📝 Deberes</option><option value="trabajo">📁 Trabajo</option></select>
+                </div>
+                <button class="btn" style="background:var(--accent-purple); color:#fff;" onclick="injectGrade()">Inyectar Nota e Inducir Predicción</button>
+                <div class="scroll" id="subjects-box"></div>
 
-                <div class="panel-title">🌙 Optimización de Ciclos de Sueño (Brain Restore)</div>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <span style="font-size:0.75rem; color:#94a3b8;">Hora de Despertar:</span>
-                    <input type="time" id="sleep-target-time" value="07:30" style="width:120px;">
-                    <button class="btn-prime" style="padding:8px 12px;" onclick="calculateSleepCycles()">Calcular</button>
-                </div>
-                <div class="sleep-grid" id="sleep-results"></div>
+                <div class="panel-title">📝 Lugar de Apuntes Rápidos por Materia</div>
+                <select id="notes-subject-dropdown"></select>
+                <textarea id="notes-text" rows="2" placeholder="Escribe aquí tus ideas, fórmulas, apuntes o recordatorios importantes de esta materia..."></textarea>
+                <button class="btn btn-sub" onclick="saveSubjectNotes()">Guardar Apunte Estructural</button>
+            </div>
 
-                <div class="panel-title">⚔️ Próximas Batallas (Exámenes)</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                    <input type="text" id="exam-title" placeholder="Materia / Tema">
-                    <input type="date" id="exam-date">
-                </div>
-                <button class="btn-prime" style="background: var(--accent-pink); color: #fff;" onclick="addExam()">Agendar Batalla</button>
-                <div class="scroll-box" id="exams-container" style="max-height: 140px;"></div>
+            <div class="panel">
+                <div class="panel-title">🧠 Laboratorio de Método Feynman <span style="color:var(--accent-orange)">[+80 XP]</span></div>
+                <input type="text" id="feynman-concept" placeholder="Concepto Complejo">
+                <textarea id="feynman-simple" rows="2" placeholder="Explícalo como si fueras un niño de 5 años..."></textarea>
+                <textarea id="feynman-voids" rows="1" placeholder="Brechas o partes olvidadas detectadas..."></textarea>
+                <button class="btn btn-sub" onclick="addFeynman()">Almacenar Bloque Feynman</button>
+                <div class="scroll" id="feynman-box"></div>
 
-                <div class="panel-title">🤖 Asistente de Estudio Cognitivo (Sage Matrix)</div>
-                <div class="ai-chatbox" id="ai-response-box">
-                    SISTEMA: Base de datos cargada. Introduce palabras clave como "Mates", "Historia", "Sueño" o "Examen" para optimizar tu retención.
-                </div>
-                <div style="display: flex; gap: 6px;">
-                    <input type="text" id="ai-input" placeholder="Pregunta sobre memorización, fatiga o técnicas...">
-                    <button class="btn-prime" style="background:var(--glass-hover); color:#fff; border:1px solid var(--glass-border);" onclick="askMatrixAI()">Consultar</button>
-                </div>
-
+                <div class="panel-title">⚡ Flashcards Autoevaluativas <span style="color:var(--accent-green)">[+30 XP / +10 MP]</span></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;"><input type="text" id="fc-q" placeholder="Pregunta"><input type="text" id="fc-a" placeholder="Respuesta"></div>
+                <button class="btn btn-sub" onclick="createFlashcard()">Forjar Tarjeta</button>
+                <div class="scroll" id="flashcards-box"></div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-title">🏆 Matriz de Recompensas y Logros Sincronizados</div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:10px;" id="quests-container-grid">
-                <div class="quest-item" id="l1">
-                    <div><h5 style="font-size:0.82rem;">Estratega de Contingencia</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Usar el simulador de nota final (+50 XP / +20 MP)</span></div>
-                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l1', 50, 20)">✓</button>
+        <div class="grid-3">
+            <div class="panel">
+                <div class="panel-title">📅 Horario Semanal Estructural</div>
+                <div style="overflow-x:auto;"><table class="sch-table"><thead><tr><th>Bloque</th><th>L</th><th>M</th><th>X</th><th>J</th><th>V</th></tr></thead><tbody id="sch-body"></tbody></table></div>
+                <button class="btn btn-sub" onclick="saveSchedule()">Guardar Configuración Horaria</button>
+
+                <div class="panel-title">🗂️ Agenda Operativa & Filtros</div>
+                <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:4px;"><input type="text" id="agenda-title" placeholder="Tarea/Examen"><input type="date" id="agenda-date"></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+                    <select id="agenda-tag"><option value="Examen">Examen</option><option value="Deberes">Deberes</option><option value="Trabajo">Trabajo</option></select>
+                    <select id="agenda-filter" onchange="renderAll()"><option value="all">Ver Todo</option><option value="Examen">Solo Exámenes</option><option value="Deberes">Solo Deberes</option><option value="Trabajo">Solo Trabajos</option></select>
                 </div>
-                <div class="quest-item" id="l2">
-                    <div><h5 style="font-size:0.82rem;">Cerebro de Élite</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Sacar un 10 perfecto en cualquier materia (+250 XP / +100 MP)</span></div>
-                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l2', 250, 100)">✓</button>
+                <button class="btn btn-sub" onclick="addAgenda()">Desplegar en Agenda</button>
+                <div class="scroll" id="agenda-box"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">🤖 Consultor Oracle IA Integrado (Estilo Gemini)</div>
+                <div class="terminal" id="oracle-terminal">ORACLE NODE: Listo para analizar tu rendimiento. Introduce tu consulta o solicita una auditoría de medias.</div>
+                <input type="text" id="oracle-input" placeholder="Pregunta sobre técnicas de estudio, tu promedio o consejos...">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+                    <button class="btn" style="background:var(--accent-cyan);" onclick="queryOracle()">Consultar IA</button>
+                    <button class="btn btn-sub" onclick="askOracleForTips()">💡 Consejos Estudio</button>
                 </div>
-                <div class="quest-item" id="l3">
-                    <div><h5 style="font-size:0.82rem;">Hacker del Sueño</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Calcular ciclos de descanso óptimo (+40 XP / +10 MP)</span></div>
-                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l3', 40, 10)">✓</button>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">🏆 Forge Quest (Forja de Misiones Personalizadas)</div>
+                <div style="display:grid; grid-template-columns:1.4fr 0.6fr 0.6fr; gap:4px;">
+                    <input type="text" id="q-text" placeholder="Nueva Misión Personalizada">
+                    <input type="number" id="q-xp" placeholder="XP" value="100">
+                    <input type="number" id="q-mp" placeholder="MP" value="25">
                 </div>
-                <div class="quest-item" id="l4">
-                    <div><h5 style="font-size:0.82rem;">Enfoque Multiplicado</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Llegar a multiplicador x1.5 en Pomodoros (+150 XP / +60 MP)</span></div>
-                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l4', 150, 60)">✓</button>
+                <button class="btn" style="background:var(--accent-purple); color:#fff;" onclick="buildQuest()">Inyectar Misión</button>
+                <div class="scroll" id="quests-box"></div>
+
+                <div class="panel-title">🎛️ Botones de Control de Limpieza Extendidos</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+                    <button class="btn" style="background:var(--accent-pink); color:#fff;" onclick="clearSection('all')">🚨 Reset Total</button>
+                    <button class="btn btn-sub" onclick="clearSection('agenda')">Limpiar Agenda</button>
+                    <button class="btn btn-sub" onclick="clearSection('misiones')">Limpiar Misiones</button>
+                    <button class="btn btn-sub" onclick="clearSection('grades')">Limpiar Notas</button>
                 </div>
+                <select id="user-status-select" onchange="changeStatusReport()"><option value="foco">🎯 Modo Foco Máximo</option><option value="fatiga">⚡ Fatiga Detectada</option><option value="libre">☕ Modo Relax Alterno</option></select>
             </div>
         </div>
     </div>
 
     <script>
-        // CARGA SE SEGURIDAD Y ESTADOS LOCALESTORAGE
-        let subjects = JSON.parse(localStorage.getItem('origin_student_subjects')) || [];
-        let exams = JSON.parse(localStorage.getItem('origin_student_exams')) || [];
-        let tasks = JSON.parse(localStorage.getItem('origin_student_tasks')) || [];
-        let pomodorosDone = parseInt(localStorage.getItem('origin_student_pomos') || '0');
-        let completedQuests = JSON.parse(localStorage.getItem('origin_student_quests')) || [];
-        let pomoTodayStreak = 0;
+        let db = {
+            xp: parseInt(localStorage.getItem('osm_xp') || '0'), mp: parseInt(localStorage.getItem('osm_mp') || '0'),
+            subjects: JSON.parse(localStorage.getItem('osm_subjs') || '[]'), agenda: JSON.parse(localStorage.getItem('osm_agd') || '[]'),
+            feynman: JSON.parse(localStorage.getItem('osm_fey') || '[]'), flashcards: JSON.parse(localStorage.getItem('osm_fcs') || '[]'),
+            quests: JSON.parse(localStorage.getItem('osm_qsts') || '[]'), schedule: JSON.parse(localStorage.getItem('osm_sch') || '{}'),
+            focusMinutes: parseInt(localStorage.getItem('osm_fmin') || '0')
+        };
 
+        const timeBlocks = ["08:00-09:30", "09:30-11:00", "11:30-13:00", "13:00-14:30", "15:30-17:00"];
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function alertSound() {
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(950, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        let lofiOsc = null, lofiGain = null, isPlayingLofi = false;
+        let pomoInterval = null, pomoRunning = false, pomoTime = 25 * 60;
+
+        function syncStorage() {
+            localStorage.setItem('osm_xp', db.xp); localStorage.setItem('osm_mp', db.mp);
+            localStorage.setItem('osm_subjs', JSON.stringify(db.subjects)); localStorage.setItem('osm_agd', JSON.stringify(db.agenda));
+            localStorage.setItem('osm_fey', JSON.stringify(db.feynman)); localStorage.setItem('osm_fcs', JSON.stringify(db.flashcards));
+            localStorage.setItem('osm_qsts', JSON.stringify(db.quests)); localStorage.setItem('osm_sch', JSON.stringify(db.schedule));
+            localStorage.setItem('osm_fmin', db.focusMinutes);
         }
 
-        // CONTROL CENTRAL DE RECOMPENSAS COMPATIBLE CON PERFIL.HTML Y INDEX
-        function addSystemPoints(xp, mp) {
-            let multiplier = 1.0;
-            if (pomoTodayStreak >= 2) multiplier = 1.5; // Multiplicador de racha activa de estudio
+        function triggerAudioAlert() {
+            let o = audioCtx.createOscillator(); let g = audioCtx.createGain();
+            o.connect(g); g.connect(audioCtx.destination); o.frequency.setValueAtTime(600, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.02, audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime + 0.12);
+        }
+
+        function rewardPoints(xp, mp) {
+            db.xp += xp; db.mp += mp; syncStorage(); updateHUD();
+        }
+
+        function updateHUD() {
+            document.getElementById('hud-xp').innerText = `${db.xp} XP`;
+            document.getElementById('hud-mp').innerText = `${db.mp} MP`;
+            document.getElementById('hud-focus').innerText = `${db.focusMinutes} min`;
             
-            let finalXP = Math.round(xp * multiplier);
-            let finalMP = Math.round(mp);
-
-            let cxp = parseInt(localStorage.getItem('xp') || localStorage.getItem('origin_xp') || '0');
-            let cmp = parseInt(localStorage.getItem('mp') || localStorage.getItem('origin_mp') || '0');
-            cxp += finalXP; cmp += finalMP;
-            
-            localStorage.setItem('xp', cxp); localStorage.setItem('origin_xp', cxp);
-            localStorage.setItem('mp', cmp); localStorage.setItem('origin_mp', cmp);
+            let totalAvg = 0, count = 0;
+            db.subjects.forEach(s => { if(s.grades.length > 0) { totalAvg += s.grades.reduce((a,b)=>a+b,0)/s.grades.length; count++; } });
+            document.getElementById('hud-avg').innerText = count > 0 ? (totalAvg / count).toFixed(2) : "0.0";
         }
 
-        // SECCIÓN MATERIAS Y CALCULO AUTOMÁTICO DE NOTAS MEDIAS
-        function addSubject() {
-            const name = document.getElementById('sub-name').value.trim();
-            const risk = document.getElementById('sub-risk').value;
-            if(!name) return;
-            subjects.push({ name, risk, grades: [] });
-            saveData(); renderAll();
-            document.getElementById('sub-name').value = '';
+        // MANAGEMENT MATERIAS & SIMULADOR PREDICTIVO TARGET 5-10
+        function createSubject() {
+            let name = document.getElementById('subject-name').value.trim(); if(!name) return;
+            if(!db.subjects.some(s => s.name === name)) { db.subjects.push({ name, grades: [], notes: '' }); syncStorage(); renderAll(); }
+            document.getElementById('subject-name').value = '';
         }
 
-        function addGradeToSubject() {
-            const idx = document.getElementById('grade-sub-select').value;
-            const grade = parseFloat(document.getElementById('new-grade-val').value);
-            if(idx === '' || isNaN(grade) || grade < 0 || grade > 10) return;
-
-            subjects[idx].grades.push(grade);
-            if(grade >= 9) alertSound();
-            saveData(); renderAll();
-            document.getElementById('new-grade-val').value = '';
+        function injectGrade() {
+            let idx = document.getElementById('subject-dropdown').value; let val = parseFloat(document.getElementById('grade-value').value);
+            let type = document.getElementById('grade-type').value;
+            if(idx === '' || isNaN(val) || val < 0 || val > 10) return;
+            db.subjects[idx].grades.push(val); triggerAudioAlert(); rewardPoints(40, 10);
+            document.getElementById('grade-value').value = ''; renderAll();
         }
 
-        function deleteSubject(idx) {
-            subjects.splice(idx, 1);
-            saveData(); renderAll();
+        function calcPredictiveTarget(avg, target) {
+            let needed = (target * 2) - avg; return needed <= 0 ? "OK" : (needed > 10 ? "✖" : needed.toFixed(1));
         }
 
-        // TAREAS DIARIAS LOGIC
-        function addTask() {
-            const text = document.getElementById('task-input').value.trim();
-            const prio = document.getElementById('task-prio').value;
-            if(!text) return;
-            tasks.push({ id: Date.now(), text, prio, done: false });
-            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
-            renderTasks();
-            document.getElementById('task-input').value = '';
+        function deleteSubject(i) { db.subjects.splice(i, 1); syncStorage(); renderAll(); }
+        function saveSubjectNotes() {
+            let idx = document.getElementById('notes-subject-dropdown').value; if(idx === '') return;
+            db.subjects[idx].notes = document.getElementById('notes-text').value; syncStorage(); triggerAudioAlert();
+            document.getElementById('oracle-terminal').innerText = "SISTEMA: Apunte guardado correctamente en la base de datos de la materia.";
         }
 
-        function toggleTask(id) {
-            tasks = tasks.map(t => {
-                if(t.id === id) {
-                    t.done = !t.done;
-                    if(t.done) {
-                        alertSound();
-                        addSystemPoints(15, 5); // Recompensa inmediata por tarea completada
-                    }
-                }
-                return t;
-            });
-            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
-            renderTasks();
+        function onNotesSubjectChange() {
+            let idx = document.getElementById('notes-subject-dropdown').value;
+            document.getElementById('notes-text').value = (idx !== '' && db.subjects[idx]) ? db.subjects[idx].notes : '';
         }
 
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
-            renderTasks();
+        // FEYNMAN
+        function addFeynman() {
+            let concept = document.getElementById('feynman-concept').value.trim(); let simple = document.getElementById('feynman-simple').value.trim();
+            let voids = document.getElementById('feynman-voids').value.trim(); if(!concept || !simple) return;
+            db.feynman.unshift({ concept, simple, voids }); rewardPoints(80, 20); triggerAudioAlert();
+            document.getElementById('feynman-concept').value = ''; document.getElementById('feynman-simple').value = ''; document.getElementById('feynman-voids').value = ''; renderAll();
         }
 
-        // SIMULADOR DE NOTA DE EMERGENCIA EXAMEN FINAL
-        function calculateNeededGrade() {
-            const current = parseFloat(document.getElementById('sim-current').value);
-            const weight = parseFloat(document.getElementById('sim-weight').value) / 100;
-            const target = parseFloat(document.getElementById('sim-target').value);
-            const resBox = document.getElementById('sim-result-box');
+        // FLASHCARDS
+        function createFlashcard() {
+            let front = document.getElementById('fc-q').value.trim(); let back = document.getElementById('fc-a').value.trim(); if(!front || !back) return;
+            db.flashcards.push({ front, back }); syncStorage(); document.getElementById('fc-q').value = ''; document.getElementById('fc-a').value = ''; renderAll();
+        }
+        function solveFc(i) { alert(`Respuesta Oficial de Tarjeta:\n\n${db.flashcards[i].back}`); rewardPoints(30, 10); }
 
-            if(isNaN(current) || isNaN(weight) || isNaN(target)) {
-                resBox.innerText = "Rellena los 3 campos del simulador.";
-                return;
-            }
-
-            // Formula: NotaNecesaria = (Target - (Current * (1 - PesoExamen))) / PesoExamen
-            const needed = (target - (current * (1 - weight))) / weight;
-
-            if (needed <= 0) {
-                resBox.innerText = "¡Ya aprobaste la materia con tus notas actuales! 😎";
-                resBox.style.color = "var(--accent-green)";
-            } else if (needed > 10) {
-                resBox.innerText = `Necesitas un ${needed.toFixed(1)}... Matemáticamente imposible pasar con esa nota actual. 💀`;
-                resBox.style.color = "var(--accent-pink)";
-            } else {
-                resBox.innerText = `Para sacar un ${target.toFixed(1)} necesitas obtener mínimo un ${needed.toFixed(1)} en el examen final.`;
-                resBox.style.color = "var(--accent-cyan)";
-            }
+        // AGENDA
+        function addAgenda() {
+            let title = document.getElementById('agenda-title').value.trim(); let date = document.getElementById('agenda-date').value;
+            let tag = document.getElementById('agenda-tag').value; if(!title || !date) return;
+            db.agenda.push({ id: Date.now(), title, date, tag }); rewardPoints(30, 5); triggerAudioAlert();
+            document.getElementById('agenda-title').value = ''; renderAll();
         }
 
-        // HACK DE CICLOS DE SUEÑO
-        function calculateSleepCycles() {
-            const timeVal = document.getElementById('sleep-target-time').value;
-            const container = document.getElementById('sleep-results');
-            container.innerHTML = '';
-            if(!timeVal) return;
-
-            let [hrs, mins] = timeVal.split(':').map(Number);
-            let date = new Date();
-            date.setHours(hrs, mins, 0, 0);
-
-            // Calcula retrasando ciclos de 90 minutos (6 ciclos es ideal, 5 es aceptable)
-            let optimalTimes = [];
-            for(let i = 6; i >= 3; i--) {
-                let copy = new Date(date.getTime() - (i * 90 * 60 * 1000) - (14 * 60 * 1000)); // 14 mins para quedarse dormido medio
-                let h = copy.getHours().toString().padStart(2, '0');
-                let m = copy.getMinutes().toString().padStart(2, '0');
-                optimalTimes.push(`${h}:${m}`);
-            }
-
-            optimalTimes.forEach(t => {
-                const pill = document.createElement('div');
-                pill.className = 'sleep-pill';
-                pill.innerText = t;
-                container.appendChild(pill);
-            });
+        // FORGE QUESTS
+        function buildQuest() {
+            let txt = document.getElementById('q-text').value.trim(); let xp = parseInt(document.getElementById('q-xp').value) || 0;
+            let mp = parseInt(document.getElementById('q-mp').value) || 0; if(!txt) return;
+            db.quests.push({ id: Date.now(), txt, xp, mp, done: false }); syncStorage();
+            document.getElementById('q-text').value = ''; renderAll();
+        }
+        function checkQuest(id, xp, mp) {
+            db.quests = db.quests.map(q => { if(q.id === id && !q.done) { q.done = true; rewardPoints(xp, mp); triggerAudioAlert(); } return q; }); renderAll();
         }
 
-        // EXÁMENES ENGINE
-        function addExam() {
-            const title = document.getElementById('exam-title').value.trim();
-            const date = document.getElementById('exam-date').value;
-            if(!title || !date) return;
-            exams.push({ title, date });
-            localStorage.setItem('origin_student_exams', JSON.stringify(exams));
-            renderExams();
-            document.getElementById('exam-title').value = '';
+        // ENGINE LOFI SINTETIZADOR DE 20 TRACKS
+        function toggleLofi() {
+            if(isPlayingLofi) { if(lofiOsc) lofiOsc.stop(); isPlayingLofi = false; document.getElementById('btn-lofi').innerText = "Iniciar Transmisión Lofi"; }
+            else { isPlayingLofi = true; document.getElementById('btn-lofi').innerText = "Detener Transmisión"; updateTrackChange(); }
+        }
+        function updateTrackChange() {
+            if(!isPlayingLofi) return; if(lofiOsc) { try { lofiOsc.stop(); } catch(e){} }
+            lofiOsc = audioCtx.createOscillator(); lofiGain = audioCtx.createGain();
+            let pitch = parseInt(document.getElementById('track-select').value);
+            lofiOsc.frequency.setValueAtTime(pitch, audioCtx.currentTime); lofiOsc.type = 'sine';
+            lofiGain.gain.setValueAtTime(0.02, audioCtx.currentTime); lofiOsc.connect(lofiGain);
+            lofiGain.connect(audioCtx.destination); lofiOsc.start();
         }
 
-        function deleteExam(idx) {
-            exams.splice(idx, 1);
-            localStorage.setItem('origin_student_exams', JSON.stringify(exams));
-            renderExams();
-        }
-
-        // RENDERS DE SECCIONES INTERNAS
-        function renderTasks() {
-            const container = document.getElementById('tasks-container');
-            container.innerHTML = '';
-            tasks.forEach(t => {
-                const item = document.createElement('div');
-                item.className = `task-item ${t.done ? 'done' : ''}`;
-                let prioLabel = t.prio === 'prio-high' ? '🚨 Alta' : t.prio === 'prio-mid' ? '⚡ Media' : '💤 Baja';
-                item.innerHTML = `
-                    <div class="task-meta" onclick="toggleTask(${t.id})" style="cursor:pointer; flex:1;">
-                        <h5>${t.text}</h5>
-                        <span class="${t.prio}">${prioLabel}</span>
-                    </div>
-                    <button style="background:transparent; border:none; color:var(--accent-pink); font-size:0.75rem; cursor:pointer;" onclick="deleteTask(${t.id})">✕</button>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        function renderExams() {
-            const container = document.getElementById('exams-container'); container.innerHTML = '';
-            exams.sort((a,b)=>new Date(a.date)-new Date(b.date));
-            exams.forEach((ex, idx) => {
-                const days = Math.ceil((new Date(ex.date) - new Date()) / (1000*60*60*24));
-                container.innerHTML += `
-                    <div class="exam-item">
-                        <div><h4 style="font-size:0.82rem;">${ex.title}</h4><p style="font-size:0.68rem; color:#64748b;">${ex.date}</p></div>
-                        <div style="display:flex; align-items:center; gap:6px;">
-                            <span style="font-size:0.68rem; font-weight:800; color:var(--accent-orange); background:rgba(249,115,22,0.1); padding:2px 6px; border-radius:4px;">${days > 0 ? `Quedan ${days}d` : 'Hoy ⚔️'}</span>
-                            <button style="background:transparent; border:none; color:var(--accent-pink); cursor:pointer;" onclick="deleteExam(${idx})">✕</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function claimQuest(id, xp, mp) {
-            if(completedQuests.includes(id)) return;
-            completedQuests.push(id);
-            localStorage.setItem('origin_student_quests', JSON.stringify(completedQuests));
-            addSystemPoints(xp, mp);
-            alertSound(); renderAll();
-        }
-
-        function renderAll() {
-            const container = document.getElementById('subjects-container');
-            const select = document.getElementById('grade-sub-select');
-            container.innerHTML = ''; select.innerHTML = '';
-            let totalSum = 0; let counted = 0;
-
-            subjects.forEach((sub, idx) => {
-                const opt = document.createElement('option'); opt.value = idx; opt.innerText = sub.name; select.appendChild(opt);
-                let avg = 0;
-                if(sub.grades.length > 0) {
-                    avg = sub.grades.reduce((a,b)=>a+b, 0) / sub.grades.length;
-                    totalSum += avg; counted++;
-                }
-                let riskText = sub.risk === 'risk-high' ? '🔴 Crítica' : sub.risk === 'risk-medium' ? '🟡 Media' : '🟢 Fácil';
-                const card = document.createElement('div'); card.className = 'subject-card';
-                card.innerHTML = `
-                    <div class="subject-header">
-                        <div><span class="subject-title">${sub.name}</span><span style="font-size:0.65rem; margin-left:6px; color:#94a3b8;">${riskText}</span></div>
-                        <span class="subject-avg">${sub.grades.length > 0 ? avg.toFixed(1) : '—'}</span>
-                    </div>
-                    <div class="grades-pills">${sub.grades.map(g=>`<span class="grade-pill">${g.toFixed(1)}</span>`).join('')}</div>
-                    <div style="text-align:right;"><span style="color:#475569; font-size:0.65rem; cursor:pointer;" onclick="deleteSubject(${idx})">Eliminar</span></div>
-                `;
-                container.appendChild(card);
-            });
-
-            document.getElementById('global-avg').innerText = counted > 0 ? (totalSum / counted).toFixed(1) : "0.0";
-            document.getElementById('pomo-count').innerText = pomodorosDone;
-            document.getElementById('missions-count').innerText = `${completedQuests.length} / 4`;
-            document.getElementById('streak-multiplier').innerText = `x${pomoTodayStreak >= 2 ? '1.5' : '1.0'}`;
-            document.getElementById('racha-pomo-badge').innerText = `Racha Hoy: ${pomoTodayStreak}`;
-
-            completedQuests.forEach(q => document.getElementById(q)?.classList.add('completed'));
-        }
-
-        // CRONÓMETRO POMODORO SUPREMO WITH STREAK
-        let timer = null; let isRunning = false; let timeLeft = 25 * 60;
-        function toggleTimer() {
-            if(isRunning) { clearInterval(timer); isRunning = false; }
+        // POMODORO ENGINE
+        function togglePomo() {
+            if(pomoRunning) { clearInterval(pomoInterval); pomoRunning = false; }
             else {
-                isRunning = true;
-                timer = setInterval(() => {
-                    timeLeft--;
-                    const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-                    const s = (timeLeft%60).toString().padStart(2,'0');
-                    document.getElementById('timer-display').innerText = `${m}:${s}`;
-                    if(timeLeft <= 0) {
-                        clearInterval(timer); isRunning = false; timeLeft = 25 * 60;
-                        pomodorosDone++; pomoTodayStreak++;
-                        localStorage.setItem('origin_student_pomos', pomodorosDone);
-                        addSystemPoints(50, 20); alertSound(); renderAll();
-                        alert("¡Ciclo completado! Tus puntos han sido multiplicados si mantienes la racha activa.");
-                    }
+                pomoRunning = true;
+                pomoInterval = setInterval(() => {
+                    pomoTime--; let m = Math.floor(pomoTime/60).toString().padStart(2,'0'), s = (pomoTime%60).toString().padStart(2,'0');
+                    document.getElementById('pomo-display').innerText = `${m}:${s}`;
+                    if(pomoTime % 60 === 0) { db.focusMinutes++; syncStorage(); updateHUD(); }
+                    if(pomoTime <= 0) { clearInterval(pomoInterval); pomoRunning = false; pomoTime = 25 * 60; rewardPoints(150, 40); triggerAudioAlert(); alert("Ciclo Pomodoro Finalizado. Recompensas Añadidas."); renderAll(); }
                 }, 1000);
             }
         }
-        function resetTimer() { clearInterval(timer); isRunning = false; timeLeft = 25 * 60; document.getElementById('timer-display').innerText = "25:00"; }
+        function resetPomo() { clearInterval(pomoInterval); pomoRunning = false; pomoTime = 25 * 60; document.getElementById('pomo-display').innerText = "25:00"; }
+        function applyCustomPomo() { let m = parseInt(document.getElementById('pomo-custom-min').value); if(!isNaN(m) && m > 0) { pomoTime = m * 60; document.getElementById('pomo-display').innerText = `${m.toString().padStart(2,'0')}:00`; } }
 
-        // IA LOCAL REFORZADA
-        function askMatrixAI() {
-            const input = document.getElementById('ai-input').value.toLowerCase();
-            const box = document.getElementById('ai-response-box');
-            if(!input) return;
-            box.innerText = "Decodificando patrones cognitivos...";
-            setTimeout(() => {
-                let r = "SISTEMA: Entrada genérica recibida. Intenta fragmentar tus temas usando mapas conceptuales dinámicos y repasa mediante auto-evaluación cronometrada.";
-                if(input.includes("mate") || input.includes("fisica") || input.includes("calculo")) r = "SISTEMA: En ciencias exactas, el cerebro asimila mediante patrones repetitivos. Realiza 2 problemas de ejemplo guiados, luego crea variaciones cambiando variables sin ver el solucionario.";
-                if(input.includes("historia") || input.includes("memorizar") || input.includes("letras")) r = "SISTEMA: Usa memorización espaciada. Lee un bloque, escríbelo simplificado en una tarjeta de memoria y vuelve a autoevaluarte a las 2 horas y a las 24 horas exactas.";
-                if(input.includes("sueño") || input.includes("cansado") || input.includes("dormir")) r = "SISTEMA: La retención de datos ocurre durante la fase REM. Dormir 4 ciclos completos de 90 minutos (6 horas) es infinitamente mejor que pasar la noche en vela memorizando.";
-                if(input.includes("examen") || input.includes("bloqueo")) r = "SISTEMA: Si te bloqueas en el examen, salta inmediatamente de pregunta. El subconsciente continuará resolviendo el problema bloqueado en segundo plano mientras respondes el resto.";
-                box.innerText = r; document.getElementById('ai-input').value = '';
-            }, 500);
+        // RULETA CON CHANCE DE DROP DE PUNTOS
+        function spinRoulette() {
+            triggerAudioAlert();
+            const breaks = ["Estiramiento de brazos y respiración profunda por 3 min.", "Camina un minuto y bebe un sorbo de agua fría.", "Cierra los ojos y deja la mente en blanco.", "Haz 10 flexiones rápidas para reactivar la circulación celular."];
+            let msg = breaks[Math.floor(Math.random() * breaks.length)];
+            let luck = Math.random();
+            if(luck > 0.7) { rewardPoints(50, 15); msg += " 🎁 ¡CRÍTICO! La ruleta te ha dropeado +50 XP y +15 MP."; }
+            document.getElementById('roulette-out').innerText = msg;
         }
 
-        function saveData() { localStorage.setItem('origin_student_subjects', JSON.stringify(subjects)); }
-
-        // CANVAS PARTICLES EFFECT
-        const canvas = document.getElementById('bg-particles'); const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-        class P {
-            constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.size = Math.random()*1.2+0.2; this.speed = -(Math.random()*0.1+0.03); }
-            update() { this.y += this.speed; if(this.y < 0) this.y = canvas.height; }
-            draw() { ctx.fillStyle = "rgba(192, 132, 252, 0.2)"; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); }
+        // IA ORACLE ENGINE INTERNA (ESTILO GEMINI)
+        function queryOracle() {
+            let q = document.getElementById('oracle-input').value.toLowerCase(); if(!q) return;
+            let out = "ORACLE NODE: Análisis procesado. Recomiendo intercalar bloques Feynman con descanso dinámico.";
+            if(q.includes("media") || q.includes("promedio") || q.includes("notas")) {
+                let report = db.subjects.map(s => `${s.name}: [${s.grades.length > 0 ? (s.grades.reduce((a,b)=>a+b,0)/s.grades.length).toFixed(1) : 'Sin notas'}]`).join(" | ");
+                out = "ORACLE MEDIA BOT: " + (report || "No tienes asignaturas registradas con notas.");
+            } else if(q.includes("feynman")) { out = "ORACLE IA: El método Feynman exige explicar el tema sin tecnicismos. Si te encallas, ahí está tu brecha de conocimiento."; }
+            document.getElementById('oracle-terminal').innerText = out; document.getElementById('oracle-input').value = '';
         }
-        for(let i=0; i<30; i++) particles.push(new P());
-        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(anim); }
+        function askOracleForTips() {
+            const tips = ["Regla de los 2 Minutos: Si una tarea lleva menos de 2 minutos, hazla ya para liberar carga cognitiva.", "Estudio Espaciado: Repasa la misma flashcard a las 24 horas, a la semana y al mes para consolidar memoria.", "Efecto Zeigarnik: Tu cerebro recuerda mejor las tareas interrumpidas. No te satures, haz pausas.", "Evita el hiperfoco falso: Cambiar de materia cada 90 minutos reactiva la plasticidad cerebral."];
+            document.getElementById('oracle-terminal').innerText = "CONSEJO DESTACADO: " + tips[Math.floor(Math.random() * tips.length)];
+        }
 
-        renderAll(); renderTasks(); renderExams(); anim();
+        // HORARIO SEMANAL MATRIX
+        function buildScheduleTable() {
+            let body = document.getElementById('sch-body'); body.innerHTML = '';
+            timeBlocks.forEach((block, bIdx) => {
+                let tr = document.createElement('tr'); tr.innerHTML = `<td><b>${block.split('-')[0]}</b></td>`;
+                for(let d=0; d<5; d++) {
+                    let k = `${bIdx}-${d}`; let v = db.schedule[k] || '';
+                    tr.innerHTML += `<td><input type="text" class="sch-input" id="sch-${k}" value="${v}" style="width:50px;"></td>`;
+                }
+                body.appendChild(tr);
+            });
+        }
+        function saveSchedule() {
+            timeBlocks.forEach((b, bIdx) => { for(let d=0; d<5; d++) { let k = `${bIdx}-${d}`; db.schedule[k] = document.getElementById(`sch-${k}`).value; } });
+            syncStorage(); triggerAudioAlert();
+        }
+
+        // CONTROL EXTENDIDO & LIMPIEZAS
+        function clearSection(sec) {
+            if(sec === 'all' && confirm("¿Eliminar toda la base de datos?")) { localStorage.clear(); location.reload(); }
+            if(sec === 'agenda') { db.agenda = []; syncStorage(); renderAll(); }
+            if(sec === 'misiones') { db.quests = []; syncStorage(); renderAll(); }
+            if(sec === 'grades') { db.subjects.forEach(s => s.grades = []); syncStorage(); renderAll(); }
+        }
+        function changeStatusReport() { let val = document.getElementById('user-status-select').value; document.getElementById('oracle-terminal').innerText = `ESTADO DE ENERGÍA ACTUALIZADO: Servidores adaptados a modo [${val.toUpperCase()}].`; }
+
+        // RENDERS GLOBALES SÍNCRONOS
+        function renderAll() {
+            // Dropdowns
+            let sd = document.getElementById('subject-dropdown'); let nsd = document.getElementById('notes-subject-dropdown');
+            let currentSdVal = sd.value; let currentNsdVal = nsd.value;
+            sd.innerHTML = ''; nsd.innerHTML = '';
+            db.subjects.forEach((s, i) => {
+                let o1 = document.createElement('option'); o1.value = i; o1.innerText = s.name; sd.appendChild(o1);
+                let o2 = document.createElement('option'); o2.value = i; o2.innerText = s.name; nsd.appendChild(o2);
+            });
+            if(currentSdVal !== '' && sd.options[currentSdVal]) sd.value = currentSdVal;
+            if(currentNsdVal !== '' && nsd.options[currentNsdVal]) { nsd.value = currentNsdVal; } else { onNotesSubjectChange(); }
+
+            // Render Asignaturas + Simulador multinivel
+            let sBox = document.getElementById('subjects-box'); sBox.innerHTML = '';
+            db.subjects.forEach((s, i) => {
+                let avg = 0; if(s.grades.length > 0) avg = s.grades.reduce((a,b)=>a+b,0)/s.grades.length;
+                let predHtml = ''; [5, 6, 7, 8, 9, 10].forEach(t => {
+                    let req = s.grades.length > 0 ? calcPredictiveTarget(avg, t) : t.toFixed(1);
+                    predHtml += `<div class="matrix-node ${req==='✖'?'ko':(req==='OK'?'ok':'')}">T${t}: <b>${req}</b></div>`;
+                });
+                sBox.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:6px; border:1px solid var(--border); border-radius:6px; font-size:0.75rem;"><div style="display:flex; justify-content:space-between;"><b>${s.name}</b><span style="color:var(--accent-green); font-weight:900;">Media: ${s.grades.length>0?avg.toFixed(2):'—'}</span></div><div class="matrix-grid">${predHtml}</div><div style="text-align:right; margin-top:4px;"><span style="color:var(--accent-pink); font-size:0.6rem; cursor:pointer;" onclick="deleteSubject(${i})">[Borrar]</span></div></div>`;
+            });
+
+            // Render Feynman
+            let fBox = document.getElementById('feynman-box'); fBox.innerHTML = '';
+            db.feynman.forEach(f => { fBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; font-size:0.7rem;"><b style="color:var(--accent-orange);">${f.concept}</b><p style="color:#94a3b8;">${f.simple}</p>${f.voids?`<i style="color:var(--accent-pink);">Brecha: ${f.voids}</i>`:''}</div>`; });
+
+            // Render Flashcards
+            let fcBox = document.getElementById('flashcards-box'); fcBox.innerHTML = '';
+            db.flashcards.forEach((f, i) => { fcBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><span>⚡ ${f.front}</span><button class="btn" style="padding:2px 4px; font-size:0.6rem;" onclick="solveFc(${i})">Revisar</button></div>`; });
+
+            // Render Agenda
+            let aBox = document.getElementById('agenda-box'); aBox.innerHTML = ''; let filter = document.getElementById('agenda-filter').value;
+            let fAg = filter !== 'all' ? db.agenda.filter(x => x.tag === filter) : db.agenda;
+            fAg.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(a => {
+                aBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:4px 6px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><div><b>[${a.tag}]</b> ${a.title} <span style="color:#64748b;">(${a.date})</span></div><span style="color:var(--accent-pink); cursor:pointer;" onclick="db.agenda=db.agenda.filter(x=>x.id!=${a.id}); syncStorage(); renderAll();">✕</span></div>`;
+            });
+
+            // Render Quests
+            let qBox = document.getElementById('quests-box'); qBox.innerHTML = '';
+            db.quests.forEach(q => {
+                qBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; opacity:${q.done?0.4:1}"><div><div>${q.txt}</div><small style="color:var(--accent-cyan);">+${q.xp}XP / +${q.mp}MP</small></div><div>${!q.done?`<button class="btn" style="padding:2px 4px; font-size:0.6rem;" onclick="checkQuest(${q.id},${q.xp},${q.mp})">✓</button>`:''}</div></div>`;
+            });
+
+            updateHUD();
+        }
+
+        function exportState() { window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage))); }
+        function importState() { try { let p = JSON.parse(prompt("Pega el JSON de backup aquí:")); if(p) { Object.keys(p).forEach(k => localStorage.setItem(k, p[k])); location.reload(); } } catch(e){ alert("Error al importar."); } }
+
+        nsd.addEventListener('change', onNotesSubjectChange);
+        buildScheduleTable(); renderAll();
     </script>
 </body>
 </html>
