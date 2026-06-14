@@ -163,7 +163,7 @@
         .btn:active { transform: translateY(1px); }
 
         /* BOTÓN VOLVER (ESTILO CIAN NEÓN) */
-        .btn-back { background: var(--accent-cyan); color: #000; text-decoration: none; display: block; text-align: center; }
+        .btn-back { background: var(--accent-cyan); color: #000; text-decoration: none; display: block; text-align: center; line-height: 20px; }
         .btn-back:hover { box-shadow: 0 5px 15px rgba(34, 211, 238, 0.4); }
 
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
@@ -182,7 +182,7 @@
 
         /* MODAL */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
-        .modal-content { background: #11111f; padding: 25px; border-radius: 20px; width: 90%; max-width: 420px; border: 1px solid var(--glass-border); animation: modalOpen 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .modal-content { background: #11111f; padding: 25px; border-radius: 20px; width: 90%; max-width: 420px; border: 1px solid var(--glass-border); animation: modalOpen 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 90vh; overflow-y: auto; }
         @keyframes modalOpen { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
@@ -369,6 +369,9 @@
         const KEY_RACHA = 'origin_racha';
         const KEY_LAST_CONN = 'origin_last_conn';
 
+        // Llaves para almacenar los textos editables del perfil en LocalStorage
+        const KEY_PROFILE_DATA = 'origin_profile_data';
+
         // --- SISTEMA DE AUDIO DIGITAL SINTETIZADO NATIVO ---
         let audioCtx = null;
         function playTone(freq, type, duration, vol) {
@@ -392,10 +395,26 @@
         function soundError() { playTone(180, 'sawtooth', 0.25, 0.2); }
 
         function loadAll() {
+            // Inicializar contadores si no existen
             if(!localStorage.getItem(KEY_XP)) localStorage.setItem(KEY_XP, '0');
             if(!localStorage.getItem(KEY_MP)) localStorage.setItem(KEY_MP, '0');
             if(!localStorage.getItem(KEY_RACHA)) localStorage.setItem(KEY_RACHA, '0');
 
+            // Cargar datos editados previamente
+            const savedData = JSON.parse(localStorage.getItem(KEY_PROFILE_DATA));
+            if (savedData) {
+                if(savedData.nombre) document.getElementById('disp-nombre').innerText = savedData.nombre;
+                if(savedData.segundo) document.getElementById('disp-segundo').innerText = savedData.segundo;
+                if(savedData.apellidos) document.getElementById('disp-apellidos').innerText = savedData.apellidos;
+                if(savedData.colegio) document.getElementById('disp-colegio').innerText = savedData.colegio;
+                if(savedData.nacimiento) document.getElementById('disp-nacimiento').innerText = savedData.nacimiento;
+                if(savedData.edad) document.getElementById('disp-edad').innerText = savedData.edad;
+                if(savedData.nacionalidad) document.getElementById('disp-nacionalidad').innerText = savedData.nacionalidad;
+                if(savedData.zodiaco) document.getElementById('disp-zodiaco').innerText = savedData.zodiaco;
+                if(savedData.descripcion) document.getElementById('disp-descripcion').innerText = savedData.descripcion;
+            }
+
+            // Mapeo de sonidos interactivos
             document.querySelectorAll('.btn, .btn-back, .action-card, .switch input').forEach(el => {
                 el.addEventListener('click', soundClick);
             });
@@ -429,7 +448,6 @@
         }
 
         function render() {
-            // INTEGRACIÓN: Leemos datos globales + datos ganados entrenando a Nala
             const baseXP = parseInt(localStorage.getItem(KEY_XP)) || 0;
             const baseMP = parseInt(localStorage.getItem(KEY_MP)) || 0;
             const racha = localStorage.getItem(KEY_RACHA);
@@ -437,7 +455,6 @@
             const nalaXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
             const nalaMP = parseInt(localStorage.getItem('nala-total-mp')) || 0;
 
-            // El total combinado de puntos que se muestra y afecta a los rangos
             const totalXP = baseXP + nalaXP;
             const totalMP = baseMP + nalaMP;
 
@@ -445,7 +462,6 @@
             document.getElementById('val-mp').innerText = totalMP;
             document.getElementById('val-racha').innerText = racha;
 
-            // Actualizar nivel de Nala en el recuadro lateral
             let nalaNivelCalculado = Math.floor(nalaXP / 100) + 1;
             document.getElementById('nala-rango-sidebar').innerText = `Nivel ${nalaNivelCalculado}`;
 
@@ -613,6 +629,7 @@
             else sidebar.classList.remove('private-mode');
         }
 
+        // --- FUNCIONES COMPLETADAS DE CONTROL DEL MODAL Y GUARDADO LOCAL ---
         function openModal() {
             document.getElementById('input-nombre').value = document.getElementById('disp-nombre').innerText;
             document.getElementById('input-segundo').value = document.getElementById('disp-segundo').innerText;
@@ -623,21 +640,42 @@
             document.getElementById('input-nacionalidad').value = document.getElementById('disp-nacionalidad').innerText || "Español y Ecuatoriano";
             document.getElementById('input-zodiaco').value = document.getElementById('disp-zodiaco').innerText;
             document.getElementById('input-descripcion').value = document.getElementById('disp-descripcion').innerText;
+            
             document.getElementById('editModal').style.display = 'flex';
         }
 
-        function closeModal() { document.getElementById('editModal').style.display = 'none'; }
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
 
         function saveData() {
-            document.getElementById('disp-nombre').innerText = document.getElementById('input-nombre').value;
-            document.getElementById('disp-segundo').innerText = document.getElementById('input-segundo').value;
-            document.getElementById('disp-apellidos').innerText = document.getElementById('input-apellidos').value;
-            document.getElementById('disp-colegio').innerText = document.getElementById('input-colegio').value;
-            document.getElementById('disp-nacimiento').innerText = document.getElementById('input-nacimiento').value;
-            document.getElementById('disp-edad').innerText = document.getElementById('input-edad').value;
-            document.getElementById('disp-nacionalidad').innerText = document.getElementById('input-nacionalidad').value;
-            document.getElementById('disp-zodiaco').innerText = document.getElementById('input-zodiaco').value;
-            document.getElementById('disp-descripcion').innerText = document.getElementById('input-descripcion').value;
+            // Obtener los valores del formulario
+            const nombre = document.getElementById('input-nombre').value;
+            const segundo = document.getElementById('input-segundo').value;
+            const apellidos = document.getElementById('input-apellidos').value;
+            const colegio = document.getElementById('input-colegio').value;
+            const nacimiento = document.getElementById('input-nacimiento').value;
+            const edad = document.getElementById('input-edad').value;
+            const nacionalidad = document.getElementById('input-nacionalidad').value;
+            const zodiaco = document.getElementById('input-zodiaco').value;
+            const descripcion = document.getElementById('input-descripcion').value;
+
+            // Actualizar la interfaz de usuario de forma dinámica
+            document.getElementById('disp-nombre').innerText = nombre;
+            document.getElementById('disp-segundo').innerText = segundo;
+            document.getElementById('disp-apellidos').innerText = apellidos;
+            document.getElementById('disp-colegio').innerText = colegio;
+            document.getElementById('disp-nacimiento').innerText = nacimiento;
+            document.getElementById('disp-edad').innerText = edad;
+            document.getElementById('disp-nacionalidad').innerText = nacionalidad;
+            document.getElementById('disp-zodiaco').innerText = zodiaco;
+            document.getElementById('disp-descripcion').innerText = descripcion;
+
+            // Guardar permanentemente en LocalStorage en formato JSON
+            const profileData = { nombre, segundo, apellidos, colegio, nacimiento, edad, nacionalidad, zodiaco, descripcion };
+            localStorage.setItem(KEY_PROFILE_DATA, JSON.stringify(profileData));
+
+            // Acciones de cierre y retroalimentación táctil/auditiva
             closeModal();
             soundSuccess();
             render();
