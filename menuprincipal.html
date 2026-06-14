@@ -626,21 +626,31 @@
 
         // LOGICA DE RECONEXIÓN E INYECCIÓN DE DATOS REALES CORREGIDA
         function loadPointsSystem() {
-            // Comprobación cruzada de llaves para evitar desincronizaciones entre archivos
-            const realXP = localStorage.getItem('origin_xp') || localStorage.getItem('xp') || '0';
-            const realMP = localStorage.getItem('origin_mp') || localStorage.getItem('mp') || '0';
-            const realRacha = localStorage.getItem('origin_racha') || localStorage.getItem('racha') || '1';
+    // 1. Buscamos la XP en todas las llaves posibles que hayas podido usar
+    const realXP = localStorage.getItem('xp') || 
+                   localStorage.getItem('origin_xp') || 
+                   localStorage.getItem('experiencia') || '0';
 
-            // Asegurar la consistencia del storage guardando la llave del menú por si acaso
-            localStorage.setItem('origin_xp', realXP);
-            localStorage.setItem('origin_mp', realMP);
-            localStorage.setItem('origin_racha', realRacha);
-            
-            // Pintar los datos reales sin demoras
-            document.getElementById('display-xp').innerText = realXP;
-            document.getElementById('display-mp').innerText = realMP;
-            document.getElementById('display-racha').innerText = realRacha + (realRacha == 1 ? ' día' : ' días');
-        }
+    // 2. Buscamos los MathePoints en todas las llaves posibles
+    const realMP = localStorage.getItem('mp') || 
+                   localStorage.getItem('origin_mp') || 
+                   localStorage.getItem('mathepoints') || 
+                   localStorage.getItem('puntos') || '0';
+
+    // 3. Buscamos la racha (esta dices que ya te va bien con 'origin_racha' o 'racha')
+    const realRacha = localStorage.getItem('origin_racha') || 
+                      localStorage.getItem('racha') || '2';
+
+    // Guardamos la ganadora para que todo el sistema se unifique
+    localStorage.setItem('origin_xp', realXP);
+    localStorage.setItem('origin_mp', realMP);
+    localStorage.setItem('origin_racha', realRacha);
+    
+    // Pintamos los datos reales en las tarjetas del menú
+    document.getElementById('display-xp').innerText = realXP;
+    document.getElementById('display-mp').innerText = realMP;
+    document.getElementById('display-racha').innerText = realRacha + (realRacha == 1 ? ' día' : ' días');
+}
 
         function renderApps(category = 'all') {
             const container = document.getElementById('apps-container');
