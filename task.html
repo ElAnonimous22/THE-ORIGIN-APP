@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Sistema de Tareas</title>
+    <style>
+        :root {
+            --bg-main: #060614; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-supreme: #ff4757; /* Rojo neón para la Suprema */
+            --accent-important: #ffa500; /* Naranja para Importantes */
+            --accent-normal: #22d3ee; /* Cian para el Resto */
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        body {
+            background: #060614;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* FONDO ESTÁTICO DE ESTRELLAS CYBERPUNK */
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 30%, #171130 0%, #060614 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 25px;
+            z-index: 1;
+        }
+        @media(max-width: 800px) { .container { grid-template-columns: 1fr; } }
+
+        /* PANELES GLASSMORPHISM */
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            height: fit-content;
+        }
+
+        h2 { font-size: 1.2rem; color: var(--accent-purple); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+
+        /* FORMULARIOS ESTILIZADOS */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+        input, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 12px; font-size: 0.9rem; transition: border-color 0.2s; }
+        input:focus, select:focus { outline: none; border-color: var(--accent-purple); }
+
+        .btn { background: var(--accent-purple); color: #000; border: none; padding: 14px 20px; border-radius: 14px; cursor: pointer; font-weight: 700; width: 100%; transition: all 0.2s ease; margin-top: 10px; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(192, 132, 252, 0.4); }
+        .btn-back { background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted); text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-top: 15px; transition: all 0.2s; }
+        .btn-back:hover { color: #fff; border-color: #fff; }
+
+        /* SECCIONES DE TAREAS */
+        .task-section { margin-bottom: 25px; }
+        .task-section:last-child { margin-bottom: 0; }
+        .section-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .section-title.suprema { color: var(--accent-supreme); }
+        .section-title.importante { color: var(--accent-important); }
+        .section-title.resto { color: var(--accent-normal); }
+
+        .reward-badge { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 10px; color: #fff; }
+
+        .task-list { display: flex; flex-direction: column; gap: 10px; min-height: 50px; background: rgba(0,0,0,0.1); border-radius: 16px; padding: 8px; border: 1px dashed rgba(255,255,255,0.02); }
+
+        /* TARJETA DE TAREA INDIVIDUAL */
+        .task-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 14px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            animation: cardSpawn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes cardSpawn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .task-card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); }
+
+        .task-info { display: flex; flex-direction: column; gap: 4px; }
+        .task-name { font-weight: 700; font-size: 0.95rem; }
+        .task-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
+        .cat-tag { background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 6px; color: var(--accent-purple); font-weight: bold; }
+
+        /* BOTÓN CHECK CIRCULAR CYBERPUNK */
+        .check-btn {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: transparent; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; color: transparent; transition: all 0.2s;
+        }
+        .task-card:hover .check-btn { border-color: var(--accent-purple); color: rgba(255,255,255,0.3); }
+        .check-btn:hover { background: var(--accent-purple) !important; border-color: transparent !important; color: #000 !important; transform: scale(1.1); }
+
+        .empty-msg { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        <div class="panel">
+            <h2>⚡ Forjar Nueva Tarea</h2>
+            
+            <div class="form-group">
+                <label>Nombre de la Tarea</label>
+                <input type="text" id="taskName" placeholder="Ej: Estudiar Criptografía">
+            </div>
+
+            <div class="form-group">
+                <label>Rango de Prioridad</label>
+                <select id="taskPriority" onchange="evaluarLimitesOcultos()">
+                    <option value="suprema">🔥 Tarea Suprema (Solo 1 por día)</option>
+                    <option value="importante">⭐ Tarea Importante (Máximo 3)</option>
+                    <option value="resto">🌌 Resto de tareas (Ilimitadas)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="taskCategory" onchange="checkNuevaCategoria(this)">
+                    <option value="Personal">🔑 Personal</option>
+                    <option value="Dinero">💰 Dinero</option>
+                    <option value="Estudios">📚 Estudios</option>
+                    <option value="__NUEVA__">+ Crear Nueva Categoría...</option>
+                </select>
+                <input type="text" id="newCategoryInput" placeholder="Nombre de la nueva categoría" style="display: none; margin-top: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Tiempo Límite (Duración)</label>
+                <select id="taskDuration" onchange="checkDuracionCustom(this)">
+                    <option value="infinito">♾️ Infinito (Sin límite)</option>
+                    <option value="1">1 Día</option>
+                    <option value="3">3 Días</option>
+                    <option value="7">7 Días</option>
+                    <option value="custom">Elegir días exactos...</option>
+                </select>
+                <input type="number" id="customDaysInput" placeholder="Número de días" min="1" style="display: none; margin-top: 8px;">
+            </div>
+
+            <button class="btn" onclick="crearTarea()">Desplegar Tarea</button>
+            <a href="menuprincipal.html" class="btn-back">⬅ Volver al Menú</a>
+        </div>
+
+        <div class="panel">
+            <h2>📋 Matriz de Enfoque Diario</h2>
+
+            <div class="task-section">
+                <div class="section-title suprema">
+                    <span>🔥 Tarea Suprema (1/1)</span>
+                    <span class="reward-badge">+50 XP | +25 MP</span>
+                </div>
+                <div class="task-list" id="pool-suprema"></div>
+            </div>
+
+            <div class="task-section">
+                <div class="section-title importante">
+                    <span id="label-importantes">⭐ Tareas Importantes (0/3)</span>
+                    <span class="reward-badge">+25 XP | +10 MP</span>
+                </div>
+                <div class="task-list" id="pool-importante"></div>
+            </div>
+
+            <div class="task-section">
+                <div class="section-title resto">
+                    <span>🌌 Resto de Tareas</span>
+                    <span class="reward-badge">+10 XP | +5 MP</span>
+                </div>
+                <div class="task-list" id="pool-resto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const KEY_TASKS = 'origin_tasks_list';
+        const KEY_XP = 'origin_xp';
+        const KEY_MP = 'origin_mp';
+
+        let tareas = JSON.parse(localStorage.getItem(KEY_TASKS)) || [];
+        let audioCtx = null;
+
+        // --- AUDIO CENTRALIZADO NATIVO ---
+        function playTone(freq, type, duration, vol) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function soundSuccess() { playTone(587.33, 'sine', 0.1, 0.15); setTimeout(() => playTone(880, 'sine', 0.25, 0.15), 90); }
+        function soundError() { playTone(220, 'sawtooth', 0.3, 0.15); }
+        function soundClick() { playTone(700, 'sine', 0.05, 0.08); }
+
+        // --- DETECTORES DE INTERFAZ DINÁMICA ---
+        function checkNuevaCategoria(select) {
+            const input = document.getElementById('newCategoryInput');
+            input.style.display = select.value === "__NUEVA__" ? "block" : "none";
+        }
+
+        function checkDuracionCustom(select) {
+            const input = document.getElementById('customDaysInput');
+            input.style.display = select.value === "custom" ? "block" : "none";
+        }
+
+        // --- MOTOR LOGIC ---
+        function crearTarea() {
+            const name = document.getElementById('taskName').value.trim();
+            let priority = document.getElementById('taskPriority').value;
+            let category = document.getElementById('taskCategory').value;
+            let durationMode = document.getElementById('taskDuration').value;
+
+            if(!name) { soundError(); alert("⚠️ Escribe el nombre de la tarea."); return; }
+
+            // Procesar nueva categoría si aplica
+            if(category === "__NUEVA__") {
+                const newCat = document.getElementById('newCategoryInput').value.trim();
+                if(!newCat) { soundError(); alert("⚠️ Especifica el nombre de la nueva categoría."); return; }
+                category = newCat;
+            }
+
+            // Calcular días de expiración
+            let diasLimite = "Infinito";
+            if(durationMode === "custom") {
+                const customDays = document.getElementById('customDaysInput').value;
+                if(!customDays || customDays < 1) { soundError(); alert("⚠️ Ingresa un número de días válido."); return; }
+                diasLimite = parseInt(customDays) + " Días";
+            } else if (durationMode !== "infinito") {
+                diasLimite = durationMode + " Días";
+            }
+
+            // Validar límites de las secciones antes de guardar
+            const conteo = obtenerConteoActual();
+            if(priority === "suprema" && conteo.suprema >= 1) {
+                soundError();
+                alert("🔒 Error de Matriz: Ya has forjado tu Tarea Suprema para hoy. Degradando automáticamente al bloque del Resto.");
+                priority = "resto";
+            }
+            if(priority === "importante" && conteo.importante >= 3) {
+                soundError();
+                alert("🔒 Límite Alcanzado: Solo se permiten 3 Tareas Importantes simultáneas para no saturar tu enfoque. Pasando al Resto.");
+                priority = "resto";
+            }
+
+            // Construir objeto tarea
+            const nuevaTarea = {
+                id: 't-' + Date.now(),
+                nombre: name,
+                prioridad: priority,
+                categoria: category,
+                limite: diasLimite,
+                fechaCreacion: new Date().toLocaleDateString()
+            };
+
+            tareas.push(nuevaTarea);
+            localStorage.setItem(KEY_TASKS, JSON.stringify(tareas));
+            
+            // Limpiar campos
+            document.getElementById('taskName').value = "";
+            document.getElementById('newCategoryInput').value = "";
+            document.getElementById('customDaysInput').value = "";
+
+            soundSuccess();
+            render();
+        }
+
+        function obtenerConteoActual() {
+            return {
+                suprema: tareas.filter(t => t.prioridad === 'suprema').length,
+                importante: tareas.filter(t => t.prioridad === 'importante').length
+            };
+        }
+
+        function completarTarea(id, prioridad) {
+            // Calcular recompensas según tus reglas exactas
+            let xpGanada = 10;
+            let mpGanado = 5;
+
+            if (prioridad === 'suprema') { xpGanada = 50; mpGanado = 25; }
+            else if (prioridad === 'importante') { xpGanada = 25; mpGanado = 10; }
+
+            // Cargar perfil actual, sumar y guardar
+            let xpActual = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            let mpActual = parseInt(localStorage.getItem(KEY_MP)) || 0;
+
+            localStorage.setItem(KEY_XP, xpActual + xpGanada);
+            localStorage.setItem(KEY_MP, mpActual + mpGanado);
+
+            // Eliminar de la lista de pendientes
+            tareas = tareas.filter(t => t.id !== id);
+            localStorage.setItem(KEY_TASKS, JSON.stringify(tareas));
+
+            soundSuccess();
+            render();
+        }
+
+        function render() {
+            const pools = {
+                suprema: document.getElementById('pool-suprema'),
+                importante: document.getElementById('pool-importante'),
+                resto: document.getElementById('pool-resto')
+            };
+
+            // Limpiar listas anteriores
+            Object.values(pools).forEach(p => p.innerHTML = "");
+
+            const conteo = obtenerConteoActual();
+            document.getElementById('label-importantes').innerText = `⭐ Tareas Importantes (${conteo.importante}/3)`;
+
+            if(tareas.length === 0) {
+                Object.values(pools).forEach(p => p.innerHTML = `<p class="empty-msg">No hay códigos activos en este sector.</p>`);
+                return;
+            }
+
+            tareas.forEach(t => {
+                const card = `
+                    <div class="task-card">
+                        <div class="task-info">
+                            <span class="task-name">${t.nombre}</span>
+                            <div class="task-meta">
+                                <span class="cat-tag">${t.categoria}</span>
+                                <span>⏳ Límite: ${t.limite}</span>
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="completarTarea('${t.id}', '${t.prioridad}')">✓</button>
+                    </div>
+                `;
+                pools[t.prioridad].innerHTML += card;
+            });
+
+            // Si un sector se queda vacío después del filtro poner mensaje individual
+            Object.keys(pools).forEach(key => {
+                if(pools[key].innerHTML === "") {
+                    pools[key].innerHTML = `<p class="empty-msg">Sector libre. Enfoque optimizado.</p>`;
+                }
+            });
+        }
+
+        // --- RENDERIZADO FONDO ESTRELLAS ---
+        function initStars() {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            ctx.fillStyle = 'rgba(255,255,255,0.15)';
+            for(let i=0; i<40; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*1.5+0.5, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+
+        window.onload = function() {
+            initStars();
+            render();
+            // Inyectar evento de click a botones de selección
+            document.querySelectorAll('select, button').forEach(el => el.addEventListener('click', soundClick));
+        };
+    </script>
+</body>
+</html>
