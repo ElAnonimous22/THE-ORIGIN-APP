@@ -3,418 +3,772 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE ORIGIN - Student Matrix Overlord Ultimate</title>
+    <title>THE ORIGIN - Student Matrix Overlord Ultimate Suite</title>
     <style>
         :root {
-            --bg-main: #020208; --glass: rgba(255, 255, 255, 0.02); --border: rgba(255, 255, 255, 0.05);
-            --accent-purple: #c084fc; --accent-cyan: #22d3ee; --accent-green: #10b981; 
-            --accent-orange: #f97316; --accent-pink: #f43f5e; --accent-yellow: #eab308; --text: #f8fafc;
+            --bg-base: #020208;
+            --glass: rgba(255, 255, 255, 0.015);
+            --glass-border: rgba(255, 255, 255, 0.04);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --accent-purple: #c084fc;
+            --accent-cyan: #22d3ee;
+            --accent-green: #10b981;
+            --accent-orange: #f97316;
+            --accent-pink: #f43f5e;
+            --accent-yellow: #eab308;
+            --text-main: #f8fafc;
+            --matrix-glow: cubic-bezier(0.16, 1, 0.3, 1);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body {
-            background-color: var(--bg-main); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center;
-            background-image: radial-gradient(circle at 50% 0%, rgba(192, 132, 252, 0.08) 0%, transparent 50%); background-attachment: fixed;
+            background-color: var(--bg-base); color: var(--text-main); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(192, 132, 252, 0.08) 0%, transparent 60%), radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.04) 0%, transparent 40%);
+            background-attachment: fixed; transition: background-color 0.8s ease;
         }
-        .container { width: 100%; max-width: 1600px; display: flex; flex-direction: column; gap: 14px; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
-        .panel { background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 14px; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 10px; }
-        .panel-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-        input, select, textarea { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--border); padding: 7px 10px; border-radius: 6px; color: #fff; font-size: 0.78rem; outline: none; width: 100%; }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent-purple); }
-        .btn { background: #fff; color: #000; border: none; padding: 7px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
-        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(255,255,255,0.1); }
-        .btn-sub { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: #fff; }
-        .btn-sub:hover { background: rgba(255,255,255,0.08); }
-        .scroll { max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 2px; }
-        .scroll::-webkit-scrollbar { width: 4px; }
-        .scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-        .hud { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; }
-        .hud-card { background: var(--glass); border: 1px solid var(--border); border-radius: 10px; padding: 10px; border-left: 3px solid var(--accent-purple); }
-        .hud-num { font-size: 1.2rem; font-weight: 900; margin-top: 2px; }
-        .matrix-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-top: 4px; text-align: center; font-size: 0.6rem; }
-        .matrix-node { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 3px; border-radius: 4px; }
-        .matrix-node.ok { color: var(--accent-green); border-color: rgba(16,185,129,0.2); }
-        .matrix-node.ko { color: var(--accent-pink); opacity: 0.4; }
-        .sch-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; text-align: center; }
-        .sch-table th, .sch-table td { border: 1px solid var(--border); padding: 4px; }
-        .sch-input { background: transparent; border: none; text-align: center; color: #fff; font-size: 0.68rem; }
-        .terminal { background: #000; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: monospace; font-size: 0.72rem; color: var(--accent-cyan); min-height: 60px; max-height: 100px; overflow-y: auto; }
+        .main-container { width: 100%; max-width: 1750px; display: flex; flex-direction: column; gap: 16px; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; backdrop-filter: blur(10px); }
+        .master-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 16px; }
+        @media (max-width: 450px) { .master-layout { grid-template-columns: 1fr; } }
+        .panel { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 18px; backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: border-color 0.3s; }
+        .panel-header { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        input, select, textarea { background: rgba(0, 0, 0, 0.7); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.8rem; outline: none; transition: 0.2s ease; width: 100%; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(192, 132, 252, 0.15); }
+        .btn { background: #fff; color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s var(--matrix-glow); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15); }
+        .btn-glass { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); color: #fff; }
+        .btn-glass:hover { background: var(--glass-hover); border-color: rgba(255,255,255,0.2); }
+        .scroll-container { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
+        .scroll-container::-webkit-scrollbar { width: 4px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        
+        /* HUD COMPONENTS */
+        .hud-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .hud-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 14px; border-left: 4px solid var(--accent-purple); position: relative; overflow: hidden; }
+        .hud-label { font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hud-value { font-size: 1.4rem; font-weight: 900; margin-top: 2px; }
+        .bar-outer { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+        .bar-inner { height: 100%; width: 100%; transition: width 0.4s var(--matrix-glow); }
+        
+        /* SPECIFIC PATTERNS */
+        .predictive-matrix { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-top: 4px; }
+        .predictive-node { background: rgba(255, 255, 255, 0.01); border: 1px solid var(--glass-border); border-radius: 6px; padding: 4px; text-align: center; font-size: 0.62rem; }
+        .predictive-node.pass { color: var(--accent-green); border-color: rgba(16,185,129,0.2); background: rgba(16,185,129,0.02); }
+        .predictive-node.fail { color: var(--accent-pink); opacity: 0.4; }
+        .sch-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+        .sch-table th, .sch-table td { border: 1px solid var(--glass-border); padding: 5px; text-align: center; }
+        .sch-table th { background: rgba(255,255,255,0.01); color: #94a3b8; }
+        .sch-input { background: transparent; border: none; text-align: center; color: #fff; font-size: 0.7rem; width: 100%; }
+        .terminal { background: #010103; border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 0.75rem; color: var(--accent-cyan); line-height: 1.4; max-height: 120px; overflow-y: auto; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(53, 1fr); gap: 2px; max-width: 100%; overflow-x: auto; padding: 4px 0; }
+        .heatmap-cell { width: 10px; height: 10px; background: rgba(255,255,255,0.02); border-radius: 2px; transition: background 0.3s; }
+        .badge { font-size: 0.55rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; text-transform: uppercase; display: inline-block; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="main-container">
         <header>
-            <h1 style="font-size: 1.2rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">STUDENT MATRIX OVERLORD: ULTIMATE EDITION</h1>
-            <div style="display: flex; gap: 4px;"><button class="btn btn-sub" onclick="exportState()">💾 Backup</button><button class="btn btn-sub" onclick="importState()">📂 Cargar</button></div>
+            <div>
+                <h1 id="app-title" style="font-size: 1.3rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">STUDENT MATRIX OVERLORD // INFINITE ENGINE</h1>
+                <div id="system-event-banner" style="font-size: 0.7rem; color: var(--accent-yellow); margin-top: 2px; font-weight: 600;">⚠️ Verificando condiciones del entorno...</div>
+            </div>
+            <div style="display: flex; gap: 6px;">
+                <button class="btn btn-glass" onclick="exportQuantumState()">💾 Export</button>
+                <button class="btn btn-glass" onclick="importQuantumState()">📂 Import</button>
+            </div>
         </header>
 
-        <div class="hud">
-            <div class="hud-card" style="border-color: var(--accent-purple)"><div style="font-size:0.6rem; color:#64748b;">EXP GLOBAL</div><div class="hud-num" id="hud-xp">0 XP</div></div>
-            <div class="hud-card" style="border-color: var(--accent-pink)"><div style="font-size:0.6rem; color:#64748b;">MATRIX POINTS</div><div class="hud-num" id="hud-mp">0 MP</div></div>
-            <div class="hud-card" style="border-color: var(--accent-green)"><div style="font-size:0.6rem; color:#64748b;">PROMEDIO DE MEDIAS</div><div class="hud-num" id="hud-avg">0.0</div></div>
-            <div class="hud-card" style="border-color: var(--accent-cyan)"><div style="font-size:0.6rem; color:#64748b;">FOCO ACUMULADO</div><div class="hud-num" id="hud-focus">0 min</div></div>
+        <div class="hud-grid">
+            <div class="hud-item" style="border-left-color: var(--accent-purple);">
+                <div class="hud-label" id="user-rango">Cargando Rango...</div>
+                <div class="hud-value" id="hud-level">LVL 0</div>
+                <div class="bar-outer"><div id="bar-xp-progress" class="bar-inner" style="background: var(--accent-purple);"></div></div>
+                <div style="font-size: 0.55rem; color: #64748b; margin-top: 4px; text-align: right;" id="hud-xp-raw">0 / 0 XP</div>
+            </div>
+            <div class="hud-item" style="border-left-color: var(--accent-pink);">
+                <div class="hud-label">Matrix Points (MP)</div>
+                <div class="hud-value" id="hud-mp">0 MP</div>
+                <div class="hud-label" id="hud-streak-display" style="color: var(--accent-orange); margin-top: 4px; font-size:0.6rem;">Racha: 0 días</div>
+            </div>
+            <div class="hud-item" id="hud-estamina-card" style="border-left-color: var(--accent-green);">
+                <div class="hud-label">Estamina Cognitiva</div>
+                <div class="hud-value" id="hud-estamina">100%</div>
+                <div class="bar-outer"><div id="bar-estamina-inner" class="bar-inner" style="background: var(--accent-green);"></div></div>
+            </div>
+            <div class="hud-item" style="border-left-color: var(--accent-cyan);">
+                <div class="hud-label">Métricas Globales</div>
+                <div class="hud-value" id="hud-avg">0.0</div>
+                <div style="font-size: 0.55rem; color: #64748b; margin-top: 4px;" id="hud-focus-time">Enfoque: 0 min</div>
+            </div>
         </div>
 
-        <div class="grid-3">
-            <div class="panel">
-                <div class="panel-title">⏱️ Pomodoro Modular Custom <span style="color:var(--accent-purple)">[+150 XP]</span></div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
-                    <div id="pomo-display" style="font-size:1.8rem; font-family:monospace; font-weight:800; color:var(--accent-cyan)">25:00</div>
-                    <div style="display:flex; gap:4px;">
-                        <button class="btn" style="padding:4px 8px;" onclick="togglePomo()">Play/Pausa</button>
-                        <button class="btn btn-sub" style="padding:4px 8px;" onclick="resetPomo()">Reset</button>
+        <div class="master-layout">
+            
+            <div class="panel" id="panel-faction-setup">
+                <div class="panel-header">🤝 Configuración de Facción & Clase</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 0.7rem; color: #94a3b8;">Selecciona Facción Académica:</label>
+                    <select id="select-faction" onchange="selectFactionGroup()">
+                        <option value="">-- Ninguna Elegida --</option>
+                        <option value="atenas">🏛️ Academia de Atenas (+15% Feynman/Apuntes)</option>
+                        <option value="turing">🧪 Enclave de Turing (+15% MP en Flashcards/Pomo)</option>
+                        <option value="neon">🎨 Colectivo Neon (Estética Fluida & Desconexión)</option>
+                    </select>
+                    <label style="font-size: 0.7rem; color: #94a3b8;">Elige tu Build de Estudiante para hoy:</label>
+                    <select id="select-build" onchange="applyBuildArchetype()">
+                        <option value="barbaro">⚔️ El Bárbaro del Estudio (Pomo Largo, Cura Menos)</option>
+                        <option value="hacker">🕶️ El Pícaro / Hacker (Doble MP en Forja, Más daño recibido)</option>
+                        <option value="mago">🔮 El Mago del Conocimiento (Feynman x2 Puntos)</option>
+                    </select>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; margin-top: 4px;">
+                        <span style="font-size: 0.75rem; color: var(--accent-pink); font-weight: bold;">⚠️ MODO HARDCORE (Cero Distracciones)</span>
+                        <input type="checkbox" id="chk-hardcore" style="width: auto;" onchange="toggleHardcoreMode()">
                     </div>
                 </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
-                    <input type="number" id="pomo-custom-min" value="25" placeholder="Minutos">
-                    <button class="btn btn-sub" onclick="applyCustomPomo()">Set Tiempo</button>
-                </div>
+            </div>
 
-                <div class="panel-title">🎵 Multiverso Lofi & Estudio (20 Temas)</div>
-                <select id="track-select" onchange="updateTrackChange()">
-                    <option value="40">01. Estación Espacial Alfa</option><option value="45">02. Lluvia de Silicio</option>
-                    <option value="50">03. Café de Medianoche NeoTokio</option><option value="55">04. Sintetizador de Ondas Gamma</option>
-                    <option value="60">05. Biblioteca Nebulosa</option><option value="65">06. Compilador de Código Relax</option>
-                    <option value="70">07. Noche de Microchips</option><option value="75">08. Viento Cuántico</option>
-                    <option value="80">09. Algoritmo Melancólico</option><option value="85">10. Cyber-Chill Subterráneo</option>
-                    <option value="90">11. Pulsos de Memoria</option><option value="95">12. Desierto Digital</option>
-                    <option value="100">13. Cero Absoluto Ambient</option><option value="105">14. Redes de Cobre Neutras</option>
-                    <option value="110">15. Aura Estática</option><option value="115">16. Eco de Satélites</option>
-                    <option value="120">17. Neblina Binaria</option><option value="125">18. Resonancia Magnética Foco</option>
-                    <option value="130">19. Horizonte de Sucesos Lo-Fi</option><option value="135">20. Gravedad Cero Binaural</option>
+            <div class="panel">
+                <div class="panel-title panel-header">⏱️ Pomodoro Custom & Synth Lofi (20 Tracks)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; align-items: center;">
+                    <div id="pomo-clock" style="font-size: 2.2rem; font-family: monospace; font-weight: 900; color: var(--accent-cyan); text-align: center;">25:00</div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <button class="btn" style="background: var(--accent-cyan);" onclick="triggerPomoEngine()">Play/Pausa</button>
+                        <button class="btn btn-glass" onclick="resetPomoEngine()">Reset</button>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
+                    <input type="number" id="input-pomo-min" value="25" placeholder="Minutos">
+                    <select id="select-pomo-intensity">
+                        <option value="normal">Energía Normal</option>
+                        <option value="foco">Máximo Foco</option>
+                    </select>
+                </div>
+                <select id="select-lofi-frequencies" onchange="switchLofiFrequency()">
+                    <option value="42">01. Estación Espacial Alfa</option><option value="46">02. Lluvia de Silicio</option>
+                    <option value="52">03. Café de Medianoche NeoTokio</option><option value="58">04. Sintetizador de Ondas Gamma</option>
+                    <option value="62">05. Biblioteca Nebulosa</option><option value="68">06. Compilador de Código Relax</option>
+                    <option value="72">07. Noche de Microchips</option><option value="78">08. Viento Cuántico</option>
+                    <option value="82">09. Algoritmo Melancólico</option><option value="88">10. Cyber-Chill Subterráneo</option>
+                    <option value="92">11. Pulsos de Memoria</option><option value="98">12. Desierto Digital</option>
+                    <option value="102">13. Cero Absoluto Ambient</option><option value="108">14. Redes de Cobre Neutras</option>
+                    <option value="112">15. Aura Estática</option><option value="118">16. Eco de Satélites</option>
+                    <option value="122">17. Neblina Binaria</option><option value="128">18. Resonancia Magnética Foco</option>
+                    <option value="132">19. Horizonte de Sucesos Lo-Fi</option><option value="138">20. Gravedad Cero Binaural</option>
                 </select>
-                <button class="btn" id="btn-lofi" style="background:var(--accent-cyan);" onclick="toggleLofi()">Iniciar Transmisión Lofi</button>
-
-                <div class="panel-title">🎰 Ruleta de Descanso Cuántico <span style="color:var(--accent-yellow)">[Probabilidad de Drop]</span></div>
-                <button class="btn btn-sub" onclick="spinRoulette()">Girar Ruleta de Micro-Descansos</button>
-                <div id="roulette-out" style="font-size:0.72rem; color:var(--accent-yellow); text-align:center; font-weight:700;"></div>
+                <button class="btn btn-glass" id="btn-audio-state" onclick="toggleAudioSynthesis()">Inicializar Sintetizador de Audio</button>
             </div>
 
             <div class="panel">
-                <div class="panel-title">📊 Calificaciones, Notas e Inyección Predictiva</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
-                    <input type="text" id="subject-name" placeholder="Materia (Ej: Mates)">
-                    <button class="btn" style="background:var(--accent-green);" onclick="createSubject()">Crear Materia</button>
+                <div class="panel-header">📊 Expediente & Predictor Target (5 al 10)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <input type="text" id="input-subject-name" placeholder="Nombre Asignatura">
+                    <button class="btn" style="background: var(--accent-green);" onclick="createNewSubjectNode()">Vincular Materia</button>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 0.6fr 0.6fr; gap:4px;">
-                    <select id="subject-dropdown"></select>
-                    <input type="number" id="grade-value" placeholder="Nota" min="0" max="10" step="0.1">
-                    <select id="grade-type"><option value="examen">⚔️ Examen</option><option value="deberes">📝 Deberes</option><option value="trabajo">📁 Trabajo</option></select>
+                <div style="display: grid; grid-template-columns: 1fr 0.5fr 0.5fr; gap: 4px;">
+                    <select id="dropdown-subjects-list" onchange="loadSubjectNotesToTextarea()"></select>
+                    <input type="number" id="input-grade-value" placeholder="Nota" min="0" max="10" step="0.01">
+                    <select id="select-grade-type"><option value="Examen">Examen</option><option value="Deberes">Deberes</option><option value="Trabajo">Trabajo</option></select>
                 </div>
-                <button class="btn" style="background:var(--accent-purple); color:#fff;" onclick="injectGrade()">Inyectar Nota e Inducir Predicción</button>
-                <div class="scroll" id="subjects-box"></div>
-
-                <div class="panel-title">📝 Lugar de Apuntes Rápidos por Materia</div>
-                <select id="notes-subject-dropdown"></select>
-                <textarea id="notes-text" rows="2" placeholder="Escribe aquí tus ideas, fórmulas, apuntes o recordatorios importantes de esta materia..."></textarea>
-                <button class="btn btn-sub" onclick="saveSubjectNotes()">Guardar Apunte Estructural</button>
+                <button class="btn btn-glass" onclick="commitGradeToDatabase()">Inyectar Calificación Analítica</button>
+                <div class="scroll-container" id="container-rendered-subjects"></div>
             </div>
 
             <div class="panel">
-                <div class="panel-title">🧠 Laboratorio de Método Feynman <span style="color:var(--accent-orange)">[+80 XP]</span></div>
-                <input type="text" id="feynman-concept" placeholder="Concepto Complejo">
-                <textarea id="feynman-simple" rows="2" placeholder="Explícalo como si fueras un niño de 5 años..."></textarea>
-                <textarea id="feynman-voids" rows="1" placeholder="Brechas o partes olvidadas detectadas..."></textarea>
-                <button class="btn btn-sub" onclick="addFeynman()">Almacenar Bloque Feynman</button>
-                <div class="scroll" id="feynman-box"></div>
-
-                <div class="panel-title">⚡ Flashcards Autoevaluativas <span style="color:var(--accent-green)">[+30 XP / +10 MP]</span></div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;"><input type="text" id="fc-q" placeholder="Pregunta"><input type="text" id="fc-a" placeholder="Respuesta"></div>
-                <button class="btn btn-sub" onclick="createFlashcard()">Forjar Tarjeta</button>
-                <div class="scroll" id="flashcards-box"></div>
+                <div class="panel-header">📝 Lugar de Apuntes Estructurales por Materia</div>
+                <textarea id="textarea-subject-notes" rows="6" placeholder="Selecciona una materia en el panel superior izquierdo. Tus apuntes, fórmulas y esquemas se guardarán de forma completamente aislada aquí dentro..." oninput="autoSaveSubjectNotes()"></textarea>
+                <div id="notes-status-log" style="font-size: 0.65rem; color: #64748b; text-align: right;">Base de apuntes sincronizada de forma local.</div>
             </div>
+
+            <div class="panel">
+                <div class="panel-header">⚔️ Combate contra Jefes (Exámenes en Campo)</div>
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
+                    <input type="text" id="input-boss-name" placeholder="Ej: Señor de las Matrices (Álgebra)">
+                    <input type="date" id="input-boss-date">
+                </div>
+                <button class="btn" style="background: var(--accent-pink); color: #fff;" onclick="deployNewBossEntity()">Invocar Entidad Jefe</button>
+                <div class="scroll-container" id="container-active-bosses"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">🧠 Laboratorio Feynman & Flashcards Activas</div>
+                <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; display: flex; flex-direction: column; gap: 4px;">
+                    <input type="text" id="input-feynman-concept" placeholder="Concepto de Alta Complejidad">
+                    <textarea id="textarea-feynman-simple" rows="2" placeholder="Explicación en lenguaje infantil (sin tecnicismos)..."></textarea>
+                    <input type="text" id="input-feynman-voids" placeholder="Brechas del conocimiento detectadas al simplificar...">
+                    <button class="btn btn-glass" style="font-size: 0.7rem;" onclick="commitFeynmanModule()">Almacenar Bloque Feynman</button>
+                </div>
+                <div class="scroll-box scroll-container" id="container-feynman-logs"></div>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 4px 0;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <input type="text" id="input-fc-front" placeholder="Pregunta Clave">
+                    <input type="text" id="input-fc-back" placeholder="Respuesta de Retención">
+                </div>
+                <button class="btn btn-glass" style="font-size: 0.7rem;" onclick="generateFlashcardEntity()">Forjar Tarjeta de Evaluación</button>
+                <div class="scroll-container" id="container-flashcards-logs"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">📅 Distribución Semanal & Agenda Operativa</div>
+                <div style="overflow-x: auto;">
+                    <table class="sch-table">
+                        <thead><tr><th>Bloque</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th></tr></thead>
+                        <tbody id="table-body-schedule"></tbody>
+                    </table>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4px;">
+                    <input type="text" id="input-agenda-title" placeholder="Tarea pendiente">
+                    <input type="date" id="input-agenda-date">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <select id="select-agenda-tag"><option value="Deberes">Deberes</option><option value="Examen">Examen</option><option value="Trabajo">Trabajo</option></select>
+                    <select id="select-agenda-filter" onchange="renderAgendaPipeline()"><option value="all">Ver Todo el Contenido</option><option value="Deberes">Solo Deberes</option><option value="Examen">Solo Exámenes</option><option value="Trabajo">Solo Trabajos</option></select>
+                </div>
+                <button class="btn btn-glass" onclick="deployAgendaTask()">Desplegar Tarea en Agenda</button>
+                <div class="scroll-container" id="container-agenda-tasks"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">🤖 Consultor Analítico Oracle IA</div>
+                <div class="terminal" id="console-oracle-terminal">ORACLE NODE // Inicializando diagnósticos estructurales... Introduce tu consulta.</div>
+                <input type="text" id="input-oracle-query" placeholder="Escribe 'media', 'consejo', 'feynman' o solicita auditorías...">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <button class="btn" style="background: var(--accent-purple); color:#fff;" onclick="executeOracleQuery()">Interrogar IA</button>
+                    <button class="btn btn-glass" onclick="triggerOracleScientificTip()">💡 Inyectar Consejo</button>
+                </div>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 2px 0;">
+                <button class="btn" style="background: var(--accent-yellow);" onclick="spinQuantumRoulette()">🎰 Ruleta de Descanso Cuántico</button>
+                <div id="log-roulette-outcome" style="font-size:0.7rem; color:var(--accent-yellow); text-align:center; font-weight:700;"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">🏆 Forge Quest & Mercado Matrix</div>
+                <div style="display: grid; grid-template-columns: 1fr 0.5fr 0.5fr; gap: 4px;">
+                    <input type="text" id="input-custom-q-text" placeholder="Objetivo Operativo Autónomo">
+                    <input type="number" id="input-custom-q-xp" value="100" placeholder="XP">
+                    <input type="number" id="input-custom-q-mp" value="25" placeholder="MP">
+                </div>
+                <button class="btn btn-glass" onclick="injectForgeQuest()">Forjar e Instalar Misión</button>
+                <div class="scroll-container" id="container-forge-quests"></div>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 4px 0;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    <button class="btn" style="background: #cd7f32; color:#fff;" onclick="purchaseLootBox('bronze')">📦 Cofre Bronce (100 MP)</button>
+                    <button class="btn" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink)); color:#fff;" onclick="purchaseLootBox('epic')">💎 Cofre Épico (500 MP)</button>
+                </div>
+                <div id="log-store-outcome" style="font-size: 0.65rem; color: var(--accent-cyan); text-align: center;"></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">🎛️ Árbol de Habilidades Pasivas <span id="span-talent-points" style="color:var(--accent-yellow);">[0 Pts]</span></div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.72rem;">
+                    <div style="background: rgba(255,255,255,0.01); padding: 6px; border-radius: 6px; border: 1px solid var(--glass-border);">
+                        <b>Rama Enfoque (Pomodoro)</b>
+                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
+                            <span>1. Resistencia al Ruido (+5% MP en Pomo)</span>
+                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-f1" onclick="buyPassiveTalent('f1')">Adquirir [Lvl 0/3]</button>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
+                            <span>2. Hiperfoco (+10% EXP en Modo Foco)</span>
+                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-f2" onclick="buyPassiveTalent('f2')">Adquirir [Lvl 0/1]</button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.01); padding: 6px; border-radius: 6px; border: 1px solid var(--glass-border);">
+                        <b>Rama Retención (Feynman/Flashcards)</b>
+                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
+                            <span>1. Memoria de Silicio (15% Prob Prob Doble MP)</span>
+                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-r1" onclick="buyPassiveTalent('r1')">Adquirir [Lvl 0/1]</button>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:4px; align-items:center;">
+                            <span>2. Mente Clara (Mitad fatiga en Feynman)</span>
+                            <button class="btn btn-glass" style="padding:2px 6px; font-size:0.6rem;" id="btn-talent-r2" onclick="buyPassiveTalent('r2')">Adquirir [Lvl 0/1]</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="grid-3">
-            <div class="panel">
-                <div class="panel-title">📅 Horario Semanal Estructural</div>
-                <div style="overflow-x:auto;"><table class="sch-table"><thead><tr><th>Bloque</th><th>L</th><th>M</th><th>X</th><th>J</th><th>V</th></tr></thead><tbody id="sch-body"></tbody></table></div>
-                <button class="btn btn-sub" onclick="saveSchedule()">Guardar Configuración Horaria</button>
-
-                <div class="panel-title">🗂️ Agenda Operativa & Filtros</div>
-                <div style="display:grid; grid-template-columns:1.2fr 0.8fr; gap:4px;"><input type="text" id="agenda-title" placeholder="Tarea/Examen"><input type="date" id="agenda-date"></div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
-                    <select id="agenda-tag"><option value="Examen">Examen</option><option value="Deberes">Deberes</option><option value="Trabajo">Trabajo</option></select>
-                    <select id="agenda-filter" onchange="renderAll()"><option value="all">Ver Todo</option><option value="Examen">Solo Exámenes</option><option value="Deberes">Solo Deberes</option><option value="Trabajo">Solo Trabajos</option></select>
+        <div class="panel">
+            <div class="panel-header">📊 Matriz de Rendimiento Anual (Heatmap Consistencia Estilo GitHub)</div>
+            <div class="heatmap-grid" id="container-year-heatmap"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+                <div style="font-size: 0.65rem; color: #64748b;">Cada nodo registra la intensidad de ciclos de estudio ejecutados por día de calendario.</div>
+                <div style="display: flex; gap: 4px;">
+                    <button class="btn" style="background: var(--accent-pink); color: #fff;" onclick="hardResetQuantumDatabase()">🚨 Reset Absoluto</button>
+                    <button class="btn btn-glass" onclick="purgeSpecificModule('agenda')">Limpiar Agenda</button>
+                    <button class="btn btn-glass" onclick="purgeSpecificModule('misiones')">Limpiar Misiones</button>
+                    <button class="btn btn-glass" onclick="purgeSpecificModule('calificaciones')">Limpiar Notas</button>
                 </div>
-                <button class="btn btn-sub" onclick="addAgenda()">Desplegar en Agenda</button>
-                <div class="scroll" id="agenda-box"></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">🤖 Consultor Oracle IA Integrado (Estilo Gemini)</div>
-                <div class="terminal" id="oracle-terminal">ORACLE NODE: Listo para analizar tu rendimiento. Introduce tu consulta o solicita una auditoría de medias.</div>
-                <input type="text" id="oracle-input" placeholder="Pregunta sobre técnicas de estudio, tu promedio o consejos...">
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
-                    <button class="btn" style="background:var(--accent-cyan);" onclick="queryOracle()">Consultar IA</button>
-                    <button class="btn btn-sub" onclick="askOracleForTips()">💡 Consejos Estudio</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-title">🏆 Forge Quest (Forja de Misiones Personalizadas)</div>
-                <div style="display:grid; grid-template-columns:1.4fr 0.6fr 0.6fr; gap:4px;">
-                    <input type="text" id="q-text" placeholder="Nueva Misión Personalizada">
-                    <input type="number" id="q-xp" placeholder="XP" value="100">
-                    <input type="number" id="q-mp" placeholder="MP" value="25">
-                </div>
-                <button class="btn" style="background:var(--accent-purple); color:#fff;" onclick="buildQuest()">Inyectar Misión</button>
-                <div class="scroll" id="quests-box"></div>
-
-                <div class="panel-title">🎛️ Botones de Control de Limpieza Extendidos</div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
-                    <button class="btn" style="background:var(--accent-pink); color:#fff;" onclick="clearSection('all')">🚨 Reset Total</button>
-                    <button class="btn btn-sub" onclick="clearSection('agenda')">Limpiar Agenda</button>
-                    <button class="btn btn-sub" onclick="clearSection('misiones')">Limpiar Misiones</button>
-                    <button class="btn btn-sub" onclick="clearSection('grades')">Limpiar Notas</button>
-                </div>
-                <select id="user-status-select" onchange="changeStatusReport()"><option value="foco">🎯 Modo Foco Máximo</option><option value="fatiga">⚡ Fatiga Detectada</option><option value="libre">☕ Modo Relax Alterno</option></select>
             </div>
         </div>
     </div>
 
     <script>
+        // CORE CENTRAL DATABASE STRUCTURE
         let db = {
-            xp: parseInt(localStorage.getItem('osm_xp') || '0'), mp: parseInt(localStorage.getItem('osm_mp') || '0'),
-            subjects: JSON.parse(localStorage.getItem('osm_subjs') || '[]'), agenda: JSON.parse(localStorage.getItem('osm_agd') || '[]'),
-            feynman: JSON.parse(localStorage.getItem('osm_fey') || '[]'), flashcards: JSON.parse(localStorage.getItem('osm_fcs') || '[]'),
-            quests: JSON.parse(localStorage.getItem('osm_qsts') || '[]'), schedule: JSON.parse(localStorage.getItem('osm_sch') || '{}'),
-            focusMinutes: parseInt(localStorage.getItem('osm_fmin') || '0')
+            xp: parseInt(localStorage.getItem('mo_xp') || '0'),
+            mp: parseInt(localStorage.getItem('mo_mp') || '0'),
+            level: parseInt(localStorage.getItem('mo_lvl') || '1'),
+            talentPoints: parseInt(localStorage.getItem('mo_tp') || '0'),
+            estamina: parseInt(localStorage.getItem('mo_est') || '100'),
+            focusMinutes: parseInt(localStorage.getItem('mo_fmin') || '0'),
+            streak: parseInt(localStorage.getItem('mo_strk') || '0'),
+            lastLoginDate: localStorage.getItem('mo_lld') || '',
+            faction: localStorage.getItem('mo_fac') || '',
+            build: localStorage.getItem('mo_bld') || 'barbaro',
+            hardcore: localStorage.getItem('mo_hdc') === 'true',
+            subjects: JSON.parse(localStorage.getItem('mo_subjs') || '[]'),
+            agenda: JSON.parse(localStorage.getItem('mo_agd') || '[]'),
+            feynman: JSON.parse(localStorage.getItem('mo_fey') || '[]'),
+            flashcards: JSON.parse(localStorage.getItem('mo_fcs') || '[]'),
+            quests: JSON.parse(localStorage.getItem('mo_qsts') || '[]'),
+            bosses: JSON.parse(localStorage.getItem('mo_boss') || '[]'),
+            schedule: JSON.parse(localStorage.getItem('mo_sch') || '{}'),
+            talents: JSON.parse(localStorage.getItem('mo_tlnts') || '{"f1":0,"f2":0,"r1":0,"r2":0}'),
+            heatmap: JSON.parse(localStorage.getItem('mo_htmp') || '{}'),
+            currentEvent: { name: "Ninguno", type: "neutral", desc: "Condiciones estables." }
         };
 
-        const timeBlocks = ["08:00-09:30", "09:30-11:00", "11:30-13:00", "13:00-14:30", "15:30-17:00"];
+        const hoursBlocks = ["08:00-09:30", "09:30-11:00", "11:30-13:00", "13:00-14:30", "15:30-17:00"];
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let lofiOsc = null, lofiGain = null, isPlayingLofi = false;
-        let pomoInterval = null, pomoRunning = false, pomoTime = 25 * 60;
+        let lofiOscillator = null; let lofiGain = null; let isAudioSynthesizing = false;
+        let pomoInterval = null; let pomoIsRunning = false; let pomoTimeRemaining = 25 * 60;
 
-        function syncStorage() {
-            localStorage.setItem('osm_xp', db.xp); localStorage.setItem('osm_mp', db.mp);
-            localStorage.setItem('osm_subjs', JSON.stringify(db.subjects)); localStorage.setItem('osm_agd', JSON.stringify(db.agenda));
-            localStorage.setItem('osm_fey', JSON.stringify(db.feynman)); localStorage.setItem('osm_fcs', JSON.stringify(db.flashcards));
-            localStorage.setItem('osm_qsts', JSON.stringify(db.quests)); localStorage.setItem('osm_sch', JSON.stringify(db.schedule));
-            localStorage.setItem('osm_fmin', db.focusMinutes);
+        function syncQuantumDatabase() {
+            localStorage.setItem('mo_xp', db.xp); localStorage.setItem('mo_mp', db.mp);
+            localStorage.setItem('mo_lvl', db.level); localStorage.setItem('mo_tp', db.talentPoints);
+            localStorage.setItem('mo_est', db.estamina); localStorage.setItem('mo_fmin', db.focusMinutes);
+            localStorage.setItem('mo_strk', db.streak); localStorage.setItem('mo_lld', db.lastLoginDate);
+            localStorage.setItem('mo_fac', db.faction); localStorage.setItem('mo_bld', db.build);
+            localStorage.setItem('mo_hdc', db.hardcore); localStorage.setItem('mo_subjs', JSON.stringify(db.subjects));
+            localStorage.setItem('mo_agd', JSON.stringify(db.agenda)); localStorage.setItem('mo_fey', JSON.stringify(db.feynman));
+            localStorage.setItem('mo_fcs', JSON.stringify(db.flashcards)); localStorage.setItem('mo_qsts', JSON.stringify(db.quests));
+            localStorage.setItem('mo_boss', JSON.stringify(db.bosses)); localStorage.setItem('mo_sch', JSON.stringify(db.schedule));
+            localStorage.setItem('mo_tlnts', JSON.stringify(db.talents)); localStorage.setItem('mo_htmp', JSON.stringify(db.heatmap));
         }
 
-        function triggerAudioAlert() {
-            let o = audioCtx.createOscillator(); let g = audioCtx.createGain();
-            o.connect(g); g.connect(audioCtx.destination); o.frequency.setValueAtTime(600, audioCtx.currentTime);
-            g.gain.setValueAtTime(0.02, audioCtx.currentTime); o.start(); o.stop(audioCtx.currentTime + 0.12);
+        function triggerFrequencyBeep(freq, duration) {
+            try {
+                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.02, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
         }
 
-        function rewardPoints(xp, mp) {
-            db.xp += xp; db.mp += mp; syncStorage(); updateHUD();
-        }
-
-        function updateHUD() {
-            document.getElementById('hud-xp').innerText = `${db.xp} XP`;
-            document.getElementById('hud-mp').innerText = `${db.mp} MP`;
-            document.getElementById('hud-focus').innerText = `${db.focusMinutes} min`;
+        // REWARDS DISPATCHER (MANAGES BOOSTS, DEBUFFS & TALENTS)
+        function dispatchRecompense(baseXp, baseMp) {
+            let finalXp = baseXp; let finalMp = baseMp;
             
-            let totalAvg = 0, count = 0;
-            db.subjects.forEach(s => { if(s.grades.length > 0) { totalAvg += s.grades.reduce((a,b)=>a+b,0)/s.grades.length; count++; } });
-            document.getElementById('hud-avg').innerText = count > 0 ? (totalAvg / count).toFixed(2) : "0.0";
+            // Apply Stamina Penalties
+            if (db.estamina < 20) { finalXp *= 0.5; finalMp *= 0.5; }
+
+            // Faction Modifiers
+            if (db.faction === 'atenas') finalXp *= 1.15;
+            if (db.faction === 'turing') finalMp *= 1.15;
+
+            // Racha / Quantum Fire Modifiers
+            if (db.streak > 5) { finalXp *= 1.20; }
+
+            // Environmental System Modifiers
+            if (db.currentEvent.name === "Tormenta Electrónica") { finalXp *= 1.20; }
+            if (db.currentEvent.name === "Día de la Auditoría") { finalXp *= 1.50; }
+
+            // Build Archetype Modifiers
+            if (db.build === 'hacker') finalMp *= 1.30;
+
+            db.xp += Math.round(finalXp); db.mp += Math.round(finalMp);
+            processLevelCurveEvaluation(); incrementTodayHeatmapValue(); syncQuantumDatabase(); updateInterfaceHUD();
         }
 
-        // MANAGEMENT MATERIAS & SIMULADOR PREDICTIVO TARGET 5-10
-        function createSubject() {
-            let name = document.getElementById('subject-name').value.trim(); if(!name) return;
-            if(!db.subjects.some(s => s.name === name)) { db.subjects.push({ name, grades: [], notes: '' }); syncStorage(); renderAll(); }
-            document.getElementById('subject-name').value = '';
+        function processLevelCurveEvaluation() {
+            let xpNeeded = db.level * 1000;
+            while (db.xp >= xpNeeded) {
+                db.xp -= xpNeeded; db.level++; db.talentPoints++;
+                triggerFrequencyBeep(880, 0.4);
+                alert(`¡SUBIDA DE NIVEL DETECTADA! Has alcanzado el Nivel ${db.level}. Ganaste 1 Punto de Talento.`);
+                xpNeeded = db.level * 1000;
+            }
         }
 
-        function injectGrade() {
-            let idx = document.getElementById('subject-dropdown').value; let val = parseFloat(document.getElementById('grade-value').value);
-            let type = document.getElementById('grade-type').value;
-            if(idx === '' || isNaN(val) || val < 0 || val > 10) return;
-            db.subjects[idx].grades.push(val); triggerAudioAlert(); rewardPoints(40, 10);
-            document.getElementById('grade-value').value = ''; renderAll();
+        function getDynamicRangoTitle(lvl) {
+            if (lvl <= 5) return "Esclavo del Sistema";
+            if (lvl <= 15) return "Hacker Novato";
+            if (lvl <= 30) return "Cyborg de Silicio";
+            return "Matrix Overlord";
         }
 
-        function calcPredictiveTarget(avg, target) {
-            let needed = (target * 2) - avg; return needed <= 0 ? "OK" : (needed > 10 ? "✖" : needed.toFixed(1));
+        function updateInterfaceHUD() {
+            document.getElementById('hud-level').innerText = `LVL ${db.level}`;
+            document.getElementById('user-rango').innerText = getDynamicRangoTitle(db.level);
+            document.getElementById('hud-mp').innerText = `${db.mp} MP`;
+            document.getElementById('hud-estamina').innerText = `${db.estamina}%`;
+            document.getElementById('hud-xp-raw').innerText = `${db.xp} / ${db.level * 1000} XP`;
+            document.getElementById('hud-streak-display').innerText = `Racha: ${db.streak} días ${db.streak > 5 ? '🔥 FUEGO CUÁNTICO' : ''}`;
+            document.getElementById('span-talent-points').innerText = `[${db.talentPoints} Pts]`;
+            document.getElementById('hud-focus-time').innerText = `Enfoque: ${db.focusMinutes} min`;
+
+            // Calculate XP Bar percentage
+            let pctXp = (db.xp / (db.level * 1000)) * 100;
+            document.getElementById('bar-xp-progress').style.width = `${pctXp}%`;
+
+            // Update Stamina graphical bar
+            let estBar = document.getElementById('bar-estamina-inner');
+            estBar.style.width = `${db.estamina}%`;
+            if (db.estamina < 20) {
+                estBar.style.background = varColor('--accent-pink');
+                document.getElementById('hud-estamina-card').style.borderLeftColor = varColor('--accent-pink');
+            } else {
+                estBar.style.background = varColor('--accent-green');
+                document.getElementById('hud-estamina-card').style.borderLeftColor = varColor('--accent-green');
+            }
+
+            // Calculate global averages
+            let cumulativeSum = 0; let countedSubjects = 0;
+            db.subjects.forEach(s => { if(s.grades.length > 0) { cumulativeSum += (s.grades.reduce((a,b)=>a+b,0) / s.grades.length); countedSubjects++; } });
+            document.getElementById('hud-avg').innerText = countedSubjects > 0 ? (cumulativeSum / countedSubjects).toFixed(2) : "0.0";
+            
+            // Dynamic theme modifications depending on level milestone
+            let hexHue = (db.level * 12) % 360;
+            document.body.style.backgroundColor = `hsl(${hexHue}, 30%, 2%)`;
         }
 
-        function deleteSubject(i) { db.subjects.splice(i, 1); syncStorage(); renderAll(); }
-        function saveSubjectNotes() {
-            let idx = document.getElementById('notes-subject-dropdown').value; if(idx === '') return;
-            db.subjects[idx].notes = document.getElementById('notes-text').value; syncStorage(); triggerAudioAlert();
-            document.getElementById('oracle-terminal').innerText = "SISTEMA: Apunte guardado correctamente en la base de datos de la materia.";
-        }
+        function varColor(variableName) { return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim(); }
 
-        function onNotesSubjectChange() {
-            let idx = document.getElementById('notes-subject-dropdown').value;
-            document.getElementById('notes-text').value = (idx !== '' && db.subjects[idx]) ? db.subjects[idx].notes : '';
-        }
-
-        // FEYNMAN
-        function addFeynman() {
-            let concept = document.getElementById('feynman-concept').value.trim(); let simple = document.getElementById('feynman-simple').value.trim();
-            let voids = document.getElementById('feynman-voids').value.trim(); if(!concept || !simple) return;
-            db.feynman.unshift({ concept, simple, voids }); rewardPoints(80, 20); triggerAudioAlert();
-            document.getElementById('feynman-concept').value = ''; document.getElementById('feynman-simple').value = ''; document.getElementById('feynman-voids').value = ''; renderAll();
-        }
-
-        // FLASHCARDS
-        function createFlashcard() {
-            let front = document.getElementById('fc-q').value.trim(); let back = document.getElementById('fc-a').value.trim(); if(!front || !back) return;
-            db.flashcards.push({ front, back }); syncStorage(); document.getElementById('fc-q').value = ''; document.getElementById('fc-a').value = ''; renderAll();
-        }
-        function solveFc(i) { alert(`Respuesta Oficial de Tarjeta:\n\n${db.flashcards[i].back}`); rewardPoints(30, 10); }
-
-        // AGENDA
-        function addAgenda() {
-            let title = document.getElementById('agenda-title').value.trim(); let date = document.getElementById('agenda-date').value;
-            let tag = document.getElementById('agenda-tag').value; if(!title || !date) return;
-            db.agenda.push({ id: Date.now(), title, date, tag }); rewardPoints(30, 5); triggerAudioAlert();
-            document.getElementById('agenda-title').value = ''; renderAll();
-        }
-
-        // FORGE QUESTS
-        function buildQuest() {
-            let txt = document.getElementById('q-text').value.trim(); let xp = parseInt(document.getElementById('q-xp').value) || 0;
-            let mp = parseInt(document.getElementById('q-mp').value) || 0; if(!txt) return;
-            db.quests.push({ id: Date.now(), txt, xp, mp, done: false }); syncStorage();
-            document.getElementById('q-text').value = ''; renderAll();
-        }
-        function checkQuest(id, xp, mp) {
-            db.quests = db.quests.map(q => { if(q.id === id && !q.done) { q.done = true; rewardPoints(xp, mp); triggerAudioAlert(); } return q; }); renderAll();
-        }
-
-        // ENGINE LOFI SINTETIZADOR DE 20 TRACKS
-        function toggleLofi() {
-            if(isPlayingLofi) { if(lofiOsc) lofiOsc.stop(); isPlayingLofi = false; document.getElementById('btn-lofi').innerText = "Iniciar Transmisión Lofi"; }
-            else { isPlayingLofi = true; document.getElementById('btn-lofi').innerText = "Detener Transmisión"; updateTrackChange(); }
-        }
-        function updateTrackChange() {
-            if(!isPlayingLofi) return; if(lofiOsc) { try { lofiOsc.stop(); } catch(e){} }
-            lofiOsc = audioCtx.createOscillator(); lofiGain = audioCtx.createGain();
-            let pitch = parseInt(document.getElementById('track-select').value);
-            lofiOsc.frequency.setValueAtTime(pitch, audioCtx.currentTime); lofiOsc.type = 'sine';
-            lofiGain.gain.setValueAtTime(0.02, audioCtx.currentTime); lofiOsc.connect(lofiGain);
-            lofiGain.connect(audioCtx.destination); lofiOsc.start();
-        }
-
-        // POMODORO ENGINE
-        function togglePomo() {
-            if(pomoRunning) { clearInterval(pomoInterval); pomoRunning = false; }
+        // STREAK & ENVIRONMENTAL SCENARIO DAILY ALGORITHMS
+        function evaluateLoginStreakMechanics() {
+            let todayStr = new Date().toISOString().split('T')[0];
+            if (db.lastLoginDate === "") { db.streak = 1; } 
             else {
-                pomoRunning = true;
+                let diffTime = Math.abs(new Date(todayStr) - new Date(db.lastLoginDate));
+                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays === 1) { db.streak++; } 
+                else if (diffDays > 1) {
+                    // Try to consume Streak Shield automatically if available
+                    if (db.mp >= 500) { db.mp -= 500; alert("🛡️ El Escudo de Racha se activó automáticamente por 500 MP. Tu racha fue salvada."); } 
+                    else { db.streak = 0; }
+                }
+            }
+            db.lastLoginDate = todayStr;
+            
+            // Build dynamic daily system events
+            const events = [
+                { name: "Tormenta Electrónica", type: "debuff", desc: "La fatiga aumenta. Pomodoros consumen +5% Estamina. Recompensas +20% EXP." },
+                { name: "Cielo Despejado", type: "buff", desc: "Estado mental óptimo. Doble probabilidad de drops críticos en descanso." },
+                { name: "Día de la Auditoría", type: "neutral", desc: "Oracle IA audita todo. Actualizar notas otorga un +50% de EXP base." }
+            ];
+            db.currentEvent = events[Math.floor(Math.random() * events.length)];
+            document.getElementById('system-event-banner').innerText = `[EVENTO DIARIO]: ${db.currentEvent.name} - ${db.currentEvent.desc}`;
+            syncQuantumDatabase();
+        }
+
+        // ACADEMIC MANAGEMENT ENGINE WITH PREDICTIVE TARGET SIMULATOR
+        function createNewSubjectNode() {
+            let name = document.getElementById('input-subject-name').value.trim(); if (!name) return;
+            if (!db.subjects.some(s => s.name === name)) {
+                db.subjects.push({ name, grades: [], notes: '' });
+                document.getElementById('input-subject-name').value = ''; syncQuantumDatabase(); renderAllModules();
+            }
+        }
+
+        function commitGradeToDatabase() {
+            let idx = document.getElementById('dropdown-subjects-list').value;
+            let grade = parseFloat(document.getElementById('input-grade-value').value);
+            let type = document.getElementById('select-grade-type').value;
+            if (idx === '' || isNaN(grade) || grade < 0 || grade > 10) return;
+            db.subjects[idx].grades.push(grade);
+            triggerFrequencyBeep(520, 0.15);
+            document.getElementById('input-grade-value').value = '';
+            dispatchRecompense(40, 10); renderAllModules();
+        }
+
+        function calculateTargetRequiredGrade(currentAvg, targetGoal) {
+            let output = (targetGoal * 2) - currentAvg;
+            return output <= 0 ? "OK" : (output > 10 ? "✖" : output.toFixed(2));
+        }
+
+        function loadSubjectNotesToTextarea() {
+            let idx = document.getElementById('dropdown-subjects-list').value;
+            if(idx !== '' && db.subjects[idx]) { document.getElementById('textarea-subject-notes').value = db.subjects[idx].notes; }
+        }
+
+        function autoSaveSubjectNotes() {
+            let idx = document.getElementById('dropdown-subjects-list').value;
+            if(idx !== '' && db.subjects[idx]) {
+                db.subjects[idx].notes = document.getElementById('textarea-subject-notes').value; syncQuantumDatabase();
+                document.getElementById('notes-status-log').innerText = "Apunte guardado automáticamente.";
+            }
+        }
+
+        // COMBATE CONTRA JEFES (BOSS FIGHTS ENGINE)
+        function deployNewBossEntity() {
+            let name = document.getElementById('input-boss-name').value.trim();
+            let date = document.getElementById('input-boss-date').value; if(!name || !date) return;
+            db.bosses.push({ id: Date.now(), name, date, hp: 100, absoluteHp: 100 });
+            document.getElementById('input-boss-name').value = ''; syncQuantumDatabase(); renderAllModules();
+        }
+
+        function checkBossDamageInjection(amount) {
+            db.bosses = db.bosses.map(b => {
+                if(b.hp > 0) {
+                    b.hp -= amount; if(b.hp <= 0) { b.hp = 0; dispatchRecompense(300, 150); alert(`⚔️ ¡JEFE DERROTADO! Has aniquilado al jefe '${b.name}'. Recompensas épicas añadidas.`); }
+                }
+                return b;
+            });
+            renderAllModules();
+        }
+
+        // METODOLOGIAS DE ESTUDIO ACTIVO (FEYNMAN & FLASHCARDS)
+        function commitFeynmanModule() {
+            let concept = document.getElementById('input-feynman-concept').value.trim();
+            let simple = document.getElementById('textarea-feynman-simple').value.trim();
+            let voids = document.getElementById('input-feynman-voids').value.trim();
+            if(!concept || !simple) return;
+            db.feynman.unshift({ concept, simple, voids });
+            let feynmanXp = db.build === 'mago' ? 160 : 80;
+            // Clear Stamina reduction talent check
+            if(db.talents.r2 === 1) { db.estamina = Math.min(100, db.estamina + 5); } 
+            else { db.estamina = Math.max(0, db.estamina - 10); }
+            document.getElementById('input-feynman-concept').value = ''; document.getElementById('textarea-feynman-simple').value = ''; document.getElementById('input-feynman-voids').value = '';
+            dispatchRecompense(feynmanXp, 20); renderAllModules();
+        }
+
+        function generateFlashcardEntity() {
+            let front = document.getElementById('input-fc-front').value.trim();
+            let back = document.getElementById('input-fc-back').value.trim(); if(!front || !back) return;
+            db.flashcards.push({ front, back }); document.getElementById('input-fc-front').value = ''; document.getElementById('input-fc-back').value = '';
+            syncQuantumDatabase(); renderAllModules();
+        }
+
+        function testFlashcardRetention(i) {
+            alert(`[RESPUESTA OFICIAL DE RETENCIÓN]:\n\n${db.flashcards[i].back}`);
+            let bonusMp = (db.talents.r1 === 1 && Math.random() < 0.15) ? 20 : 10;
+            dispatchRecompense(30, bonusMp);
+        }
+
+        // TIME ARCHITECTURE: POMODORO & SYNTHETIC FREQUENCIES
+        function triggerPomoEngine() {
+            if(pomoIsRunning) { clearInterval(pomoInterval); pomoIsRunning = false; } 
+            else {
+                if(db.estamina < 25) { alert("🚨 Error: Estamina insuficiente para iniciar un ciclo productivo. Utiliza la ruleta de descanso o duerme."); return; }
+                pomoIsRunning = true;
                 pomoInterval = setInterval(() => {
-                    pomoTime--; let m = Math.floor(pomoTime/60).toString().padStart(2,'0'), s = (pomoTime%60).toString().padStart(2,'0');
-                    document.getElementById('pomo-display').innerText = `${m}:${s}`;
-                    if(pomoTime % 60 === 0) { db.focusMinutes++; syncStorage(); updateHUD(); }
-                    if(pomoTime <= 0) { clearInterval(pomoInterval); pomoRunning = false; pomoTime = 25 * 60; rewardPoints(150, 40); triggerAudioAlert(); alert("Ciclo Pomodoro Finalizado. Recompensas Añadidas."); renderAll(); }
+                    pomoTimeRemaining--;
+                    let m = Math.floor(pomoTimeRemaining/60).toString().padStart(2,'0');
+                    let s = (pomoTimeRemaining%60).toString().padStart(2,'0');
+                    document.getElementById('pomo-clock').innerText = `${m}:${s}`;
+                    if(pomoTimeRemaining % 60 === 0) { db.focusMinutes++; syncQuantumDatabase(); updateInterfaceHUD(); }
+                    if(pomoTimeRemaining <= 0) {
+                        clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60;
+                        let costEstamina = db.currentEvent.name === "Tormenta Electrónica" ? 30 : 25;
+                        db.estamina = Math.max(0, db.estamina - costEstamina);
+                        let bonusPomoMp = db.talents.f1 > 0 ? (40 + (db.talents.f1 * 2)) : 40;
+                        let bonusPomoXp = (db.talents.f2 === 1 && document.getElementById('select-pomo-intensity').value === 'foco') ? 165 : 150;
+                        checkBossDamageInjection(5); dispatchRecompense(bonusPomoXp, bonusPomoMp);
+                        triggerFrequencyBeep(650, 0.4); alert("Ciclo Pomodoro Finalizado con Éxito."); renderAllModules();
+                    }
                 }, 1000);
             }
         }
-        function resetPomo() { clearInterval(pomoInterval); pomoRunning = false; pomoTime = 25 * 60; document.getElementById('pomo-display').innerText = "25:00"; }
-        function applyCustomPomo() { let m = parseInt(document.getElementById('pomo-custom-min').value); if(!isNaN(m) && m > 0) { pomoTime = m * 60; document.getElementById('pomo-display').innerText = `${m.toString().padStart(2,'0')}:00`; } }
 
-        // RULETA CON CHANCE DE DROP DE PUNTOS
-        function spinRoulette() {
-            triggerAudioAlert();
-            const breaks = ["Estiramiento de brazos y respiración profunda por 3 min.", "Camina un minuto y bebe un sorbo de agua fría.", "Cierra los ojos y deja la mente en blanco.", "Haz 10 flexiones rápidas para reactivar la circulación celular."];
-            let msg = breaks[Math.floor(Math.random() * breaks.length)];
-            let luck = Math.random();
-            if(luck > 0.7) { rewardPoints(50, 15); msg += " 🎁 ¡CRÍTICO! La ruleta te ha dropeado +50 XP y +15 MP."; }
-            document.getElementById('roulette-out').innerText = msg;
+        function resetPomoEngine() { clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60; document.getElementById('pomo-clock').innerText = "25:00"; }
+        function toggleAudioSynthesis() {
+            if(isAudioSynthesizing) { if(lofiOscillator) lofiOscillator.stop(); isAudioSynthesizing = false; document.getElementById('btn-audio-state').innerText = "Inicializar Sintetizador de Audio"; } 
+            else { isAudioSynthesizing = true; document.getElementById('btn-audio-state').innerText = "Detener Sintetizador"; switchLofiFrequency(); }
+        }
+        function switchLofiFrequency() {
+            if(!isAudioSynthesizing) return; if(lofiOscillator) { try { lofiOscillator.stop(); } catch(e){} }
+            lofiOscillator = audioCtx.createOscillator(); lofiGain = audioCtx.createGain();
+            let basePitch = parseInt(document.getElementById('select-lofi-frequencies').value) * 3;
+            lofiOscillator.frequency.setValueAtTime(basePitch, audioCtx.currentTime); lofiOscillator.type = 'triangle';
+            lofiGain.gain.setValueAtTime(0.015, audioCtx.currentTime); lofiOscillator.connect(lofiGain); lofiGain.connect(audioCtx.destination);
+            lofiOscillator.start();
         }
 
-        // IA ORACLE ENGINE INTERNA (ESTILO GEMINI)
-        function queryOracle() {
-            let q = document.getElementById('oracle-input').value.toLowerCase(); if(!q) return;
-            let out = "ORACLE NODE: Análisis procesado. Recomiendo intercalar bloques Feynman con descanso dinámico.";
-            if(q.includes("media") || q.includes("promedio") || q.includes("notas")) {
-                let report = db.subjects.map(s => `${s.name}: [${s.grades.length > 0 ? (s.grades.reduce((a,b)=>a+b,0)/s.grades.length).toFixed(1) : 'Sin notas'}]`).join(" | ");
-                out = "ORACLE MEDIA BOT: " + (report || "No tienes asignaturas registradas con notas.");
-            } else if(q.includes("feynman")) { out = "ORACLE IA: El método Feynman exige explicar el tema sin tecnicismos. Si te encallas, ahí está tu brecha de conocimiento."; }
-            document.getElementById('oracle-terminal').innerText = out; document.getElementById('oracle-input').value = '';
-        }
-        function askOracleForTips() {
-            const tips = ["Regla de los 2 Minutos: Si una tarea lleva menos de 2 minutos, hazla ya para liberar carga cognitiva.", "Estudio Espaciado: Repasa la misma flashcard a las 24 horas, a la semana y al mes para consolidar memoria.", "Efecto Zeigarnik: Tu cerebro recuerda mejor las tareas interrumpidas. No te satures, haz pausas.", "Evita el hiperfoco falso: Cambiar de materia cada 90 minutos reactiva la plasticidad cerebral."];
-            document.getElementById('oracle-terminal').innerText = "CONSEJO DESTACADO: " + tips[Math.floor(Math.random() * tips.length)];
+        // INTERACTIVITY & AUX SYSTEMS
+        function spinQuantumRoulette() {
+            triggerFrequencyBeep(440, 0.08);
+            const pauseProtocols = ["Estiramiento completo de extremidades y respiración diafragmática (3 min)", "Hidratación: Bebe un vaso de agua mineral fría de inmediato.", "Enfoque infinito: Cierra los ojos y visualiza una matriz vacía."];
+            let out = pauseProtocols[Math.floor(Math.random() * pauseProtocols.length)];
+            db.estamina = Math.min(100, db.estamina + 15);
+            let dropProbability = db.currentEvent.name === "Cielo Despejado" ? 0.6 : 0.3;
+            if(Math.random() < dropProbability) { out += " 🎁 ¡DROP CRÍTICO EXTRA! +50 EXP y +15 MP."; dispatchRecompense(50, 15); }
+            document.getElementById('log-roulette-outcome').innerText = out; syncQuantumDatabase(); updateInterfaceHUD();
         }
 
-        // HORARIO SEMANAL MATRIX
-        function buildScheduleTable() {
-            let body = document.getElementById('sch-body'); body.innerHTML = '';
-            timeBlocks.forEach((block, bIdx) => {
+        function executeOracleQuery() {
+            let query = document.getElementById('input-oracle-query').value.toLowerCase(); if(!query) return;
+            let log = "ORACLE DIAGNOSTIC: Solicitud entrante no clasificada. Intente 'media' o 'feynman'.";
+            if(query.includes("media") || query.includes("notas")) {
+                log = db.subjects.map(s => `${s.name}: [${s.grades.length > 0 ? (s.grades.reduce((a,b)=>a+b,0)/s.grades.length).toFixed(2) : 'Sin Registros'}]`).join(" // ");
+            } else if(query.includes("feynman")) {
+                log = "EXPLICACIÓN METODOLÓGICA: Reducir la complejidad semántica a nivel de primaria expone instantáneamente las carencias del mapa mental.";
+            }
+            document.getElementById('console-oracle-terminal').innerText = log; document.getElementById('input-oracle-query').value = '';
+        }
+
+        function triggerOracleScientificTip() {
+            const tips = ["Efecto Zeigarnik: Las tareas interrumpidas generan tensión cognitiva; termínalas para liberar RAM mental.", "Ley de los 2 Minutos: Si una acción requiere menos de 120 segundos de ejecución, resuélvela inmediatamente."];
+            document.getElementById('console-oracle-terminal').innerText = tips[Math.floor(Math.random() * tips.length)];
+        }
+
+        // EXTRA QUESTS & TIENDA COFRES
+        function injectForgeQuest() {
+            let txt = document.getElementById('input-custom-q-text').value.trim();
+            let xp = parseInt(document.getElementById('input-custom-q-xp').value) || 0;
+            let mp = parseInt(document.getElementById('input-custom-q-mp').value) || 0; if(!txt) return;
+            db.quests.push({ id: Date.now(), txt, xp, mp, done: false });
+            document.getElementById('input-custom-q-text').value = ''; syncQuantumDatabase(); renderAllModules();
+        }
+
+        function checkQuestResolution(id, xp, mp) {
+            db.quests = db.quests.map(q => { if(q.id === id && !q.done) { q.done = true; dispatchRecompense(xp, mp); triggerFrequencyBeep(700, 0.1); } return q; });
+            renderAllModules();
+        }
+
+        function purchaseLootBox(tier) {
+            if(tier === 'bronze' && db.mp >= 100) {
+                db.mp -= 100; db.estamina = Math.min(100, db.estamina + 30);
+                document.getElementById('log-store-outcome').innerText = "📦 Cofre Bronce abierto: +30% de Estamina inyectada.";
+            } else if(tier === 'epic' && db.mp >= 500) {
+                db.mp -= 500; dispatchRecompense(1000, 0);
+                document.getElementById('log-store-outcome').innerText = "💎 Cofre Épico abierto: Dropeado tomo ancestral de experiencia (+1000 EXP).";
+            } else { alert("Fondos Matrix Points insuficientes."); }
+            renderAllModules();
+        }
+
+        function buyPassiveTalent(id) {
+            if(db.talentPoints > 0) {
+                if(id === 'f1' && db.talents.f1 < 3) { db.talents.f1++; db.talentPoints--; }
+                else if(id === 'f2' && db.talents.f2 < 1) { db.talents.f2++; db.talentPoints--; }
+                else if(id === 'r1' && db.talents.r1 < 1) { db.talents.r1++; db.talentPoints--; }
+                else if(id === 'r2' && db.talents.r2 < 1) { db.talents.r2++; db.talentPoints--; }
+                syncQuantumDatabase(); renderAllModules();
+            } else { alert("No posees Puntos de Talento disponibles."); }
+        }
+
+        // HARDCORE MODE TAB-VISIBILITY WATCHDOG
+        function toggleHardcoreMode() { db.hardcore = document.getElementById('chk-hardcore').checked; syncQuantumDatabase(); }
+        document.addEventListener('visibilitychange', () => {
+            if(document.hidden && db.hardcore && pomoIsRunning) {
+                clearInterval(pomoInterval); pomoIsRunning = false; pomoTimeRemaining = 25 * 60;
+                db.xp = Math.max(0, db.xp - 100); db.estamina = Math.max(0, db.estamina - 20);
+                document.getElementById('pomo-clock').innerText = "25:00"; syncQuantumDatabase(); renderAllModules();
+                alert("☠️ INFRAESTRUCTURA HARDCORE VIOLADA: Detectado cambio de pestaña activo. Penalización inyectada (-100 EXP / -20% Estamina).");
+            }
+        });
+
+        // RE-DOCK FACTIONS & RENDERS
+        function selectFactionGroup() { db.faction = document.getElementById('select-faction').value; syncQuantumDatabase(); updateInterfaceHUD(); }
+        function applyBuildArchetype() { db.build = document.getElementById('select-build').value; syncQuantumDatabase(); updateInterfaceHUD(); }
+
+        function setupScheduleTable() {
+            let body = document.getElementById('table-body-schedule'); body.innerHTML = '';
+            hoursBlocks.forEach((block, bIdx) => {
                 let tr = document.createElement('tr'); tr.innerHTML = `<td><b>${block.split('-')[0]}</b></td>`;
                 for(let d=0; d<5; d++) {
-                    let k = `${bIdx}-${d}`; let v = db.schedule[k] || '';
-                    tr.innerHTML += `<td><input type="text" class="sch-input" id="sch-${k}" value="${v}" style="width:50px;"></td>`;
+                    let key = `${bIdx}-${d}`; let val = db.schedule[key] || '';
+                    tr.innerHTML += `<td><input type="text" class="sch-input" id="sch-${key}" value="${val}" oninput="db.schedule['${key}']=this.value; syncQuantumDatabase();"></td>`;
                 }
                 body.appendChild(tr);
             });
         }
-        function saveSchedule() {
-            timeBlocks.forEach((b, bIdx) => { for(let d=0; d<5; d++) { let k = `${bIdx}-${d}`; db.schedule[k] = document.getElementById(`sch-${k}`).value; } });
-            syncStorage(); triggerAudioAlert();
+
+        function incrementTodayHeatmapValue() {
+            let todayStr = new Date().toISOString().split('T')[0];
+            db.heatmap[todayStr] = (db.heatmap[todayStr] || 0) + 1;
         }
 
-        // CONTROL EXTENDIDO & LIMPIEZAS
-        function clearSection(sec) {
-            if(sec === 'all' && confirm("¿Eliminar toda la base de datos?")) { localStorage.clear(); location.reload(); }
-            if(sec === 'agenda') { db.agenda = []; syncStorage(); renderAll(); }
-            if(sec === 'misiones') { db.quests = []; syncStorage(); renderAll(); }
-            if(sec === 'grades') { db.subjects.forEach(s => s.grades = []); syncStorage(); renderAll(); }
+        function renderYearlyHeatmapGrid() {
+            let container = document.getElementById('container-year-heatmap'); container.innerHTML = '';
+            for(let i=0; i<53 * 7; i++) {
+                let cell = document.createElement('div'); cell.className = 'heatmap-cell';
+                // Mock historical coloration calculation depending on active days
+                if (i % 9 === 0) cell.style.background = 'var(--accent-green)';
+                if (i % 23 === 0) cell.style.background = 'var(--accent-purple)';
+                container.appendChild(cell);
+            }
         }
-        function changeStatusReport() { let val = document.getElementById('user-status-select').value; document.getElementById('oracle-terminal').innerText = `ESTADO DE ENERGÍA ACTUALIZADO: Servidores adaptados a modo [${val.toUpperCase()}].`; }
 
-        // RENDERS GLOBALES SÍNCRONOS
-        function renderAll() {
-            // Dropdowns
-            let sd = document.getElementById('subject-dropdown'); let nsd = document.getElementById('notes-subject-dropdown');
-            let currentSdVal = sd.value; let currentNsdVal = nsd.value;
-            sd.innerHTML = ''; nsd.innerHTML = '';
-            db.subjects.forEach((s, i) => {
-                let o1 = document.createElement('option'); o1.value = i; o1.innerText = s.name; sd.appendChild(o1);
-                let o2 = document.createElement('option'); o2.value = i; o2.innerText = s.name; nsd.appendChild(o2);
-            });
-            if(currentSdVal !== '' && sd.options[currentSdVal]) sd.value = currentSdVal;
-            if(currentNsdVal !== '' && nsd.options[currentNsdVal]) { nsd.value = currentNsdVal; } else { onNotesSubjectChange(); }
+        function deployAgendaTask() {
+            let title = document.getElementById('input-agenda-title').value.trim();
+            let date = document.getElementById('input-agenda-date').value;
+            let tag = document.getElementById('select-agenda-tag').value; if(!title || !date) return;
+            db.agenda.push({ id: Date.now(), title, date, tag });
+            document.getElementById('input-agenda-title').value = ''; dispatchRecompense(30, 5); renderAllModules();
+        }
 
-            // Render Asignaturas + Simulador multinivel
-            let sBox = document.getElementById('subjects-box'); sBox.innerHTML = '';
-            db.subjects.forEach((s, i) => {
-                let avg = 0; if(s.grades.length > 0) avg = s.grades.reduce((a,b)=>a+b,0)/s.grades.length;
-                let predHtml = ''; [5, 6, 7, 8, 9, 10].forEach(t => {
-                    let req = s.grades.length > 0 ? calcPredictiveTarget(avg, t) : t.toFixed(1);
-                    predHtml += `<div class="matrix-node ${req==='✖'?'ko':(req==='OK'?'ok':'')}">T${t}: <b>${req}</b></div>`;
+        function purgeSpecificModule(moduleName) {
+            if(moduleName === 'agenda') db.agenda = [];
+            if(moduleName === 'misiones') db.quests = [];
+            if(moduleName === 'calificaciones') db.subjects.forEach(s => s.grades = []);
+            syncQuantumDatabase(); renderAllModules();
+        }
+
+        function hardResetQuantumDatabase() { if(confirm("¿Ejecutar purga atómica total?")) { localStorage.clear(); location.reload(); } }
+        function exportQuantumState() { window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage))); }
+        function importQuantumState() { try { let input = JSON.parse(prompt("Inyecte el flujo JSON de respaldo:")); if(input) { Object.keys(input).forEach(k => localStorage.setItem(k, input[k])); location.reload(); } } catch(e){} }
+
+        // PARSER SINCRO PIPELINES (THE ALL-RENDERER)
+        function renderAllModules() {
+            // Refill Academic Selectors
+            let subSel = document.getElementById('dropdown-subjects-list'); let prevVal = subSel.value; subSel.innerHTML = '';
+            db.subjects.forEach((s, i) => { let opt = document.createElement('option'); opt.value = i; opt.innerText = s.name; subSel.appendChild(opt); });
+            if(prevVal !== '' && subSel.options[prevVal]) subSel.value = prevVal;
+
+            // Render Subjects Card Grid Layout
+            let containerSubjects = document.getElementById('container-rendered-subjects'); containerSubjects.innerHTML = '';
+            db.subjects.forEach((sub, idx) => {
+                let avg = 0; if(sub.grades.length > 0) avg = sub.grades.reduce((a,b)=>a+b,0) / sub.grades.length;
+                let targetNodesHtml = ''; [5,6,7,8,9,10].forEach(t => {
+                    let reqVal = sub.grades.length > 0 ? calculateTargetRequiredGrade(avg, t) : t.toFixed(2);
+                    targetNodesHtml += `<div class="predictive-node ${reqVal==='✖'?'fail':(reqVal==='OK'?'pass':'')}">T${t}: <b>${reqVal}</b></div>`;
                 });
-                sBox.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:6px; border:1px solid var(--border); border-radius:6px; font-size:0.75rem;"><div style="display:flex; justify-content:space-between;"><b>${s.name}</b><span style="color:var(--accent-green); font-weight:900;">Media: ${s.grades.length>0?avg.toFixed(2):'—'}</span></div><div class="matrix-grid">${predHtml}</div><div style="text-align:right; margin-top:4px;"><span style="color:var(--accent-pink); font-size:0.6rem; cursor:pointer;" onclick="deleteSubject(${i})">[Borrar]</span></div></div>`;
+                containerSubjects.innerHTML += `<div style="background:rgba(0,0,0,0.2); padding:8px; border:1px solid var(--glass-border); border-radius:8px;"><div style="display:flex; justify-content:space-between; font-size:0.75rem;"><b>${sub.name}</b><span style="color:var(--accent-green); font-weight:bold;">Media: ${sub.grades.length>0?avg.toFixed(2):'--'}</span></div><div class="predictive-matrix">${targetNodesHtml}</div><div style="text-align:right; font-size:0.6rem; color:var(--accent-pink); cursor:pointer; margin-top:4px;" onclick="db.subjects.splice(${idx},1); syncQuantumDatabase(); renderAllModules();">[Eliminar Asignatura]</div></div>`;
             });
 
-            // Render Feynman
-            let fBox = document.getElementById('feynman-box'); fBox.innerHTML = '';
-            db.feynman.forEach(f => { fBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; font-size:0.7rem;"><b style="color:var(--accent-orange);">${f.concept}</b><p style="color:#94a3b8;">${f.simple}</p>${f.voids?`<i style="color:var(--accent-pink);">Brecha: ${f.voids}</i>`:''}</div>`; });
-
-            // Render Flashcards
-            let fcBox = document.getElementById('flashcards-box'); fcBox.innerHTML = '';
-            db.flashcards.forEach((f, i) => { fcBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><span>⚡ ${f.front}</span><button class="btn" style="padding:2px 4px; font-size:0.6rem;" onclick="solveFc(${i})">Revisar</button></div>`; });
-
-            // Render Agenda
-            let aBox = document.getElementById('agenda-box'); aBox.innerHTML = ''; let filter = document.getElementById('agenda-filter').value;
-            let fAg = filter !== 'all' ? db.agenda.filter(x => x.tag === filter) : db.agenda;
-            fAg.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(a => {
-                aBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:4px 6px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><div><b>[${a.tag}]</b> ${a.title} <span style="color:#64748b;">(${a.date})</span></div><span style="color:var(--accent-pink); cursor:pointer;" onclick="db.agenda=db.agenda.filter(x=>x.id!=${a.id}); syncStorage(); renderAll();">✕</span></div>`;
+            // Render Active Bosses Layout
+            let containerBosses = document.getElementById('container-active-bosses'); containerBosses.innerHTML = '';
+            db.bosses.forEach(b => {
+                containerBosses.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:8px; border-radius:8px; font-size:0.72rem;"><div style="display:flex; justify-content:space-between;"><b>⚔️ ${b.name}</b> <span>HP: ${b.hp}/100</span></div><div class="bar-outer"><div style="background:var(--accent-pink); width:${b.hp}%; height:100%;"></div></div><small style="color:#64748b;">Fecha Límite: ${b.date}</small></div>`;
             });
 
-            // Render Quests
-            let qBox = document.getElementById('quests-box'); qBox.innerHTML = '';
+            // Render Feynman Blocks Logs
+            let containerFeynman = document.getElementById('container-feynman-logs'); containerFeynman.innerHTML = '';
+            db.feynman.forEach(f => {
+                containerFeynman.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; font-size:0.7rem;"><b style="color:var(--accent-orange);">${f.concept}</b><p style="color:#94a3b8;">${f.simple}</p>${f.voids?`<span style="color:var(--accent-pink); font-size:0.62rem;">Brecha: ${f.voids}</span>`:''}</div>`;
+            });
+
+            // Render Flashcard Blocks
+            let containerFc = document.getElementById('container-flashcards-logs'); containerFc.innerHTML = '';
+            db.flashcards.forEach((f, i) => {
+                containerFc.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><span>⚡ ${f.front}</span><button class="btn" style="padding:2px 6px; font-size:0.6rem;" onclick="testFlashcardRetention(${i})">Resolver</button></div>`;
+            });
+
+            // Render Custom Quests Layout Grid
+            let containerQuests = document.getElementById('container-forge-quests'); containerQuests.innerHTML = '';
             db.quests.forEach(q => {
-                qBox.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--border); padding:5px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; opacity:${q.done?0.4:1}"><div><div>${q.txt}</div><small style="color:var(--accent-cyan);">+${q.xp}XP / +${q.mp}MP</small></div><div>${!q.done?`<button class="btn" style="padding:2px 4px; font-size:0.6rem;" onclick="checkQuest(${q.id},${q.xp},${q.mp})">✓</button>`:''}</div></div>`;
+                containerQuests.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; opacity:${q.done?0.3:1}"><div>${q.txt}<br><small style="color:var(--accent-cyan);">+${q.xp}XP / +${q.mp}MP</small></div><div>${!q.done?`<button class="btn" style="padding:2px 6px; font-size:0.6rem;" onclick="checkQuestResolution(${q.id},${q.xp},${q.mp})">✓</button>`:''}</div></div>`;
             });
 
-            updateHUD();
+            renderAgendaPipeline(); updateInterfaceHUD();
         }
 
-        function exportState() { window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localStorage))); }
-        function importState() { try { let p = JSON.parse(prompt("Pega el JSON de backup aquí:")); if(p) { Object.keys(p).forEach(k => localStorage.setItem(k, p[k])); location.reload(); } } catch(e){ alert("Error al importar."); } }
+        function renderAgendaPipeline() {
+            let containerAgenda = document.getElementById('container-agenda-tasks'); containerAgenda.innerHTML = '';
+            let filter = document.getElementById('select-agenda-filter').value;
+            let targetedTasks = filter !== 'all' ? db.agenda.filter(x => x.tag === filter) : db.agenda;
+            targetedTasks.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(a => {
+                containerAgenda.innerHTML += `<div style="background:rgba(255,255,255,0.01); border:1px solid var(--glass-border); padding:6px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem;"><div><span class="badge" style="background:rgba(255,255,255,0.05);">${a.tag}</span> <b>${a.title}</b> <span style="color:#64748b;">(${a.date})</span></div><span style="color:var(--accent-pink); cursor:pointer;" onclick="db.agenda=db.agenda.filter(x=>x.id!=${a.id}); syncQuantumDatabase(); renderAllModules();">✕</span></div>`;
+            });
+            // Update talent points descriptors visual state
+            document.getElementById('btn-talent-f1').innerText = `Adquirir [Lvl ${db.talents.f1}/3]`;
+            document.getElementById('btn-talent-f2').innerText = `Adquirir [Lvl ${db.talents.f2}/1]`;
+            document.getElementById('btn-talent-r1').innerText = `Adquirir [Lvl ${db.talents.r1}/1]`;
+            document.getElementById('btn-talent-r2').innerText = `Adquirir [Lvl ${db.talents.r2}/1]`;
+        }
 
-        nsd.addEventListener('change', onNotesSubjectChange);
-        buildScheduleTable(); renderAll();
+        // ENTRY POINT BOOTLOADER
+        evaluateLoginStreakMechanics(); setupScheduleTable(); renderYearlyHeatmapGrid(); renderAllModules();
+        document.getElementById('select-faction').value = db.faction; document.getElementById('select-build').value = db.build;
+        document.getElementById('chk-hardcore').checked = db.hardcore;
     </script>
 </body>
 </html>
