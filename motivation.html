@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Motivation Hub</title>
+    <style>
+        :root {
+            --bg-main: #04040d;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-purple: #c084fc;
+            --accent-cyan: #22d3ee;
+            --accent-gold: #f59e0b;
+            --accent-pink: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* FONDO EN ALTA DEFINICIÓN (4K SPACE CANVAS) */
+        #spaceCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040d 100%);
+        }
+
+        /* CONTENEDOR INTERFAZ DEL FEED al estilo TikTok */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 92vh;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 10px;
+            z-index: 2;
+        }
+
+        /* BARRA SUPERIOR DE BÚSQUEDA Y CONTROL */
+        .top-nav {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 12px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 8px 12px;
+            align-items: center;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            padding: 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-purple);
+            color: #000;
+            border-color: transparent;
+        }
+
+        /* CARD PRINCIPAL (EL FEED DE FRASES) */
+        .feed-view {
+            flex-grow: 1;
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        /* DIBUJO/SÍMBOLO GEOMÉTRICO CYBERPUNK NATIVO */
+        .geometry-core {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 2px dashed rgba(34, 211, 238, 0.15);
+            border-radius: 50%;
+            animation: spinGear 25s linear infinite;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .geometry-core::before {
+            content: '';
+            width: 130px;
+            height: 130px;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            transform: rotate(45deg);
+            position: absolute;
+            animation: spinGearInverse 15s linear infinite;
+        }
+        @keyframes spinGear { to { transform: rotate(360deg); } }
+        @keyframes spinGearInverse { to { transform: rotate(-360deg); } }
+
+        .phrase-container {
+            z-index: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* ETIQUETA FRASE DEL DÍA */
+        .daily-tag {
+            align-self: center;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+
+        .phrase-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-main);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phrase-author {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* MENÚ LATERAL INTEGRADO EN LA CARD (TIKTOK STYLE) */
+        .interaction-sidebar {
+            position: absolute;
+            right: 20px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+        }
+
+        .action-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .action-button:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
+        .action-button:active { transform: scale(0.9); }
+        .action-button span.count { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-weight: bold; }
+
+        .action-button.liked { color: var(--accent-pink); border-color: rgba(244, 63, 94, 0.3); }
+        .action-button.favorited { color: var(--accent-gold); border-color: rgba(245, 158, 11, 0.3); }
+
+        /* CONTROLES DE DESLIZAMIENTO */
+        .swipe-instructions {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            animation: pulseText 2s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+
+        /* BOTONES DE NAVEGACIÓN INFERIOR */
+        .bottom-actions {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.06); border-color: var(--accent-purple); }
+
+        .btn-center-next {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #000;
+            font-weight: 700;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+        .btn-center-next:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(192, 132, 252, 0.5); }
+
+        /* ANIMACIONES DE CAMBIO DE FRASE */
+        .slide-up { animation: slideUpEffect 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUpEffect {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(5px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        /* LISTA COMPLETA DE FAVORITOS (OVERLAY) */
+        .fav-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 4, 13, 0.95);
+            border-radius: 30px;
+            z-index: 10;
+            padding: 25px;
+            display: none;
+            flex-direction: column;
+        }
+        .fav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .fav-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 5px; }
+        .fav-list::-webkit-scrollbar { width: 4px; }
+        .fav-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .fav-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; font-size: 0.8rem; position: relative; cursor: pointer; }
+        .fav-item:hover { border-color: var(--accent-gold); }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+
+    <div class="app-container">
+        <div class="top-nav">
+            <div class="search-box">
+                <span style="margin-right: 8px; font-size:0.9rem;">🔍</span>
+                <input type="text" id="searchInput" placeholder="Buscar palabras clave (ej: Disciplina, Mañana...)" oninput="filtrarFrases()">
+            </div>
+            <div class="tabs">
+                <button class="tab-btn active" id="tab-all" onclick="cambiarModo('all')">Descubrir</button>
+                <button class="tab-btn" id="tab-daily" onclick="cambiarModo('daily')">Del Día ☀️</button>
+                <button class="tab-btn" id="tab-favs" onclick="openFavsOverlay()">Mis Favoritos (0)</button>
+            </div>
+        </div>
+
+        <div class="feed-view" id="feedView">
+            <div class="geometry-core"></div>
+            
+            <div class="phrase-container" id="phraseContainer">
+                <div class="daily-tag" id="labelEspecial" style="display:none;">Exclusivo del Día</div>
+                <p class="phrase-text" id="phraseTxt">"Cargando códigos de motivación en el sistema..."</p>
+                <p class="phrase-author" id="authorTxt">SISTEMA CENTRAL</p>
+            </div>
+
+            <div class="interaction-sidebar">
+                <div class="action-button" id="likeBtn" onclick="toggleLike()">
+                    ❤️
+                    <span class="count" id="likeCount">24.1k</span>
+                </div>
+                <div class="action-button" id="favBtn" onclick="toggleFavorite()">
+                    ⭐
+                </div>
+                <div class="action-button" onclick="compartirFrase()">
+                    🔗
+                </div>
+            </div>
+
+            <div class="swipe-instructions">Desliza o presiona el botón central para cambiar</div>
+
+            <div class="fav-overlay" id="favOverlay">
+                <div class="fav-header">
+                    <h3 style="color:var(--accent-gold);">⭐ Tus Favoritos</h3>
+                    <button class="tab-btn" style="flex:none; width:60px;" onclick="closeFavsOverlay()">Cerrar</button>
+                </div>
+                <div class="fav-list" id="favListContainer">
+                    </div>
+            </div>
+        </div>
+
+        <div class="bottom-actions">
+            <a href="perfil.html" class="nav-btn" style="text-decoration:none;">👤 Perfil</a>
+            <button class="btn-center-next" onclick="obtenerSiguienteFrase()">⚡</button>
+            <a href="menuprincipal.html" class="nav-btn" style="text-decoration:none;">🏠 Menú</a>
+        </div>
+    </div>
+
+    <script>
+        // --- BANCO DE VARIABLES CÓSMICAS (GENERADOR COMPLETO >1000 COMBINACIONES) ---
+        const SUJETOS = ["La disciplina", "El fracaso", "Tu enfoque", "Cada mañana", "El dolor de hoy", "La obsesión por mejorar", "Tu mente", "El proceso silencioso", "El verdadero guerrero", "Tu paciencia", "La constancia", "El caos externo"];
+        const ACCIONES = ["destruye cualquier", "construye un", "forja el camino hacia un", "es el combustible de tu", "supera con creces al", "se convierte en el", "es el pilar invisible de tu", "muta en pura energía para tu", "abre las puertas del", "vence silenciosamente al"];
+        const PREDICADOS = ["talento sin dirección.", "imperio mental inquebrantable.", "destino que tú mismo elegiste.", "éxito absoluto mañana.", "azar o a la suerte.", "crecimiento diario continuo.", "legado que nadie podrá borrar.", "maestría cuántica personal.", "propósito superior de vida.", "miedo que te frena."];
+        const REMATES = ["No te rindas jamás.", "Hazlo en silencio.", "Que miren tus resultados.", "Tu historia acaba de empezar.", "Mantén el control.", "Nadie lo hará por ti.", "Sé implacable.", "Abraza el proceso.", "Disciplina pura."];
+        
+        const AUTORES = ["Filosofía Estoica", "Código de Disciplina", "The Origin Core", "Mentalidad de Titán", "Estrategia de Enfoque", "Leyes del Éxito", "Cultura del Esfuerzo"];
+
+        // Llaves LocalStorage
+        const KEY_FAVS = "origin_motiv_favs";
+        const KEY_LIKES = "origin_motiv_likes_pool";
+
+        let favorites = JSON.parse(localStorage.getItem(KEY_FAVS)) || [];
+        let likedPhrases = JSON.parse(localStorage.getItem(KEY_LIKES)) || [];
+        
+        let fraseActual = {};
+        let modoFiltro = "all"; // all, daily
+
+        // --- MOTOR SINTETIZADOR DE MÚSICA DINÁMICA ---
+        // Genera música e instrumentos diferentes para cada frase usando Web Audio API
+        let audioCtx = null;
+        function playPhraseTrack(seed) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Generar frecuencias basadas en la longitud o letras de la frase
+                let baseFreq = 150 + (seed % 300); 
+                let notas = [baseFreq, baseFreq * 1.25, baseFreq * 1.5, baseFreq * 1.87]; // Acorde armónico
+                
+                let tiempoActual = audioCtx.currentTime;
+
+                // Crear arpegio synth de fondo espacial
+                notas.forEach((freq, index) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    
+                    // Elegir tipo de onda aleatoria según frase para variar la "melodía"
+                    const tipos = ['sine', 'triangle'];
+                    osc.type = tipos[seed % tipos.length];
+                    
+                    osc.frequency.setValueAtTime(freq, tiempoActual + (index * 0.15));
+                    
+                    gain.gain.setValueAtTime(0.06, tiempoActual + (index * 0.15));
+                    gain.gain.exponentialRampToValueAtTime(0.00001, tiempoActual + 0.6 + (index * 0.15));
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(tiempoActual + (index * 0.15));
+                    osc.stop(tiempoActual + 0.6 + (index * 0.15));
+                });
+            } catch(e) { console.log("Audio esperando interacción."); }
+        }
+
+        // Sonido de clic moderno
+        function playClickSound() {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // --- GENERADOR MATEMÁTICO DE FRASES (>1000 OPCIONES) ---
+        function generarFraseAleatoria() {
+            const idxS = Math.floor(Math.random() * SUJETOS.length);
+            const idxA = Math.floor(Math.random() * ACCIONES.length);
+            const idxP = Math.floor(Math.random() * PREDICADOS.length);
+            const idxR = Math.floor(Math.random() * REMATES.length);
+            const idxAu = Math.floor(Math.random() * AUTORES.length);
+
+            const texto = `${SUJETOS[idxS]} ${ACCIONES[idxA]} ${PREDICADOS[idxP]} ${REMATES[idxR]}`;
+            const id = `f-${idxS}-${idxA}-${idxP}-${idxR}`;
+            
+            // Likes aleatorios simulados estilo TikTok
+            const likesSimulados = Math.floor((idxS + idxA + idxP + 1) * 342) + 12;
+
+            return { id, texto, autor: AUTORES[idxAu], baseLikes: likesSimulados };
+        }
+
+        // FRASE DEL DÍA: Sincronizada algorítmicamente usando la fecha de hoy
+        function generarFraseDelDia() {
+            const hoy = new Date();
+            const seed = hoy.getDate() + hoy.getMonth() + hoy.getFullYear();
+            
+            const idxS = seed % SUJETOS.length;
+            const idxA = (seed + 2) % ACCIONES.length;
+            const idxP = (seed + 5) % PREDICADOS.length;
+            const idxR = (seed + 7) % REMATES.length;
+            
+            const texto = `${SUJETOS[idxS]} ${ACCIONES[idxA]} ${PREDICADOS[idxP]} ${REMATES[idxR]}`;
+            return {
+                id: `daily-${seed}`,
+                texto: texto,
+                autor: "MÁXIMA REVELACIÓN SUPREMA",
+                baseLikes: 8972
+            };
+        }
+
+        // --- CONTROL DEL FLUJO ---
+        function desplegarFrase(fraseObj) {
+            fraseActual = fraseObj;
+            const elTxt = document.getElementById('phraseTxt');
+            const elAut = document.getElementById('authorTxt');
+            const elFeed = document.getElementById('feedView');
+
+            // Quitar y poner animación de entrada
+            elTxt.parentElement.classList.remove('slide-up');
+            void elTxt.offsetWidth; // Trigger reflow
+            elTxt.parentElement.classList.add('slide-up');
+
+            elTxt.innerText = `"${fraseObj.texto}"`;
+            elAut.innerText = fraseObj.autor.toUpperCase();
+
+            // Actualizar interfaz visual de botones e interacciones
+            const isLiked = likedPhrases.includes(fraseObj.id);
+            const elLike = document.getElementById('likeBtn');
+            elLike.classList.toggle('liked', isLiked);
+            document.getElementById('likeCount').innerText = fraseObj.baseLikes + (isLiked ? 1 : 0);
+
+            const isFav = favorites.some(f => f.id === fraseObj.id);
+            document.getElementById('favBtn').classList.toggle('favorited', isFav);
+
+            document.getElementById('labelEspecial').style.display = modoFiltro === 'daily' ? 'block' : 'none';
+
+            // Ejecutar su respectiva pista de música única según el ID numérico
+            let numericalSeed = fraseObj.texto.length * 7;
+            playPhraseTrack(numericalSeed);
+        }
+
+        function obtenerSiguienteFrase() {
+            if (modoFiltro === "daily") {
+                desplegarFrase(generarFraseDelDia());
+            } else {
+                desplegarFrase(generarFraseAleatoria());
+            }
+        }
+
+        function cambiarModo(modo) {
+            modoFiltro = modo;
+            document.getElementById('tab-all').classList.toggle('active', modo === 'all');
+            document.getElementById('tab-daily').classList.toggle('active', modo === 'daily');
+            playClickSound();
+            obtenerSiguienteFrase();
+        }
+
+        // --- SISTEMA DE INTERACCIONES ---
+        function toggleLike() {
+            const id = fraseActual.id;
+            if(likedPhrases.includes(id)) {
+                likedPhrases = likedPhrases.filter(item => item !== id);
+            } else {
+                likedPhrases.push(id);
+                playClickSound();
+            }
+            localStorage.setItem(KEY_LIKES, JSON.stringify(likedPhrases));
+            desplegarFrase(fraseActual);
+        }
+
+        function toggleFavorite() {
+            const index = favorites.findIndex(f => f.id === fraseActual.id);
+            if(index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(fraseActual);
+                playClickSound();
+            }
+            localStorage.setItem(KEY_FAVS, JSON.stringify(favorites));
+            document.getElementById('tab-favs').innerText = `Mis Favoritos (${favorites.length})`;
+            desplegarFrase(fraseActual);
+        }
+
+        function compartirFrase() {
+            playClickSound();
+            navigator.clipboard.writeText(`${fraseActual.texto} — via THE ORIGIN`);
+            alert("📋 ¡Frase copiada al portapapeles en calidad encriptada!");
+        }
+
+        // BUSCADOR EN VIVO
+        function filtrarFrases() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if(query.trim() === "") return;
+
+            // Intentar buscar o generar una frase adaptada a la palabra clave
+            let intentos = 0;
+            let fraseEncontrada = null;
+            
+            while(intentos < 150) {
+                let candidata = generarFraseAleatoria();
+                if(candidata.texto.toLowerCase().includes(query)) {
+                    fraseEncontrada = candidata;
+                    break;
+                }
+                intentos++;
+            }
+
+            if(fraseEncontrada) {
+                modoFiltro = "all";
+                document.getElementById('tab-daily').classList.remove('active');
+                document.getElementById('tab-all').classList.add('active');
+                desplegarFrase(fraseEncontrada);
+            }
+        }
+
+        // OVERLAY FAVORITOS
+        function openFavsOverlay() {
+            playClickSound();
+            const overlay = document.getElementById('favOverlay');
+            const container = document.getElementById('favListContainer');
+            container.innerHTML = "";
+
+            if(favorites.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); font-size:0.8rem; text-align:center; padding-top:40px;">No has guardado favoritos aún.</p>`;
+            } else {
+                favorites.forEach(f => {
+                    container.innerHTML += `
+                        <div class="fav-item" onclick="cargarFraseEspecifica('${f.id}')">
+                            <p style="font-weight:600; margin-bottom:4px;">"${f.texto}"</p>
+                            <span style="color:var(--accent-cyan); font-size:0.7rem;">${f.autor}</span>
+                        </div>
+                    `;
+                });
+            }
+            overlay.style.display = "flex";
+        }
+
+        function closeFavsOverlay() {
+            playClickSound();
+            document.getElementById('favOverlay').style.display = "none";
+        }
+
+        function cargarFraseEspecifica(id) {
+            const f = favorites.find(item => item.id === id);
+            if(f) {
+                desplegarFrase(f);
+                closeFavsOverlay();
+            }
+        }
+
+        // --- RENDERIZADO FONDO DE ESTRELLAS 4K ANIMADO ---
+        function initSpaceBackground() {
+            const canvas = document.getElementById('spaceCanvas');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth * window.devicePixelRatio;
+                canvas.height = window.innerHeight * window.devicePixelRatio;
+                canvas.style.width = window.innerWidth + "px";
+                canvas.style.height = window.innerHeight + "px";
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Crear universo de estrellas con profundidad física
+            for(let i = 0; i < 150; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2.5 + 0.5,
+                    opacity: Math.random() * 0.7 + 0.3,
+                    speed: Math.random() * 0.15 + 0.05
+                });
+            }
+
+            function frame() {
+                ctx.clearRect(0,0, canvas.width, canvas.height);
+                
+                // Fondo base deep space
+                let grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 50, canvas.width/2, canvas.height/2, canvas.height);
+                grad.addColorStop(0, '#0e0924');
+                grad.addColorStop(1, '#030309');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0,0, canvas.width, canvas.height);
+
+                // Dibujar y mover estrellas
+                stars.forEach(s => {
+                    s.y -= s.speed;
+                    if(s.y < 0) s.y = canvas.height;
+
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(frame);
+            }
+            frame();
+        }
+
+        // --- SOPORTE GESTUAL SWIPE (ESTILO TIKTOK EN MÓVILES) ---
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        const feedElement = document.getElementById('feedView');
+        feedElement.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+
+        feedElement.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            // Si el gesto fue hacia arriba (scroll down estilo tiktok)
+            if (touchStartY - touchEndY > 60) {
+                obtenerSiguienteFrase();
+            }
+        }
+
+        // Inicialización al cargar la ventana
+        window.onload = function() {
+            initSpaceBackground();
+            document.getElementById('tab-favs').innerText = `Mis Favoritos (${favorites.length})`;
+            
+            // Cargar por defecto la frase del día sincronizada
+            desplegarFrase(generarFraseDelDia());
+        }
+    </script>
+</body>
+</html>
