@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Notas Cuánticas Pro</title>
+    <style>
+        :root {
+            --bg-main: #04040c; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-purple: #c084fc;
+            --accent-cyan: #22d3ee;
+            --accent-gold: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* FONDO DINÁMICO ESPACIAL 4K */
+        #spaceCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #100a26 0%, #04040c 100%);
+        }
+
+        /* DIBUJOS GEOMÉTRICOS HOLOGRÁFICOS ANIMADOS DE FONDO */
+        .bg-hud-graphic {
+            position: fixed;
+            bottom: -50px;
+            left: -50px;
+            width: 300px;
+            height: 300px;
+            border: 2px dashed rgba(192, 132, 252, 0.08);
+            border-radius: 50%;
+            z-index: -1;
+            animation: spinCore 40s linear infinite;
+            pointer-events: none;
+        }
+        .bg-hud-graphic::before {
+            content: '';
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(34, 211, 238, 0.05);
+            transform: rotate(45deg);
+            animation: spinCoreInverse 20s linear infinite;
+        }
+        @keyframes spinCore { to { transform: rotate(360deg); } }
+        @keyframes spinCoreInverse { to { transform: rotate(-360deg); } }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 2.2fr;
+            gap: 25px;
+            z-index: 1;
+        }
+        @media(max-width: 800px) { .container { grid-template-columns: 1fr; overflow-y: auto; } }
+
+        /* PANELES CON ANIMACIÓN DE ENTRADA Y GLASSMORPHISM POTENTE */
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 22px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            height: 88vh;
+            display: flex;
+            flex-direction: column;
+            animation: panelSpawn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes panelSpawn {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        h2 { font-size: 1.1rem; color: var(--accent-purple); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+
+        .notes-archive {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 5px;
+        }
+        .notes-archive::-webkit-scrollbar { width: 4px; }
+        .notes-archive::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .note-item-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .note-item-card:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); transform: translateX(3px); }
+        .note-item-card.active { border-color: var(--accent-purple); background: rgba(192, 132, 252, 0.04); box-shadow: inset 0 0 15px rgba(192,132,252,0.05); }
+        
+        .note-title-preview { font-weight: bold; font-size: 0.95rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .note-meta-preview { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+        .editor-header { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 12px; }
+        input, select, textarea { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06); color: #fff; border-radius: 12px; font-size: 0.9rem; transition: all 0.2s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(192,132,252,0.15); }
+
+        .work-area { flex-grow: 1; position: relative; display: flex; flex-direction: column; gap: 10px; }
+        textarea { resize: none; flex-grow: 1; line-height: 1.6; font-size: 0.95rem; }
+
+        .xp-monitor-bar {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.04);
+            padding: 12px 15px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .chest-indicator { font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 5px; }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-top: 10px; }
+        .btn { background: var(--accent-purple); color: #000; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); text-align: center; font-size: 0.85rem; }
+        .btn:hover { transform: translateY(-1.5px); box-shadow: 0 5px 20px rgba(192, 132, 252, 0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.08); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+        .btn-danger { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.2); }
+        .btn-danger:hover { background: #ff4757; color: #000; border-color: transparent; }
+
+        /* EFECTO PRIVACIDAD DIFUMINADO CON ANIMACIÓN SMOOTH */
+        .private-lock textarea { filter: blur(12px); opacity: 0.1; pointer-events: none; transition: all 0.3s ease; }
+
+        .empty-msg { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+    <div class="bg-hud-graphic"></div>
+
+    <div class="container">
+        <div class="panel">
+            <h2>📁 Banco de Datos</h2>
+            <button class="btn btn-secondary" style="margin-bottom: 15px;" onclick="iniciarNuevaNota()">+ Forjar Nueva Nota</button>
+            
+            <div class="notes-archive" id="archiveContainer"></div>
+
+            <a href="menuprincipal.html" class="btn btn-secondary" style="margin-top: 15px; text-decoration: none;">⬅ Menú Principal</a>
+        </div>
+
+        <div class="panel" id="editorPanel">
+            <h2>📝 Terminal de Redacción</h2>
+            
+            <div class="editor-header">
+                <input type="text" id="noteTitle" placeholder="Título de la nota...">
+                <select id="noteTag">
+                    <option value="Personal">🔑 Personal</option>
+                    <option value="Dinero">💰 Dinero</option>
+                    <option value="Estudios">📚 Estudios</option>
+                    <option value="Ideas">💡 Ideas sueltas</option>
+                </select>
+            </div>
+
+            <div class="work-area" id="workArea">
+                <textarea id="noteContent" placeholder="Empieza a escribir... El núcleo central rastreará tu volumen de caracteres para inyectar XP y MP." oninput="analizarEscritura()"></textarea>
+            </div>
+
+            <div class="xp-monitor-bar">
+                <div>
+                    <span style="color:var(--text-muted)">Caracteres netos:</span> 
+                    <strong id="charCount" style="color:var(--accent-cyan)">0</strong>
+                </div>
+                <div class="chest-indicator" id="chestLabel">
+                    🔒 Próximo Hito: 100 caracteres
+                </div>
+            </div>
+
+            <div class="btn-grid">
+                <button class="btn" onclick="guardarNotaCompleta()">Guardar Archivo</button>
+                <button class="btn btn-secondary" onclick="toggleCamuflajeNota()">👁️ Privacidad</button>
+                <button class="btn btn-danger" onclick="eliminarNotaActual()">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const KEY_NOTES = 'origin_notes_pool';
+        const KEY_XP = 'origin_xp';
+        const KEY_MP = 'origin_mp';
+
+        let notas = JSON.parse(localStorage.getItem(KEY_NOTES)) || [];
+        let notaActivaId = null;
+        let audioCtx = null;
+
+        let hitNivel1 = false, hitNivel2 = false, hitNivel3 = false;
+
+        // --- SISTEMA DE AUDIO SINTETIZADO INTERACTIVO ---
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(freq, type, duration, vol) {
+            initAudio();
+            if(!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function soundClick() { playSound(600, 'sine', 0.04, 0.05); }
+        function soundUnlock() { playSound(440, 'sine', 0.06, 0.1); setTimeout(() => playSound(554.37, 'sine', 0.06, 0.1), 50); setTimeout(() => playSound(659.25, 'sine', 0.18, 0.1), 100); }
+        function soundError() { playSound(180, 'triangle', 0.25, 0.15); }
+
+        // --- SISTEMA LOGIC ---
+        function analizarEscritura() {
+            initAudio(); // Forzar activación de contexto por interacción
+            const contenido = document.getElementById('noteContent').value;
+            const textoLimpio = contenido.replace(/\s+/g, ' ').trim();
+            const charLen = textoLimpio.length;
+
+            document.getElementById('charCount').innerText = charLen;
+            const elChest = document.getElementById('chestLabel');
+
+            if (charLen < 100) {
+                elChest.innerHTML = `🔒 Próximo Hito: 100 char`;
+            } 
+            else if (charLen >= 100 && charLen < 500) {
+                if(!hitNivel1) { ejecutarInyeccionPuntos(5, 2, "¡Nota Rápida!"); hitNivel1 = true; }
+                elChest.innerHTML = `🟢 Nivel 1 Alcanzado (+5 XP)`;
+            } 
+            else if (charLen >= 500 && charLen < 1200) {
+                if(!hitNivel2) { ejecutarInyeccionPuntos(20, 10, "¡Gran Contenido!"); hitNivel2 = true; }
+                elChest.innerHTML = `🟡 Nivel 2 Alcanzado (+20 XP)`;
+            } 
+            else if (charLen >= 1200) {
+                if(!hitNivel3) { ejecutarInyeccionPuntos(50, 25, "¡Ensayo Supremo!"); hitNivel3 = true; }
+                elChest.innerHTML = `🔥 Nivel Máximo (+50 XP)`;
+            }
+        }
+
+        function ejecutarInyeccionPuntos(xp, mp, mensaje) {
+            let currentXP = parseInt(localStorage.getItem(KEY_XP)) || 0;
+            let currentMP = parseInt(localStorage.getItem(KEY_MP)) || 0;
+            localStorage.setItem(KEY_XP, currentXP + xp);
+            localStorage.setItem(KEY_MP, currentMP + mp);
+
+            soundUnlock();
+
+            // Alerta visual interna flotante animada
+            const notice = document.createElement('div');
+            notice.style.cssText = "position:absolute; bottom:30px; right:30px; background:var(--accent-gold); color:#000; padding:10px 16px; border-radius:10px; font-size:0.8rem; font-weight:bold; z-index:10; box-shadow:0 0 15px rgba(245,158,11,0.4); animation: panelSpawn 0.3s ease;";
+            notice.innerText = `✨ ${mensaje} +${xp} XP | +${mp} MP`;
+            document.getElementById('workArea').appendChild(notice);
+            setTimeout(() => notice.remove(), 3000);
+        }
+
+        function iniciarNuevaNota() {
+            soundClick();
+            notaActivaId = null;
+            document.getElementById('noteTitle').value = "";
+            document.getElementById('noteTag').value = "Personal";
+            document.getElementById('noteContent').value = "";
+            hitNivel1 = false; hitNivel2 = false; hitNivel3 = false;
+            analizarEscritura();
+            renderArchive();
+        }
+
+        function guardarNotaCompleta() {
+            const title = document.getElementById('noteTitle').value.trim() || "Nota sin título";
+            const tag = document.getElementById('noteTag').value;
+            const content = document.getElementById('noteContent').value;
+
+            if(!content.trim()) { soundError(); alert("⚠️ Escribe contenido antes de guardar."); return; }
+
+            if(notaActivaId) {
+                const idx = notas.findIndex(n => n.id === notaActivaId);
+                if(idx > -1) {
+                    notas[idx].titulo = title;
+                    notas[idx].categoria = tag;
+                    notas[idx].contenido = content;
+                }
+            } else {
+                const nuevaNota = {
+                    id: 'n-' + Date.now(),
+                    titulo: title,
+                    categoria: tag,
+                    contenido: content,
+                    fecha: new Date().toLocaleDateString()
+                };
+                notaActivaId = nuevaNota.id;
+                notas.push(nuevaNota);
+            }
+
+            localStorage.setItem(KEY_NOTES, JSON.stringify(notas));
+            soundUnlock();
+            renderArchive();
+        }
+
+        function cargarNota(id) {
+            soundClick();
+            const note = notas.find(n => n.id === id);
+            if(note) {
+                notaActivaId = note.id;
+                document.getElementById('noteTitle').value = note.titulo;
+                document.getElementById('noteTag').value = note.categoria;
+                document.getElementById('noteContent').value = note.contenido;
+                hitNivel1 = true; hitNivel2 = true; hitNivel3 = true; // Bloquear doble cobro
+                analizarEscritura();
+                renderArchive();
+            }
+        }
+
+        function eliminarNotaActual() {
+            if(!notaActivaId) { soundError(); return; }
+            if(confirm("¿Eliminar nota del disco central?")) {
+                notas = notas.filter(n => n.id !== notaActivaId);
+                localStorage.setItem(KEY_NOTES, JSON.stringify(notas));
+                iniciarNuevaNota();
+            }
+        }
+
+        function toggleCamuflajeNota() {
+            soundClick();
+            document.getElementById('workArea').classList.toggle('private-lock');
+        }
+
+        function renderArchive() {
+            const container = document.getElementById('archiveContainer');
+            container.innerHTML = "";
+            if(notas.length === 0) {
+                container.innerHTML = `<p class="empty-msg">Disco vacío.</p>`;
+                return;
+            }
+            notas.forEach(n => {
+                container.innerHTML += `
+                    <div class="note-item-card ${n.id === notaActivaId ? 'active' : ''}" onclick="cargarNota('${n.id}')">
+                        <div class="note-title-preview">${n.titulo}</div>
+                        <div class="note-meta-preview">
+                            <span style="color:var(--accent-cyan)">🏷️ ${n.categoria}</span>
+                            <span>${n.fecha}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- MOTOR CINÉTICO DE ESTRELLAS (4K ANIMATED SPACE) ---
+        function initSpaceEngine() {
+            const canvas = document.getElementById('spaceCanvas');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth * window.devicePixelRatio;
+                canvas.height = window.innerHeight * window.devicePixelRatio;
+                canvas.style.width = window.innerWidth + "px";
+                canvas.style.height = window.innerHeight + "px";
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Configurar 120 estrellas con profundidad cinemática
+            for(let i = 0; i < 120; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    opacity: Math.random() * 0.8 + 0.2,
+                    speed: Math.random() * 0.3 + 0.05
+                });
+            }
+
+            function updateStars() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Redibujar degradado profundo
+                let grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 10, canvas.width/2, canvas.height/2, canvas.height);
+                grad.addColorStop(0, '#0f0a28');
+                grad.addColorStop(1, '#04040c');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                stars.forEach(s => {
+                    s.y -= s.speed; // Movimiento vertical continuo hacia arriba
+                    if(s.y < 0) s.y = canvas.height; // Reiniciar abajo al salir
+
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(updateStars);
+            }
+            updateStars();
+        }
+
+        window.onload = function() {
+            initSpaceEngine();
+            renderArchive();
+            
+            // Forzar el desbloqueo de audio en el primer toque de pantalla
+            window.addEventListener('click', initAudio, { once: true });
+            window.addEventListener('keydown', initAudio, { once: true });
+            
+            document.querySelectorAll('button, select, input, textarea').forEach(el => {
+                el.addEventListener('click', soundClick);
+            });
+        };
+    </script>
+</body>
+</html>
