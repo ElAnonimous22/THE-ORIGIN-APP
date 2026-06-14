@@ -624,21 +624,32 @@
             { name: "Music", icon: "🎧", cat: "utils", url: "music.html", desc: "Reproductor sónico" }
         ];
 
+        // LOGICA DE RECONEXIÓN E INYECCIÓN DE DATOS REALES CORREGIDA
         function loadPointsSystem() {
-            if (localStorage.getItem('origin_xp') === null) localStorage.setItem('origin_xp', '0');
-            if (localStorage.getItem('origin_mp') === null) localStorage.setItem('origin_mp', '0');
-            if (localStorage.getItem('origin_racha') === null) localStorage.setItem('origin_racha', '1');
+            // Comprobación cruzada de llaves para evitar desincronizaciones entre archivos
+            const realXP = localStorage.getItem('origin_xp') || localStorage.getItem('xp') || '0';
+            const realMP = localStorage.getItem('origin_mp') || localStorage.getItem('mp') || '0';
+            const realRacha = localStorage.getItem('origin_racha') || localStorage.getItem('racha') || '1';
+
+            // Asegurar la consistencia del storage guardando la llave del menú por si acaso
+            localStorage.setItem('origin_xp', realXP);
+            localStorage.setItem('origin_mp', realMP);
+            localStorage.setItem('origin_racha', realRacha);
             
-            document.getElementById('display-xp').innerText = localStorage.getItem('origin_xp');
-            document.getElementById('display-mp').innerText = localStorage.getItem('origin_mp');
-            document.getElementById('display-racha').innerText = localStorage.getItem('origin_racha') + (localStorage.getItem('origin_racha') == 1 ? ' día' : ' días');
+            // Pintar los datos reales sin demoras
+            document.getElementById('display-xp').innerText = realXP;
+            document.getElementById('display-mp').innerText = realMP;
+            document.getElementById('display-racha').innerText = realRacha + (realRacha == 1 ? ' día' : ' días');
         }
 
         function renderApps(category = 'all') {
             const container = document.getElementById('apps-container');
             container.innerHTML = '';
+            let totalModulos = 0;
+
             originApps.forEach(app => {
                 if (category === 'all' || app.cat === category) {
+                    totalModulos++;
                     const item = document.createElement('a');
                     item.href = app.url;
                     item.className = 'app-item';
@@ -655,6 +666,8 @@
                     container.appendChild(item);
                 }
             });
+            // Mantiene actualizado el contador inferior dinámicamente si usas filtros
+            document.getElementById('app-counter').innerText = totalModulos;
         }
 
         function filterMenu(módulo, button) {
@@ -860,9 +873,6 @@
         initParticles();
         animateParticles();
         initVisualizer();
-        
-        // Inyectar el número exacto total de tus aplicaciones en tiempo real
-        document.getElementById('app-counter').innerText = originApps.length;
 
         setInterval(updateHUD, 1000);
     </script>
