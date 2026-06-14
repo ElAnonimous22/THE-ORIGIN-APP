@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Diario de Datos</title>
+    <style>
+        :root {
+            --primary: #55efc4; /* Verde Menta / Crecimiento */
+            --secondary: #a29bfe; /* Violeta Neón */
+            --warning: #ffeaa7;
+            --dark: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(125deg, #020604, #08110d, #0b021a, #140324);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        #stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: blink 4s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.1; transform: scale(0.6); }
+            50% { opacity: 0.9; transform: scale(1.3); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(-3px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- DASHBOARD GRID --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2.2fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px var(--glass-shadow);
+            height: fit-content;
+        }
+
+        /* --- CONTADORES IZQUIERDA --- */
+        .currency-box {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.15);
+            padding: 12px;
+            border-radius: 16px;
+            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item-display {
+            text-align: center;
+        }
+        .stat-item-display span {
+            display: block;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+        .stat-item-display .num {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        .prompt-box {
+            background: rgba(85, 239, 196, 0.05);
+            border: 1px dashed rgba(85, 239, 196, 0.3);
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+        .prompt-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .prompt-text {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            font-style: italic;
+        }
+        .btn-refresh-prompt {
+            background: none; border: none; color: var(--secondary); font-size: 0.8rem;
+            font-weight: bold; cursor: pointer; margin-top: 8px; display: inline-block;
+        }
+
+        /* --- CAMPO DE ESCRITURA --- */
+        .journal-area {
+            width: 100%;
+            height: 250px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+            line-height: 1.5;
+        }
+
+        .journal-area:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .live-rewards {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        .reward-preview-value {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .btn-save-entry {
+            background: linear-gradient(135deg, var(--primary), #00b894);
+            border: none;
+            color: #06060c;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .btn-save-entry.active {
+            opacity: 1;
+            pointer-events: auto;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(85, 239, 196, 0.3);
+        }
+
+        .btn-save-entry.active:hover {
+            transform: scale(1.03);
+        }
+
+        /* --- CONTADOR VISUAL --- */
+        .char-counter-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .char-counter-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.2s ease, background-color 0.3s;
+        }
+
+        /* --- HISTORIAL DE ENTRADAS RECIENTES --- */
+        .history-section {
+            margin-top: 25px;
+        }
+        .history-title {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .history-container {
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .history-container::-webkit-scrollbar { width: 4px; }
+        .history-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .history-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* --- CONTROL DE MÚSICA FLOTANTE --- */
+        .music-controller {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+        .music-btn {
+            background: none; border: none; color: #ffffff; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .music-info { font-size: 0.75rem; font-weight: 600; color: #94a3b8; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <div class="music-controller">
+        <button class="music-btn" id="btn-play-music" onclick="toggleMúsica()">🎵</button>
+        <button class="music-btn" onclick="siguienteCancion()">⏭️</button>
+        <span class="music-info" id="track-title">Pista 1</span>
+    </div>
+
+    <div class="nav-header">
+        <a href="menuprincipal.html" class="btn-back">← Volver</a>
+        <h1>Diario de Crecimiento</h1>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="glass-card">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <div style="font-size: 2.5rem; margin-bottom: 5px;">✍️</div>
+                <h2 style="color: white; font-size: 1.2rem;">Sincronización Cuántica</h2>
+            </div>
+
+            <div class="currency-box">
+                <div class="stat-item-display">
+                    <span>PUNTOS TOTALES (XP)</span>
+                    <div class="num" id="total-xp-display" style="color: var(--primary);">0</div>
+                </div>
+                <div class="stat-item-display">
+                    <span>NALA MONEDAS (MP)</span>
+                    <div class="num" id="total-mp-display">0</div>
+                </div>
+            </div>
+
+            <div class="prompt-box">
+                <div class="prompt-title">💡 Idea del día</div>
+                <div class="prompt-text" id="prompt-display">¿Qué pequeña victoria has conseguido hoy por la que estés orgulloso/a?</div>
+                <button class="btn-refresh-prompt" onclick="cambiarIdea()">🔄 Cambiar pregunta</button>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="color: white; font-size: 1.1rem;">Escribe tu mente</h3>
+                <span style="font-size: 0.8rem; color: #94a3b8;" id="char-indicator">0 caracteres (Mín. 30)</span>
+            </div>
+
+            <textarea class="journal-area" id="journal-input" placeholder="Escribe aquí tus pensamientos, ideas o lo que has aprendido hoy..." oninput="procesarEscritura()"></textarea>
+            
+            <div class="char-counter-bar">
+                <div class="char-counter-fill" id="char-bar-fill"></div>
+            </div>
+
+            <div class="editor-footer">
+                <div class="live-rewards">
+                    Recompensa estimada: <span class="reward-preview-value" id="preview-xp">+0 XP</span> | <span class="reward-preview-value" id="preview-mp" style="color: var(--warning);">+0 MP</span>
+                </div>
+                <button class="btn-save-entry" id="btn-save" onclick="guardarEntrada()">Transmitir Entrada 🚀</button>
+            </div>
+
+            <div class="history-section">
+                <div class="history-title">📜 Últimas transmisiones</div>
+                <div class="history-container" id="history-box">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- SISTEMA DE LOGROS / DATOS UNIFICADOS ---
+        let totalXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
+        let totalMP = parseInt(localStorage.getItem('nala-total-mp')) || 0;
+        let historialDiario = JSON.parse(localStorage.getItem('journal-history')) || [];
+
+        // Banco de disparadores de ideas
+        const ideasBancarias = [
+            "¿Qué pequeña victoria has conseguido hoy por la que estés orgulloso/a?",
+            "Si el día de hoy fuera un capítulo de un libro, ¿qué título le pondrías?",
+            "¿Qué te ha estresado hoy y cómo planeas solucionarlo o dejarlo ir?",
+            "Escribe 3 cosas específicas por las que estés agradecido/a en este momento.",
+            "¿Qué aprendiste hoy que tu 'yo' de la semana pasada no sabía?",
+            "¿Cómo puedes hacer que el día de mañana sea un 1% mejor que el de hoy?"
+        ];
+
+        // --- CÁLCULO DINÁMICO DE PUNTOS ---
+        // Fórmula equitativa: Cada 10 caracteres otorgan 1 XP y cada 25 otorgan 1 MP.
+        function calcularRecompensas(length) {
+            if (length < 30) return { xp: 0, mp: 0 };
+            let xp = Math.floor(length / 10);
+            let mp = Math.floor(length / 25);
+            return { xp, mp };
+        }
+
+        function procesarEscritura() {
+            const input = document.getElementById('journal-input').value;
+            const len = input.length;
+            const indicator = document.getElementById('char-indicator');
+            const barFill = document.getElementById('char-bar-fill');
+            const btnSave = document.getElementById('btn-save');
+            
+            // Actualizar texto informativo
+            indicator.innerText = `${len} caracteres ${len < 30 ? '(Mín. 30)' : ''}`;
+            
+            // Barra de progreso visual (se completa al llegar a los 150 caracteres para dar buen feeling)
+            let porcentaje = Math.min((len / 150) * 100, 100);
+            barFill.style.width = `${porcentaje}%`;
+            barFill.style.backgroundColor = len < 30 ? 'var(--secondary)' : 'var(--primary)';
+
+            // Calcular vista previa de premios
+            const premios = calcularRecompensas(len);
+            document.getElementById('preview-xp').innerText = `+${premios.xp} XP`;
+            document.getElementById('preview-mp').innerText = `+${premios.mp} MP`;
+
+            // Validar botón de guardado
+            if (len >= 30) {
+                btnSave.classList.add('active');
+            } else {
+                btnSave.classList.remove('active');
+            }
+        }
+
+        function guardarEntrada() {
+            const textInput = document.getElementById('journal-input');
+            const len = textInput.value.length;
+
+            if (len < 30) return;
+
+            const premios = calcularRecompensas(len);
+
+            // Sumar al estado global
+            totalXP += premios.xp;
+            totalMP += premios.mp;
+
+            localStorage.setItem('nala-total-xp', totalXP);
+            localStorage.setItem('nala-total-mp', totalMP);
+
+            // Guardar en el historial local del diario
+            const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+            const extracto = textInput.value.substring(0, 75) + (textInput.value.length > 75 ? '...' : '');
+            
+            historialDiario.unshift({ fecha, extracto, xp: premios.xp, mp: premios.mp });
+            if (historialDiario.length > 5) historialDiario.pop(); // Guardar solo los últimos 5 para optimizar
+
+            localStorage.setItem('journal-history', JSON.stringify(historialDiario));
+
+            // Feedback y limpieza
+            playSound('cyber');
+            textInput.value = '';
+            procesarEscritura();
+            renderizarEstado();
+            renderizarHistorial();
+        }
+
+        function renderizarEstado() {
+            document.getElementById('total-xp-display').innerText = totalXP;
+            document.getElementById('total-mp-display').innerText = totalMP;
+        }
+
+        function renderizarHistorial() {
+            const box = document.getElementById('history-box');
+            box.innerHTML = '';
+            
+            if (historialDiario.length === 0) {
+                box.innerHTML = `<p style="color: #64748b; font-size: 0.8rem; font-style: italic;">No hay registros hoy...</p>`;
+                return;
+            }
+
+            historialDiario.forEach(item => {
+                box.innerHTML += `
+                    <div class="history-card">
+                        <div class="history-meta">
+                            <span>⚡ ${item.fecha}</span>
+                            <span style="color: var(--primary)">+${item.xp}XP / +${item.mp}MP</span>
+                        </div>
+                        <div style="color: #cbd5e1; line-height: 1.3;">"${item.extracto}"</div>
+                    </div>
+                `;
+            });
+        }
+
+        function cambiarIdea() {
+            const actual = document.getElementById('prompt-display').innerText;
+            let filtradas = ideasBancarias.filter(i => i !== actual);
+            let randomIdea = filtradas[Math.floor(Math.random() * filtradas.length)];
+            document.getElementById('prompt-display').innerText = randomIdea;
+            playSound('click');
+        }
+
+        // --- AUDIO FX ---
+        function playSound(tipo) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+
+            if (tipo === 'click') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.05);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } else if (tipo === 'cyber') {
+                // Tono doble ascendente sci-fi
+                osc.type = 'sawtooth'; 
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.25);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+            }
+        }
+
+        // --- CREADOR DE ESTRELLAS DE FONDO ---
+        function crearEstrellas() {
+            const contenedor = document.getElementById('stars-container');
+            for (let i = 0; i < 60; i++) {
+                const estrella = document.createElement('div');
+                estrella.classList.add('star');
+                const tam = Math.random() * 2 + 0.5;
+                estrella.style.width = `${tam}px`; estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`; estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.animationDelay = `${Math.random() * 4}s`;
+                contenedor.appendChild(estrella);
+            }
+        }
+
+        // --- REPRODUCTOR DE MÚSICA ---
+        const listaCanciones = [
+            { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { titulo: "Retro Pulse", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+        let indiceCancionActual = 0;
+        const reproductorMusica = new Audio();
+        reproductorMusica.volume = 0.15;
+
+        function cargarCancion(index) {
+            reproductorMusica.src = listaCanciones[index].url;
+            document.getElementById('track-title').innerText = listaCanciones[index].titulo;
+        }
+        function toggleMúsica() {
+            if (reproductorMusica.paused) {
+                reproductorMusica.play().catch(() => {});
+                document.getElementById('btn-play-music').innerText = "⏸️";
+            } else {
+                reproductorMusica.pause();
+                document.getElementById('btn-play-music').innerText = "▶️";
+            }
+        }
+        function siguienteCancion() {
+            indiceCancionActual = (indiceCancionActual + 1) % listaCanciones.length;
+            cargarCancion(indiceCancionActual);
+            reproductorMusica.play().catch(() => {});
+            document.getElementById('btn-play-music').innerText = "⏸️";
+        }
+        reproductorMusica.addEventListener('ended', siguienteCancion);
+
+        document.body.addEventListener('click', () => {
+            if (reproductorMusica.paused && document.getElementById('btn-play-music').innerText === "🎵") {
+                reproductorMusica.play().then(() => { document.getElementById('btn-play-music').innerText = "⏸️"; }).catch(() => {});
+            }
+        }, { once: true });
+
+        // Inicializar
+        crearEstrellas();
+        cargarCancion(indiceCancionActual);
+        renderizarEstado();
+        renderizarHistorial();
+    </script>
+</body>
+</html>
