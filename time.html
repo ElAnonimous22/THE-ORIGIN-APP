@@ -37,7 +37,7 @@
             background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
         }
 
-        /* DISEÑO DE CUADRÍCULA ORGANIZADA */
+        /* CUADRÍCULA CORREGIDA Y LIMPIA */
         .container {
             width: 100%;
             max-width: 1100px;
@@ -54,7 +54,7 @@
             gap: 20px;
         }
 
-        /* COMPONENTES CARD GLASS */
+        /* PANELES INDEPENDIENTES */
         .panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -75,7 +75,7 @@
             padding-bottom: 8px; 
         }
 
-        /* SECCIÓN RELOJ PRINCIPAL */
+        /* PANELES DE HORA MASTER */
         .clock-display {
             font-size: 3rem;
             font-weight: 800;
@@ -113,7 +113,7 @@
             letter-spacing: 1px;
         }
 
-        /* ENTORNO DE HERRAMIENTAS Y BOTONES */
+        /* COMPONENTES DE ENTORNO */
         .tool-display { font-size: 2.2rem; font-weight: bold; text-align: center; font-family: monospace; margin: 8px 0; color: #fff; }
         .btn-row { display: flex; gap: 10px; justify-content: center; }
         
@@ -124,7 +124,7 @@
         }
         button:hover { background: var(--accent-purple); color: #000; border-color: transparent; transform: translateY(-1px); }
         
-        /* COCHE DE HORAS MUNDIALES */
+        /* LISTA ZONAS MUNDIALES */
         .world-list { display: flex; flex-direction: column; gap: 8px; }
         .world-item {
             display: flex; justify-content: space-between; align-items: center;
@@ -223,7 +223,6 @@
     <script>
         let audioCtx = null;
 
-        // --- SISTEMA DE AUDIO ---
         function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
         function playAlert() {
             initAudio(); if(!audioCtx) return;
@@ -244,16 +243,12 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // --- DINÁMICA DEL RELOJ MAESTRO ---
         function runMasterClock() {
             const ahora = new Date();
-            
-            // Renderizado Hora Barcelona
             const bcnTime = ahora.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false });
             const ms = String(ahora.getMilliseconds()).padStart(3, '0');
             document.getElementById('barcelonaClock').innerHTML = `${bcnTime}<span>.${ms}</span>`;
 
-            // Métricas de Calendario Exactas
             const inicioAno = new Date(ahora.getFullYear(), 0, 1);
             const diaDelAno = Math.floor((ahora - inicioAno) / (1000 * 60 * 60 * 24)) + 1;
             document.getElementById('valDiaAno').innerText = diaDelAno;
@@ -266,16 +261,16 @@
             const m = String(ahora.getMonth() + 1).padStart(2, '0');
             document.getElementById('valFechaCompleta').innerText = `${d}-${m}-${ahora.getFullYear()}`;
 
-            // Actualización de zonas horarias mundiales
             const zones = { zoneNY: 'America/New_York', zoneLondon: 'Europe/London', zoneDubai: 'Asia/Dubai', zoneTokyo: 'Asia/Tokyo' };
             Object.keys(zones).forEach(id => {
-                document.getElementById(id).innerText = ahora.toLocaleTimeString('es-ES', { timeZone: zones[id], hour12: false });
+                if(document.getElementById(id)) {
+                    document.getElementById(id).innerText = ahora.toLocaleTimeString('es-ES', { timeZone: zones[id], hour12: false });
+                }
             });
 
             requestAnimationFrame(runMasterClock);
         }
 
-        // --- OPERACIONES CRONÓMETRO ---
         let chronoTime = 0, chronoInterval = null;
         function controlChrono(action) {
             playClick();
@@ -297,7 +292,6 @@
             }
         }
 
-        // --- OPERACIONES TEMPORIZADOR ---
         let timerSeconds = 300, timerInterval = null;
         function setCustomTimer() { playClick(); timerSeconds = document.getElementById('timerMinutes').value * 60; renderTimer(); }
         function renderTimer() {
@@ -315,7 +309,6 @@
             } else if (action === 'pause') { clearInterval(timerInterval); timerInterval = null; }
         }
 
-        // --- OPERACIONES POMODORO ---
         let pomoSeconds = 1500, pomoInterval = null, isBreak = false;
         function renderPomo() {
             let m = Math.floor(pomoSeconds / 60); let s = pomoSeconds % 60;
@@ -337,7 +330,6 @@
             else if (action === 'reset') { clearInterval(pomoInterval); pomoInterval = null; isBreak = false; pomoSeconds = 1500; document.getElementById('pomoStatus').innerText = "[ESTUDIO]"; renderPomo(); }
         }
 
-        // --- FONDO CINÉTICO ESTRELLAS ---
         function initStars() {
             const canvas = document.getElementById('spaceCanvas'); const ctx = canvas.getContext('2d');
             let stars = [];
@@ -359,371 +351,6 @@
             initStars();
             requestAnimationFrame(runMasterClock);
             window.addEventListener('click', initAudio, { once: true });
-        }
-    </script>
-</body>
-</html>            z-index: -2;
-            background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            display: grid;
-            grid-template-columns: 1.21fr 1fr;
-            gap: 20px;
-            z-index: 1;
-        }
-        @media(max-width: 850px) { .container { grid-template-columns: 1fr; } }
-
-        /* PANELES CYBERPUNK GLASS */
-        .panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 22px;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        h2 { font-size: 1rem; color: var(--accent-purple); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
-
-        /* RELOJ MAESTRO DE BARCELONA */
-        .main-clock-display {
-            font-size: 2.8rem;
-            font-weight: 800;
-            text-align: center;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
-            font-family: monospace;
-            padding: 10px 0;
-        }
-        .main-clock-display span { font-size: 1.5rem; color: var(--accent-cyan); }
-
-        .time-metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .metric-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.03);
-            padding: 12px;
-            border-radius: 14px;
-            text-align: center;
-        }
-        .metric-val { font-size: 1.3rem; font-weight: bold; color: var(--accent-gold); margin-top: 4px; }
-        .metric-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-
-        .full-date-badge {
-            background: rgba(192, 132, 252, 0.1);
-            border: 1px solid var(--accent-purple);
-            color: var(--text-main);
-            text-align: center;
-            padding: 10px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        /* INTERFACES DE HERRAMIENTAS */
-        .tool-display { font-size: 2.2rem; font-weight: bold; text-align: center; font-family: monospace; margin: 10px 0; color: #fff; }
-        .btn-row { display: flex; gap: 10px; justify-content: center; }
-        
-        button, select, input {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 0.8rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        button:hover { background: var(--accent-purple); color: #000; border-color: transparent; transform: translateY(-1px); }
-        button:active { transform: translateY(0); }
-
-        /* RELOJ MUNDIAL STYLES */
-        .world-grid { display: flex; flex-direction: column; gap: 8px; }
-        .world-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.02);
-        }
-        .world-name { font-size: 0.85rem; font-weight: bold; }
-        .world-time { font-family: monospace; color: var(--accent-cyan); font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <canvas id="spaceCanvas"></canvas>
-
-    <div class="container">
-        <div class="panel">
-            <h2>🌍 MATRIZ HORARIA: BARCELONA CORE</h2>
-            <div class="main-clock-display" id="barcelonaClock">00:00:00<span>.000</span></div>
-            
-            <div class="time-metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-lbl">Día del Año</div>
-                    <div class="metric-val" id="valDiaAno">-</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-lbl">Semana Actual</div>
-                    <div class="metric-val" id="valSemana">-</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-lbl">Mes Digital</div>
-                    <div class="metric-val" id="valMes">-</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-lbl">Año en Curso</div>
-                    <div class="metric-val">2026</div>
-                </div>
-            </div>
-
-            <div class="full-date-badge" id="valFechaCompleta">XX-XX-XXXX</div>
-            
-            <a href="menuprincipal.html" style="text-decoration:none; text-align:center; margin-top: auto;">
-                <button style="width:100%; background:rgba(255,255,255,0.02);">🏠 Volver al Núcleo Central</button>
-            </a>
-        </div>
-
-        <div class="right-column">
-            
-            <div class="panel">
-                <h2>⏱️ CRONÓMETRO</h2>
-                <div class="tool-display" id="chronoDisplay">00:00:00.00</div>
-                <div class="btn-row">
-                    <button onclick="startChrono()">Iniciar</button>
-                    <button onclick="pauseChrono()">Pausar</button>
-                    <button onclick="resetChrono()">Reiniciar</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>⏳ TEMPORIZADOR DE CUENTA ATRÁS</h2>
-                <div class="tool-display" id="timerDisplay">05:00</div>
-                <div class="btn-row">
-                    <input type="number" id="timerMinutes" value="5" min="1" max="180" style="width: 70px; text-align:center; padding:8px;">
-                    <button onclick="setCustomTimer()">Set</button>
-                    <button onclick="startTimer()">Iniciar</button>
-                    <button onclick="pauseTimer()">Pausar</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>🎯 ENFOQUE POMODORO <span id="pomoStatus" style="font-size:0.75rem; color:var(--accent-gold); margin-left:auto;">[ESTUDIO]</span></h2>
-                <div class="tool-display" id="pomoDisplay">25:00</div>
-                <div class="btn-row">
-                    <button onclick="startPomodoro()">Enfocar</button>
-                    <button onclick="pausePomodoro()">Pausar</button>
-                    <button onclick="resetPomodoro()">Reiniciar</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>🌐 RED HORARIA MUNDIAL (ZONAS)</h2>
-                <div class="world-grid">
-                    <div class="world-item">
-                        <span class="world-name">🇺🇸 Nueva York (EST)</span>
-                        <span class="world-time" id="zoneNY">00:00:00</span>
-                    </div>
-                    <div class="world-item">
-                        <span class="world-name">🇬🇧 Londres (GMT)</span>
-                        <span class="world-time" id="zoneLondon">00:00:00</span>
-                    </div>
-                    <div class="world-item">
-                        <span class="world-name">🇦🇪 Dubái (GST)</span>
-                        <span class="world-time" id="zoneDubai">00:00:00</span>
-                    </div>
-                    <div class="world-item">
-                        <span class="world-name">🇯🇵 Tokio (JST)</span>
-                        <span class="world-time" id="zoneTokyo">00:00:00</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        let audioCtx = null;
-
-        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-        function playAlertSound() {
-            initAudio(); if(!audioCtx) return;
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-        }
-        function playClick() {
-            initAudio(); if(!audioCtx) return;
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-        }
-
-        // --- RELOJ DE BARCELONA Y MÉTRICAS AVANZADAS ---
-        function updateBarcelonaClock() {
-            const ahora = new Date();
-            
-            // Forzar zona de Barcelona
-            const bcnTimeStr = ahora.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false });
-            const ms = String(ahora.getMilliseconds()).padStart(3, '0');
-            document.getElementById('barcelonaClock').innerHTML = `${bcnTimeStr}<span>.${ms}</span>`;
-
-            // Calcular día del año (Día Juliano)
-            const inicioAno = new Date(ahora.getFullYear(), 0, 1);
-            const difMs = ahora - inicioAno;
-            const diaDelAno = Math.floor(difMs / (1000 * 60 * 60 * 24)) + 1;
-            document.getElementById('valDiaAno').innerText = diaDelAno;
-
-            // Calcular semana del año
-            const diaSemanaInicio = inicioAno.getDay() || 7;
-            const semana = Math.ceil((diaDelAno + diaSemanaInicio - 1) / 7);
-            document.getElementById('valSemana').innerText = semana;
-
-            // Mes y fecha limpia
-            document.getElementById('valMes').innerText = ahora.getMonth() + 1;
-            
-            const d = String(ahora.getDate()).padStart(2, '0');
-            const m = String(ahora.getMonth() + 1).padStart(2, '0');
-            const y = ahora.getFullYear();
-            document.getElementById('valFechaCompleta').innerText = `${d}-${m}-${y}`;
-
-            // Actualizar Relojes Mundiales
-            updateWorldTime('zoneNY', 'America/New_York');
-            updateWorldTime('zoneLondon', 'Europe/London');
-            updateWorldTime('zoneDubai', 'Asia/Dubai');
-            updateWorldTime('zoneTokyo', 'Asia/Tokyo');
-
-            requestAnimationFrame(updateBarcelonaClock);
-        }
-
-        function updateWorldTime(elId, timeZone) {
-            const el = document.getElementById(elId);
-            if(el) {
-                el.innerText = new Date().toLocaleTimeString('es-ES', { timeZone: timeZone, hour12: false });
-            }
-        }
-
-        // --- MOTOR DEL CRONÓMETRO ---
-        let chronoTime = 0, chronoInterval = null;
-        function startChrono() {
-            playClick();
-            if(!chronoInterval) {
-                let start = Date.now() - chronoTime;
-                chronoInterval = setInterval(() => {
-                    chronoTime = Date.now() - start;
-                    let ms = Math.floor((chronoTime % 1000) / 10);
-                    let s = Math.floor((chronoTime / 1000) % 60);
-                    let m = Math.floor((chronoTime / 60000) % 60);
-                    let h = Math.floor(chronoTime / 3600000);
-                    document.getElementById('chronoDisplay').innerText = 
-                        `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(2,'0')}`;
-                }, 10);
-            }
-        }
-        function pauseChrono() { playClick(); clearInterval(chronoInterval); chronoInterval = null; }
-        function resetChrono() { playClick(); pauseChrono(); chronoTime = 0; document.getElementById('chronoDisplay').innerText = "00:00:00.00"; }
-
-        // --- MOTOR DEL TEMPORIZADOR ---
-        let timerSeconds = 300, timerInterval = null;
-        function setCustomTimer() {
-            playClick();
-            const mins = document.getElementById('timerMinutes').value;
-            timerSeconds = mins * 60;
-            displayTimer();
-        }
-        function displayTimer() {
-            let m = Math.floor(timerSeconds / 60);
-            let s = timerSeconds % 60;
-            document.getElementById('timerDisplay').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }
-        function startTimer() {
-            playClick();
-            if(!timerInterval) {
-                timerInterval = setInterval(() => {
-                    if(timerSeconds <= 0) {
-                        clearInterval(timerInterval); timerInterval = null;
-                        playAlertSound(); alert("⏳ ¡El temporizador cuántico ha expirado!");
-                    } else {
-                        timerSeconds--; displayTimer();
-                    }
-                }, 1000);
-            }
-        }
-        function pauseTimer() { playClick(); clearInterval(timerInterval); timerInterval = null; }
-
-        // --- MOTOR DEL POMODORO ---
-        let pomoSeconds = 1500, pomoInterval = null, isBreak = false;
-        function displayPomo() {
-            let m = Math.floor(pomoSeconds / 60); let s = pomoSeconds % 60;
-            document.getElementById('pomoDisplay').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        }
-        function startPomodoro() {
-            playClick();
-            if(!pomoInterval) {
-                pomoInterval = setInterval(() => {
-                    if(pomoSeconds <= 0) {
-                        clearInterval(pomoInterval); pomoInterval = null;
-                        playAlertSound();
-                        isBreak = !isBreak;
-                        pomoSeconds = isBreak ? 300 : 1500;
-                        document.getElementById('pomoStatus').innerText = isBreak ? "[DESCANSO]" : "[ESTUDIO]";
-                        displayPomo();
-                        alert(isBreak ? "☕ ¡Bloque completado! Tómate un respiro de 5 minutos." : "⚡ ¡Hora de volver a enfocarse!");
-                    } else {
-                        pomoSeconds--; displayPomo();
-                    }
-                }, 1000);
-            }
-        }
-        function pausePomodoro() { playClick(); clearInterval(pomoInterval); pomoInterval = null; }
-        function resetPomodoro() { playClick(); pausePomodoro(); isBreak = false; pomoSeconds = 1500; document.getElementById('pomoStatus').innerText = "[ESTUDIO]"; displayPomo(); }
-
-        // --- MOTOR CINÉTICO DE ESTRELLAS 4K ---
-        function initSpaceBackground() {
-            const canvas = document.getElementById('spaceCanvas'); const ctx = canvas.getContext('2d');
-            let stars = [];
-            function resize() {
-                canvas.width = window.innerWidth * window.devicePixelRatio; canvas.height = window.innerHeight * window.devicePixelRatio;
-                canvas.style.width = window.innerWidth + "px"; canvas.style.height = window.innerHeight + "px";
-            }
-            window.addEventListener('resize', resize); resize();
-            for(let i=0; i<100; i++) {
-                stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.8+0.5, speed: Math.random()*0.2+0.05 });
-            }
-            function frame() {
-                ctx.clearRect(0,0, canvas.width, canvas.height);
-                ctx.fillStyle = "rgba(255,255,255,0.3)";
-                stars.forEach(s => {
-                    s.y -= s.speed; if(s.y < 0) s.y = canvas.height;
-                    ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
-                });
-                requestAnimationFrame(frame);
-            }
-            frame();
-        }
-
-        window.onload = function() {
-            initSpaceBackground();
-            requestAnimationFrame(updateBarcelonaClock);
-            window.addEventListener('click', initAudio, { once: true });
-            document.querySelectorAll('button').forEach(b => b.addEventListener('click', playClick));
         }
     </script>
 </body>
