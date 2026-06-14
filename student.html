@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE ORIGIN - Student Matrix Supreme</title>
+    <style>
+        :root {
+            --bg-main: #04040d; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.09);
+            --accent-purple: #c084fc; 
+            --accent-cyan: #22d3ee;   
+            --accent-orange: #f97316;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-pink: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #475569;
+            --anim-space: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(192, 132, 252, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px 16px 80px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        #bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1400px; 
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.4s var(--anim-space);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .btn-back:hover {
+            background: var(--glass-hover);
+            border-color: var(--accent-purple);
+            transform: scale(1.03);
+        }
+
+        .title-block h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 30%, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* TOP HUD INFO */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .metric-card:hover { transform: translateY(-2px); }
+        .metric-label { font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .metric-val { font-size: 1.4rem; font-weight: 900; margin-top: 4px; }
+
+        /* MULTICOLUMNA SUPREMA */
+        .mega-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 1100px) {
+            .mega-layout { grid-template-columns: 1.2fr 1.2fr; }
+        }
+
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .panel-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        /* CONTROLES GLOBALES */
+        input, select, textarea {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            width: 100%;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-purple); }
+
+        .btn-prime {
+            background: #fff; color: #04040d; border: none;
+            padding: 11px 16px; border-radius: 10px; font-size: 0.82rem;
+            font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-prime:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
+
+        /* SCROLLBOX ELEMENT */
+        .scroll-box { 
+            max-height: 250px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            padding-right: 4px; 
+        }
+        .scroll-box::-webkit-scrollbar { width: 4px; }
+        .scroll-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        /* POMODORO */
+        .pomo-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            padding: 14px;
+            border-radius: 14px;
+        }
+        .pomo-time { font-size: 2.2rem; font-weight: 900; color: var(--accent-cyan); text-shadow: 0 0 8px rgba(34,211,238,0.2); }
+        .pomo-btns { display: flex; gap: 6px; }
+        .btn-pomo { background: var(--glass-bg); border: 1px solid var(--glass-border); color: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.72rem; font-weight: 700; }
+        
+        /* MATERIAS */
+        .subject-card {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .subject-header { display: flex; justify-content: space-between; align-items: center; }
+        .subject-title { font-weight: 700; font-size: 0.88rem; }
+        .subject-avg { font-weight: 900; font-size: 0.95rem; color: var(--accent-green); }
+        
+        .grades-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+        .grade-pill { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 2px 6px; border-radius: 6px; font-size: 0.7rem; }
+
+        /* TASK LOG */
+        .task-item {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid var(--glass-border);
+            padding: 10px 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-item.done { opacity: 0.3; text-decoration: line-through; }
+        .task-meta h5 { font-size: 0.82rem; font-weight: 700; }
+        .task-meta span { font-size: 0.65rem; font-weight: 600; }
+        .prio-high { color: var(--accent-pink); }
+        .prio-mid { color: var(--accent-orange); }
+        .prio-low { color: var(--accent-cyan); }
+
+        /* SLEEP OPTIMIZER */
+        .sleep-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .sleep-pill {
+            background: rgba(34, 211, 238, 0.04);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            padding: 8px; text-align: center; border-radius: 8px;
+            font-size: 0.75rem; font-weight: 800; color: var(--accent-cyan);
+        }
+
+        /* CHATBOT */
+        .ai-chatbox {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px; padding: 12px; font-size: 0.8rem;
+            line-height: 1.4; max-height: 120px; overflow-y: auto; color: #cbd5e1;
+        }
+
+        /* EXAMEN CARD */
+        .exam-item {
+            background: rgba(0,0,0,0.15);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px; padding: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* LOGROS GRID */
+        .quest-item {
+            background: rgba(255,255,255,0.01); border: 1px solid var(--glass-border);
+            border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .quest-item.completed { opacity: 0.25; text-decoration: line-through; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-particles"></canvas>
+
+    <div class="main-container">
+        <header>
+            <a href="index.html" class="btn-back">⏮ Menú Principal</a>
+            <div class="title-block">
+                <h1>STUDENT MATRIX SUPREME</h1>
+            </div>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="metric-card" style="border-left: 3px solid var(--accent-green)">
+                <div class="metric-label">Media General</div>
+                <div class="metric-val" id="global-avg" style="color: var(--accent-green)">0.0</div>
+            </div>
+            <div class="metric-card" style="border-left: 3px solid var(--accent-cyan)">
+                <div class="metric-label">Pomodoros Activos</div>
+                <div class="metric-val" id="pomo-count" style="color: var(--accent-cyan)">0</div>
+            </div>
+            <div class="metric-card" style="border-left: 3px solid var(--accent-purple)">
+                <div class="metric-label">Multiplicador Racha</div>
+                <div class="metric-val" id="streak-multiplier" style="color: var(--accent-purple)">x1.0</div>
+            </div>
+            <div class="metric-card" style="border-left: 3px solid var(--accent-orange)">
+                <div class="metric-label">Misiones Hechas</div>
+                <div class="metric-val" id="missions-count" style="color: var(--accent-orange)">0 / 10</div>
+            </div>
+        </div>
+
+        <div class="mega-layout">
+            
+            <div class="panel">
+                
+                <div class="panel-title">⏱️ Enfoque e Hiper-Foco (Pomodoro Node) <span id="racha-pomo-badge" style="font-size:0.7rem; color:var(--accent-orange)">Racha Hoy: 0</span></div>
+                <div class="pomo-wrap">
+                    <div class="pomo-time" id="timer-display">25:00</div>
+                    <div class="pomo-btns">
+                        <button class="btn-pomo" style="background:rgba(34,211,238,0.1); border-color:var(--accent-cyan);" onclick="toggleTimer()">Play/Pausa</button>
+                        <button class="btn-pomo" onclick="resetTimer()">Reset</button>
+                    </div>
+                </div>
+
+                <div class="panel-title">📚 Núcleo de Calificaciones</div>
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px;">
+                    <input type="text" id="sub-name" placeholder="Materia (Ej: Física)">
+                    <select id="sub-risk">
+                        <option value="risk-low">🟢 Fácil (Easy)</option>
+                        <option value="risk-medium">🟡 Media (Medium)</option>
+                        <option value="risk-high">🔴 Crítica (Boss Fight)</option>
+                    </select>
+                </div>
+                <button class="btn-prime" onclick="addSubject()">Vincular Materia</button>
+
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px; margin-top: 4px; border-top: 1px dashed var(--glass-border); padding-top: 10px;">
+                    <select id="grade-sub-select"></select>
+                    <input type="number" id="new-grade-val" placeholder="Nota (0-10)" min="0" max="10" step="0.1">
+                </div>
+                <button class="btn-prime" style="background: var(--accent-green); color: #000;" onclick="addGradeToSubject()">Inyectar Nota Directa</button>
+
+                <div class="scroll-box" id="subjects-container" style="max-height: 220px;"></div>
+
+                <div class="panel-title">🧮 Simulador de Nota de Emergencia (Final Boss)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
+                    <input type="number" id="sim-current" placeholder="Nota Actual" min="0" max="10" step="0.1">
+                    <input type="number" id="sim-weight" placeholder="Peso Examen %" min="0" max="100">
+                    <input type="number" id="sim-target" placeholder="Nota Deseada" value="5.0" min="0" max="10">
+                </div>
+                <button class="btn-prime" style="background: rgba(249,115,22,0.1); color: var(--accent-orange); border: 1px solid rgba(249,115,22,0.3);" onclick="calculateNeededGrade()">Calcular Nota Necesaria</button>
+                <div id="sim-result-box" style="font-size:0.78rem; text-align:center; font-weight:700; color:var(--accent-cyan)"></div>
+
+            </div>
+
+            <div class="panel">
+                
+                <div class="panel-title">📝 Diario de Tareas (Daily Quests)</div>
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 6px;">
+                    <input type="text" id="task-input" placeholder="Ej: Terminar mapa conceptual de historia">
+                    <select id="task-prio">
+                        <option value="prio-high">🚨 Alta</option>
+                        <option value="prio-mid">⚡ Media</option>
+                        <option value="prio-low">💤 Baja</option>
+                    </select>
+                </div>
+                <button class="btn-prime" style="background:var(--accent-purple); color:#fff;" onclick="addTask()">Desplegar Tarea</button>
+                <div class="scroll-box" id="tasks-container" style="max-height: 160px;"></div>
+
+                <div class="panel-title">🌙 Optimización de Ciclos de Sueño (Brain Restore)</div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <span style="font-size:0.75rem; color:#94a3b8;">Hora de Despertar:</span>
+                    <input type="time" id="sleep-target-time" value="07:30" style="width:120px;">
+                    <button class="btn-prime" style="padding:8px 12px;" onclick="calculateSleepCycles()">Calcular</button>
+                </div>
+                <div class="sleep-grid" id="sleep-results"></div>
+
+                <div class="panel-title">⚔️ Próximas Batallas (Exámenes)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <input type="text" id="exam-title" placeholder="Materia / Tema">
+                    <input type="date" id="exam-date">
+                </div>
+                <button class="btn-prime" style="background: var(--accent-pink); color: #fff;" onclick="addExam()">Agendar Batalla</button>
+                <div class="scroll-box" id="exams-container" style="max-height: 140px;"></div>
+
+                <div class="panel-title">🤖 Asistente de Estudio Cognitivo (Sage Matrix)</div>
+                <div class="ai-chatbox" id="ai-response-box">
+                    SISTEMA: Base de datos cargada. Introduce palabras clave como "Mates", "Historia", "Sueño" o "Examen" para optimizar tu retención.
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="ai-input" placeholder="Pregunta sobre memorización, fatiga o técnicas...">
+                    <button class="btn-prime" style="background:var(--glass-hover); color:#fff; border:1px solid var(--glass-border);" onclick="askMatrixAI()">Consultar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">🏆 Matriz de Recompensas y Logros Sincronizados</div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:10px;" id="quests-container-grid">
+                <div class="quest-item" id="l1">
+                    <div><h5 style="font-size:0.82rem;">Estratega de Contingencia</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Usar el simulador de nota final (+50 XP / +20 MP)</span></div>
+                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l1', 50, 20)">✓</button>
+                </div>
+                <div class="quest-item" id="l2">
+                    <div><h5 style="font-size:0.82rem;">Cerebro de Élite</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Sacar un 10 perfecto en cualquier materia (+250 XP / +100 MP)</span></div>
+                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l2', 250, 100)">✓</button>
+                </div>
+                <div class="quest-item" id="l3">
+                    <div><h5 style="font-size:0.82rem;">Hacker del Sueño</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Calcular ciclos de descanso óptimo (+40 XP / +10 MP)</span></div>
+                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l3', 40, 10)">✓</button>
+                </div>
+                <div class="quest-item" id="l4">
+                    <div><h5 style="font-size:0.82rem;">Enfoque Multiplicado</h5><span style="font-size:0.65rem; color:var(--accent-purple);">Llegar a multiplicador x1.5 en Pomodoros (+150 XP / +60 MP)</span></div>
+                    <button class="btn-pomo" style="border-radius:50%; width:28px; height:28px; padding:0;" onclick="claimQuest('l4', 150, 60)">✓</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CARGA SE SEGURIDAD Y ESTADOS LOCALESTORAGE
+        let subjects = JSON.parse(localStorage.getItem('origin_student_subjects')) || [];
+        let exams = JSON.parse(localStorage.getItem('origin_student_exams')) || [];
+        let tasks = JSON.parse(localStorage.getItem('origin_student_tasks')) || [];
+        let pomodorosDone = parseInt(localStorage.getItem('origin_student_pomos') || '0');
+        let completedQuests = JSON.parse(localStorage.getItem('origin_student_quests')) || [];
+        let pomoTodayStreak = 0;
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function alertSound() {
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(950, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // CONTROL CENTRAL DE RECOMPENSAS COMPATIBLE CON PERFIL.HTML Y INDEX
+        function addSystemPoints(xp, mp) {
+            let multiplier = 1.0;
+            if (pomoTodayStreak >= 2) multiplier = 1.5; // Multiplicador de racha activa de estudio
+            
+            let finalXP = Math.round(xp * multiplier);
+            let finalMP = Math.round(mp);
+
+            let cxp = parseInt(localStorage.getItem('xp') || localStorage.getItem('origin_xp') || '0');
+            let cmp = parseInt(localStorage.getItem('mp') || localStorage.getItem('origin_mp') || '0');
+            cxp += finalXP; cmp += finalMP;
+            
+            localStorage.setItem('xp', cxp); localStorage.setItem('origin_xp', cxp);
+            localStorage.setItem('mp', cmp); localStorage.setItem('origin_mp', cmp);
+        }
+
+        // SECCIÓN MATERIAS Y CALCULO AUTOMÁTICO DE NOTAS MEDIAS
+        function addSubject() {
+            const name = document.getElementById('sub-name').value.trim();
+            const risk = document.getElementById('sub-risk').value;
+            if(!name) return;
+            subjects.push({ name, risk, grades: [] });
+            saveData(); renderAll();
+            document.getElementById('sub-name').value = '';
+        }
+
+        function addGradeToSubject() {
+            const idx = document.getElementById('grade-sub-select').value;
+            const grade = parseFloat(document.getElementById('new-grade-val').value);
+            if(idx === '' || isNaN(grade) || grade < 0 || grade > 10) return;
+
+            subjects[idx].grades.push(grade);
+            if(grade >= 9) alertSound();
+            saveData(); renderAll();
+            document.getElementById('new-grade-val').value = '';
+        }
+
+        function deleteSubject(idx) {
+            subjects.splice(idx, 1);
+            saveData(); renderAll();
+        }
+
+        // TAREAS DIARIAS LOGIC
+        function addTask() {
+            const text = document.getElementById('task-input').value.trim();
+            const prio = document.getElementById('task-prio').value;
+            if(!text) return;
+            tasks.push({ id: Date.now(), text, prio, done: false });
+            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
+            renderTasks();
+            document.getElementById('task-input').value = '';
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => {
+                if(t.id === id) {
+                    t.done = !t.done;
+                    if(t.done) {
+                        alertSound();
+                        addSystemPoints(15, 5); // Recompensa inmediata por tarea completada
+                    }
+                }
+                return t;
+            });
+            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            localStorage.setItem('origin_student_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // SIMULADOR DE NOTA DE EMERGENCIA EXAMEN FINAL
+        function calculateNeededGrade() {
+            const current = parseFloat(document.getElementById('sim-current').value);
+            const weight = parseFloat(document.getElementById('sim-weight').value) / 100;
+            const target = parseFloat(document.getElementById('sim-target').value);
+            const resBox = document.getElementById('sim-result-box');
+
+            if(isNaN(current) || isNaN(weight) || isNaN(target)) {
+                resBox.innerText = "Rellena los 3 campos del simulador.";
+                return;
+            }
+
+            // Formula: NotaNecesaria = (Target - (Current * (1 - PesoExamen))) / PesoExamen
+            const needed = (target - (current * (1 - weight))) / weight;
+
+            if (needed <= 0) {
+                resBox.innerText = "¡Ya aprobaste la materia con tus notas actuales! 😎";
+                resBox.style.color = "var(--accent-green)";
+            } else if (needed > 10) {
+                resBox.innerText = `Necesitas un ${needed.toFixed(1)}... Matemáticamente imposible pasar con esa nota actual. 💀`;
+                resBox.style.color = "var(--accent-pink)";
+            } else {
+                resBox.innerText = `Para sacar un ${target.toFixed(1)} necesitas obtener mínimo un ${needed.toFixed(1)} en el examen final.`;
+                resBox.style.color = "var(--accent-cyan)";
+            }
+        }
+
+        // HACK DE CICLOS DE SUEÑO
+        function calculateSleepCycles() {
+            const timeVal = document.getElementById('sleep-target-time').value;
+            const container = document.getElementById('sleep-results');
+            container.innerHTML = '';
+            if(!timeVal) return;
+
+            let [hrs, mins] = timeVal.split(':').map(Number);
+            let date = new Date();
+            date.setHours(hrs, mins, 0, 0);
+
+            // Calcula retrasando ciclos de 90 minutos (6 ciclos es ideal, 5 es aceptable)
+            let optimalTimes = [];
+            for(let i = 6; i >= 3; i--) {
+                let copy = new Date(date.getTime() - (i * 90 * 60 * 1000) - (14 * 60 * 1000)); // 14 mins para quedarse dormido medio
+                let h = copy.getHours().toString().padStart(2, '0');
+                let m = copy.getMinutes().toString().padStart(2, '0');
+                optimalTimes.push(`${h}:${m}`);
+            }
+
+            optimalTimes.forEach(t => {
+                const pill = document.createElement('div');
+                pill.className = 'sleep-pill';
+                pill.innerText = t;
+                container.appendChild(pill);
+            });
+        }
+
+        // EXÁMENES ENGINE
+        function addExam() {
+            const title = document.getElementById('exam-title').value.trim();
+            const date = document.getElementById('exam-date').value;
+            if(!title || !date) return;
+            exams.push({ title, date });
+            localStorage.setItem('origin_student_exams', JSON.stringify(exams));
+            renderExams();
+            document.getElementById('exam-title').value = '';
+        }
+
+        function deleteExam(idx) {
+            exams.splice(idx, 1);
+            localStorage.setItem('origin_student_exams', JSON.stringify(exams));
+            renderExams();
+        }
+
+        // RENDERS DE SECCIONES INTERNAS
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = '';
+            tasks.forEach(t => {
+                const item = document.createElement('div');
+                item.className = `task-item ${t.done ? 'done' : ''}`;
+                let prioLabel = t.prio === 'prio-high' ? '🚨 Alta' : t.prio === 'prio-mid' ? '⚡ Media' : '💤 Baja';
+                item.innerHTML = `
+                    <div class="task-meta" onclick="toggleTask(${t.id})" style="cursor:pointer; flex:1;">
+                        <h5>${t.text}</h5>
+                        <span class="${t.prio}">${prioLabel}</span>
+                    </div>
+                    <button style="background:transparent; border:none; color:var(--accent-pink); font-size:0.75rem; cursor:pointer;" onclick="deleteTask(${t.id})">✕</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderExams() {
+            const container = document.getElementById('exams-container'); container.innerHTML = '';
+            exams.sort((a,b)=>new Date(a.date)-new Date(b.date));
+            exams.forEach((ex, idx) => {
+                const days = Math.ceil((new Date(ex.date) - new Date()) / (1000*60*60*24));
+                container.innerHTML += `
+                    <div class="exam-item">
+                        <div><h4 style="font-size:0.82rem;">${ex.title}</h4><p style="font-size:0.68rem; color:#64748b;">${ex.date}</p></div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:0.68rem; font-weight:800; color:var(--accent-orange); background:rgba(249,115,22,0.1); padding:2px 6px; border-radius:4px;">${days > 0 ? `Quedan ${days}d` : 'Hoy ⚔️'}</span>
+                            <button style="background:transparent; border:none; color:var(--accent-pink); cursor:pointer;" onclick="deleteExam(${idx})">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function claimQuest(id, xp, mp) {
+            if(completedQuests.includes(id)) return;
+            completedQuests.push(id);
+            localStorage.setItem('origin_student_quests', JSON.stringify(completedQuests));
+            addSystemPoints(xp, mp);
+            alertSound(); renderAll();
+        }
+
+        function renderAll() {
+            const container = document.getElementById('subjects-container');
+            const select = document.getElementById('grade-sub-select');
+            container.innerHTML = ''; select.innerHTML = '';
+            let totalSum = 0; let counted = 0;
+
+            subjects.forEach((sub, idx) => {
+                const opt = document.createElement('option'); opt.value = idx; opt.innerText = sub.name; select.appendChild(opt);
+                let avg = 0;
+                if(sub.grades.length > 0) {
+                    avg = sub.grades.reduce((a,b)=>a+b, 0) / sub.grades.length;
+                    totalSum += avg; counted++;
+                }
+                let riskText = sub.risk === 'risk-high' ? '🔴 Crítica' : sub.risk === 'risk-medium' ? '🟡 Media' : '🟢 Fácil';
+                const card = document.createElement('div'); card.className = 'subject-card';
+                card.innerHTML = `
+                    <div class="subject-header">
+                        <div><span class="subject-title">${sub.name}</span><span style="font-size:0.65rem; margin-left:6px; color:#94a3b8;">${riskText}</span></div>
+                        <span class="subject-avg">${sub.grades.length > 0 ? avg.toFixed(1) : '—'}</span>
+                    </div>
+                    <div class="grades-pills">${sub.grades.map(g=>`<span class="grade-pill">${g.toFixed(1)}</span>`).join('')}</div>
+                    <div style="text-align:right;"><span style="color:#475569; font-size:0.65rem; cursor:pointer;" onclick="deleteSubject(${idx})">Eliminar</span></div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('global-avg').innerText = counted > 0 ? (totalSum / counted).toFixed(1) : "0.0";
+            document.getElementById('pomo-count').innerText = pomodorosDone;
+            document.getElementById('missions-count').innerText = `${completedQuests.length} / 4`;
+            document.getElementById('streak-multiplier').innerText = `x${pomoTodayStreak >= 2 ? '1.5' : '1.0'}`;
+            document.getElementById('racha-pomo-badge').innerText = `Racha Hoy: ${pomoTodayStreak}`;
+
+            completedQuests.forEach(q => document.getElementById(q)?.classList.add('completed'));
+        }
+
+        // CRONÓMETRO POMODORO SUPREMO WITH STREAK
+        let timer = null; let isRunning = false; let timeLeft = 25 * 60;
+        function toggleTimer() {
+            if(isRunning) { clearInterval(timer); isRunning = false; }
+            else {
+                isRunning = true;
+                timer = setInterval(() => {
+                    timeLeft--;
+                    const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+                    const s = (timeLeft%60).toString().padStart(2,'0');
+                    document.getElementById('timer-display').innerText = `${m}:${s}`;
+                    if(timeLeft <= 0) {
+                        clearInterval(timer); isRunning = false; timeLeft = 25 * 60;
+                        pomodorosDone++; pomoTodayStreak++;
+                        localStorage.setItem('origin_student_pomos', pomodorosDone);
+                        addSystemPoints(50, 20); alertSound(); renderAll();
+                        alert("¡Ciclo completado! Tus puntos han sido multiplicados si mantienes la racha activa.");
+                    }
+                }, 1000);
+            }
+        }
+        function resetTimer() { clearInterval(timer); isRunning = false; timeLeft = 25 * 60; document.getElementById('timer-display').innerText = "25:00"; }
+
+        // IA LOCAL REFORZADA
+        function askMatrixAI() {
+            const input = document.getElementById('ai-input').value.toLowerCase();
+            const box = document.getElementById('ai-response-box');
+            if(!input) return;
+            box.innerText = "Decodificando patrones cognitivos...";
+            setTimeout(() => {
+                let r = "SISTEMA: Entrada genérica recibida. Intenta fragmentar tus temas usando mapas conceptuales dinámicos y repasa mediante auto-evaluación cronometrada.";
+                if(input.includes("mate") || input.includes("fisica") || input.includes("calculo")) r = "SISTEMA: En ciencias exactas, el cerebro asimila mediante patrones repetitivos. Realiza 2 problemas de ejemplo guiados, luego crea variaciones cambiando variables sin ver el solucionario.";
+                if(input.includes("historia") || input.includes("memorizar") || input.includes("letras")) r = "SISTEMA: Usa memorización espaciada. Lee un bloque, escríbelo simplificado en una tarjeta de memoria y vuelve a autoevaluarte a las 2 horas y a las 24 horas exactas.";
+                if(input.includes("sueño") || input.includes("cansado") || input.includes("dormir")) r = "SISTEMA: La retención de datos ocurre durante la fase REM. Dormir 4 ciclos completos de 90 minutos (6 horas) es infinitamente mejor que pasar la noche en vela memorizando.";
+                if(input.includes("examen") || input.includes("bloqueo")) r = "SISTEMA: Si te bloqueas en el examen, salta inmediatamente de pregunta. El subconsciente continuará resolviendo el problema bloqueado en segundo plano mientras respondes el resto.";
+                box.innerText = r; document.getElementById('ai-input').value = '';
+            }, 500);
+        }
+
+        function saveData() { localStorage.setItem('origin_student_subjects', JSON.stringify(subjects)); }
+
+        // CANVAS PARTICLES EFFECT
+        const canvas = document.getElementById('bg-particles'); const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        class P {
+            constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.size = Math.random()*1.2+0.2; this.speed = -(Math.random()*0.1+0.03); }
+            update() { this.y += this.speed; if(this.y < 0) this.y = canvas.height; }
+            draw() { ctx.fillStyle = "rgba(192, 132, 252, 0.2)"; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); }
+        }
+        for(let i=0; i<30; i++) particles.push(new P());
+        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update(); p.draw();}); requestAnimationFrame(anim); }
+
+        renderAll(); renderTasks(); renderExams(); anim();
+    </script>
+</body>
+</html>
