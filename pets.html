@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Academia de Nala</title>
+    <style>
+        :root {
+            --primary: #fd79a8; /* Rosa Nala */
+            --secondary: #a29bfe; /* Violeta Espacial */
+            --success: #55efc4;
+            --warning: #ffeaa7;
+            --dark: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+
+        body {
+            background: linear-gradient(125deg, #06060c, #0d0e15, #160126, #220638);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        #stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: blink 3s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.1; transform: scale(0.6); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+            margin-bottom: 25px;
+        }
+
+        .btn-back {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(-3px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- DASHBOARD GRID RESPONSIVO --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* PC estándar: Perfil izquierda, ejercicios derecha */
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+        }
+
+        /* Media Queries para Tablet y Móvil */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr; /* Una sola columna en tablets y móviles */
+            }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px var(--glass-shadow);
+            height: fit-content;
+        }
+
+        /* --- ESTADÍSTICAS DE NALA --- */
+        .pet-profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pet-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(253, 121, 168, 0.4);
+        }
+
+        .level-badge {
+            background: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .xp-bar-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin: 15px 0 5px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+
+        .currency-box {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.15);
+            padding: 12px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item-display {
+            text-align: center;
+        }
+        .stat-item-display span {
+            display: block;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+        .stat-item-display .num {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        /* --- LISTA DE ENTRENAMIENTOS --- */
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .exercise-card:hover {
+            border-color: rgba(253, 121, 168, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .exercise-info {
+            flex-grow: 1;
+        }
+
+        .exercise-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+
+        .exercise-desc {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        .rewards-tag {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .badge-reward {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, var(--primary), #e84393);
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-complete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(253, 121, 168, 0.3);
+        }
+
+        .btn-reset {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            padding: 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        /* --- CONTROL DE MÚSICA FLOTANTE --- */
+        .music-controller {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); padding: 8px 14px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+        .music-btn {
+            background: none; border: none; color: #ffffff; font-size: 1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .music-info { font-size: 0.75rem; font-weight: 600; color: #94a3b8; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+
+    <div class="music-controller">
+        <button class="music-btn" id="btn-play-music" onclick="toggleMúsica()">🎵</button>
+        <button class="music-btn" onclick="siguienteCancion()">⏭️</button>
+        <span class="music-info" id="track-title">Pista 1</span>
+    </div>
+
+    <div class="nav-header">
+        <a href="menuprincipal.html" class="btn-back">← Volver</a>
+        <h1>Academia de Nala</h1>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="glass-card">
+            <div class="pet-profile-header">
+                <div class="pet-avatar">🐶</div>
+                <h2 style="justify-content: center; margin-bottom: 5px; color: white;">Nala</h2>
+                <span class="level-badge" id="nala-level">Nivel 1</span>
+            </div>
+
+            <label>Experiencia de Nala</label>
+            <div class="xp-bar-container">
+                <div class="xp-bar-fill" id="nala-xp-bar"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+                <span id="nala-xp-text">0 / 100 XP</span>
+                <span>Siguiente Nivel</span>
+            </div>
+
+            <div class="currency-box">
+                <div class="stat-item-display">
+                    <span>PUNTOS TOTALES (XP)</span>
+                    <div class="num" id="total-xp-display" style="color: var(--primary);">0</div>
+                </div>
+                <div class="stat-item-display">
+                    <span>NALA MONEDAS (MP)</span>
+                    <div class="num" id="total-mp-display">0</div>
+                </div>
+            </div>
+
+            <button class="btn-reset" onclick="reiniciarProgreso()">Reiniciar Atributos</button>
+        </div>
+
+        <div class="glass-card">
+            <div class="section-title">⚔️ Misiones de Entrenamiento</div>
+            
+            <div class="exercise-card">
+                <div class="exercise-info">
+                    <div class="exercise-title">Orden: "Sentada" (Sit)</div>
+                    <div class="exercise-desc">Sostén un premio sobre su nariz y muévelo hacia atrás sobre su cabeza. Su colita bajará de forma natural.</div>
+                    <div class="rewards-tag">
+                        <span class="badge-reward" style="color: var(--primary);">+15 XP</span>
+                        <span class="badge-reward" style="color: var(--warning);">+5 MP</span>
+                    </div>
+                </div>
+                <button class="btn-complete" onclick="completarTruco(15, 5)">¡Hecho! 🐾</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-info">
+                    <div class="exercise-title">Orden: "Tumbada" (Down)</div>
+                    <div class="exercise-desc">Con Nala sentada, guía un premio desde su hocico directamente en línea recta hacia el suelo.</div>
+                    <div class="rewards-tag">
+                        <span class="badge-reward" style="color: var(--primary);">+20 XP</span>
+                        <span class="badge-reward" style="color: var(--warning);">+10 MP</span>
+                    </div>
+                </div>
+                <button class="btn-complete" onclick="completarTruco(20, 10)">¡Hecho! 🐾</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-info">
+                    <div class="exercise-title">Orden: "Dar la Pata" (Paw)</div>
+                    <div class="exercise-desc">Esconde un premio en tu puño cerrado frente a ella. Cuando intente tocar tu mano con su pata, premia al instante.</div>
+                    <div class="rewards-tag">
+                        <span class="badge-reward" style="color: var(--primary);">+25 XP</span>
+                        <span class="badge-reward" style="color: var(--warning);">+15 MP</span>
+                    </div>
+                </div>
+                <button class="btn-complete" onclick="completarTruco(25, 15)">¡Hecho! 🐾</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="exercise-info">
+                    <div class="exercise-title">Orden: "Quieta" (Stay)</div>
+                    <div class="exercise-desc">Pídele que se siente, haz una señal de "alto" con la mano y da un paso atrás. Vuelve y premia si no se movió.</div>
+                    <div class="rewards-tag">
+                        <span class="badge-reward" style="color: var(--primary);">+35 XP</span>
+                        <span class="badge-reward" style="color: var(--warning);">+25 MP</span>
+                    </div>
+                </div>
+                <button class="btn-complete" onclick="completarTruco(35, 25)">¡Hecho! 🐾</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- SISTEMA DE LOGROS / DATOS (Sincronizado con perfil.html) ---
+        let totalXP = parseInt(localStorage.getItem('nala-total-xp')) || 0;
+        let totalMP = parseInt(localStorage.getItem('nala-total-mp')) || 0;
+
+        function calcularNivel(xp) {
+            // Cada nivel requiere 100 de XP (Nivel 1 = 0-99, Nivel 2 = 100-199, etc.)
+            let nivel = Math.floor(xp / 100) + 1;
+            let xpRestante = xp % 100;
+            return { nivel, xpRestante };
+        }
+
+        function completarTruco(xpGanada, mpGanado) {
+            totalXP += xpGanada;
+            totalMP += mpGanado;
+
+            // Guardamos en LocalStorage para que perfil.html tenga acceso a estas llaves exactas
+            localStorage.setItem('nala-total-xp', totalXP);
+            localStorage.setItem('nala-total-mp', totalMP);
+
+            playSound('success');
+            renderizarEstado();
+        }
+
+        function renderizarEstado() {
+            const status = calcularNivel(totalXP);
+
+            document.getElementById('nala-level').innerText = `Nivel ${status.nivel}`;
+            document.getElementById('nala-xp-text').innerText = `${status.xpRestante} / 100 XP`;
+            document.getElementById('nala-xp-bar').style.width = `${status.xpRestante}%`;
+            
+            document.getElementById('total-xp-display').innerText = totalXP;
+            document.getElementById('total-mp-display').innerText = totalMP;
+        }
+
+        function reiniciarProgreso() {
+            if(confirm("¿Seguro que quieres restablecer el nivel de Nala? (Esto afectará a los datos de tu perfil)")) {
+                totalXP = 0;
+                totalMP = 0;
+                localStorage.setItem('nala-total-xp', 0);
+                localStorage.setItem('nala-total-mp', 0);
+                playSound('click');
+                renderizarEstado();
+            }
+        }
+
+        // --- AUDIO FX ---
+        function playSound(tipo) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+
+            if (tipo === 'click') {
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+            } else if (tipo === 'success') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Nota C5
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // Nota E5
+                osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16); // Nota G5
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        // --- CREADOR DE ESTRELLAS DE FONDO ---
+        function crearEstrellas() {
+            const contenedor = document.getElementById('stars-container');
+            for (let i = 0; i < 60; i++) {
+                const estrella = document.createElement('div');
+                estrella.classList.add('star');
+                const tam = Math.random() * 2 + 0.5;
+                estrella.style.width = `${tam}px`; estrella.style.height = `${tam}px`;
+                estrella.style.left = `${Math.random() * 100}%`; estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.animationDelay = `${Math.random() * 4}s`;
+                contenedor.appendChild(estrella);
+            }
+        }
+
+        // --- REPRODUCTOR DE MÚSICA UNIFICADO ---
+        const listaCanciones = [
+            { titulo: "Cyber Ambient", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { titulo: "Space Lounge", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { titulo: "Retro Pulse", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" }
+        ];
+        let indiceCancionActual = 0;
+        const reproductorMusica = new Audio();
+        reproductorMusica.volume = 0.2;
+
+        function cargarCancion(index) {
+            reproductorMusica.src = listaCanciones[index].url;
+            document.getElementById('track-title').innerText = listaCanciones[index].titulo;
+        }
+        function toggleMúsica() {
+            if (reproductorMusica.paused) {
+                reproductorMusica.play().catch(() => {});
+                document.getElementById('btn-play-music').innerText = "⏸️";
+            } else {
+                reproductorMusica.pause();
+                document.getElementById('btn-play-music').innerText = "▶️";
+            }
+        }
+        function siguienteCancion() {
+            indiceCancionActual = (indiceCancionActual + 1) % listaCanciones.length;
+            cargarCancion(indiceCancionActual);
+            reproductorMusica.play().catch(() => {});
+            document.getElementById('btn-play-music').innerText = "⏸️";
+        }
+        reproductorMusica.addEventListener('ended', siguienteCancion);
+
+        document.body.addEventListener('click', () => {
+            if (reproductorMusica.paused && document.getElementById('btn-play-music').innerText === "🎵") {
+                reproductorMusica.play().then(() => { document.getElementById('btn-play-music').innerText = "⏸️"; }).catch(() => {});
+            }
+        }, { once: true });
+
+        // Inicialización
+        crearEstrellas();
+        cargarCancion(indiceCancionActual);
+        renderizarEstado();
+    </script>
+</body>
+</html>
