@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Enlaces Cuánticos</title>
+    <style>
+        :root {
+            --bg-main: #04040c; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-purple: #c084fc;
+            --accent-cyan: #22d3ee;
+            --accent-gold: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #spaceCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            z-index: 1;
+            height: 85vh;
+        }
+        @media(max-width: 800px) { .container { grid-template-columns: 1fr; height: auto; } }
+
+        /* PANELES INDEPENDIENTES */
+        .panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 22px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 { 
+            font-size: 0.9rem; 
+            color: var(--accent-purple); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 8px; 
+        }
+
+        /* CONFIGURACIÓN DE FORMULARIOS */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 10px rgba(192, 132, 252, 0.15);
+        }
+
+        /* ENTORNO DE BOTONES */
+        button {
+            background: var(--accent-purple);
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(192, 132, 252, 0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.08); margin-top: auto; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); box-shadow: none; }
+
+        /* LISTA DE CONTACTOS DE LA DERECHA */
+        .contacts-feed {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 5px;
+        }
+        .contacts-feed::-webkit-scrollbar { width: 4px; }
+        .contacts-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .contact-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.2s;
+        }
+        .contact-card:hover {
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.08);
+            transform: translateX(2px);
+        }
+
+        .contact-avatar {
+            font-size: 1.8rem;
+            background: rgba(255,255,255,0.03);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .contact-info { flex-grow: 1; }
+        .contact-name { font-weight: bold; font-size: 1rem; color: #fff; margin-bottom: 2px; }
+        .contact-phone { font-family: monospace; font-size: 0.85rem; color: var(--accent-cyan); }
+
+        .btn-delete {
+            background: transparent;
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        .btn-delete:hover { background: #ff4757; color: #000; box-shadow: none; }
+
+        .empty-msg { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+
+    <div class="container">
+        
+        <div class="panel">
+            <h2>📡 Registrar Enlace</h2>
+            
+            <div class="form-group">
+                <span class="label">Nombre y Apellidos</span>
+                <input type="text" id="contactName" placeholder="Ej. John Doe">
+            </div>
+
+            <div class="form-group">
+                <span class="label">Número de Teléfono</span>
+                <input type="tel" id="contactPhone" placeholder="Ej. +34 600 000 000">
+            </div>
+
+            <div class="form-group">
+                <span class="label">Identificador Visual (Emoji)</span>
+                <select id="contactEmoji">
+                    <option value="👤">👤 Identidad Base</option>
+                    <option value="⚡">⚡ Operador Crítico</option>
+                    <option value="🥷">🥷 Modo Incógnito</option>
+                    <option value="👽">👽 Contacto Externo</option>
+                    <option value="👑">👑 Enlace VIP</option>
+                    <option value="🧠">🧠 Soporte Técnico</option>
+                    <option value="💼">💼 Asuntos de Dinero</option>
+                    <option value="🔥">🔥 Contacto Clave</option>
+                </select>
+            </div>
+
+            <button onclick="guardarContacto()" style="margin-top: 10px;">Vincular al Terminal</button>
+
+            <a href="menuprincipal.html" style="text-decoration:none; display:flex; margin-top:auto;">
+                <button class="btn-secondary" style="width:100%;">🏠 Volver al Núcleo</button>
+            </a>
+        </div>
+
+        <div class="panel">
+            <h2>🗂️ Registro de Red Privada</h2>
+            <div class="contacts-feed" id="contactsContainer"></div>
+        </div>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        const KEY_CONTACTS = 'origin_contacts_pool';
+        let contactos = JSON.parse(localStorage.getItem(KEY_CONTACTS)) || [];
+
+        // --- SISTEMA DE AUDIO ---
+        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playClick() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }
+        function playSuccess() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(700, audioCtx.currentTime + 0.06);
+            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // --- SISTEMA LOGIC OPERATIVO ---
+        function guardarContacto() {
+            const name = document.getElementById('contactName').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const emoji = document.getElementById('contactEmoji').value;
+
+            if(!name || !phone) {
+                alert("⚠️ Error de Red: Rellena los campos de nombre y teléfono.");
+                return;
+            }
+
+            const nuevoContacto = {
+                id: 'c-' + Date.now(),
+                nombre: name,
+                telefono: phone,
+                avatar: emoji
+            };
+
+            contactos.push(nuevoContacto);
+            localStorage.setItem(KEY_CONTACTS, JSON.stringify(contactos));
+            
+            playSuccess();
+            renderContactos();
+
+            // Resetear inputs básicos
+            document.getElementById('contactName').value = "";
+            document.getElementById('contactPhone').value = "";
+        }
+
+        function borrarContacto(id) {
+            playClick();
+            contactos = contactos.filter(c => c.id !== id);
+            localStorage.setItem(KEY_CONTACTS, JSON.stringify(contactos));
+            renderContactos();
+        }
+
+        function renderContactos() {
+            const container = document.getElementById('contactsContainer');
+            container.innerHTML = "";
+
+            if(contactos.length === 0) {
+                container.innerHTML = `<p class="empty-msg">No hay registros en la red central.</p>`;
+                return;
+            }
+
+            contactos.forEach(c => {
+                container.innerHTML += `
+                    <div class="contact-card">
+                        <div class="contact-avatar">${c.avatar}</div>
+                        <div class="contact-info">
+                            <div class="contact-name">${c.nombre}</div>
+                            <div class="contact-phone">📞 ${c.telefono}</div>
+                        </div>
+                        <button class="btn-delete" onclick="borrarContacto('${c.id}')">Eliminar</button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- CINEMÁTICA ESTRELLA DE FONDO ---
+        function initStars() {
+            const canvas = document.getElementById('spaceCanvas'); const ctx = canvas.getContext('2d');
+            let stars = [];
+            function resize() {
+                canvas.width = window.innerWidth * window.devicePixelRatio; canvas.height = window.innerHeight * window.devicePixelRatio;
+                canvas.style.width = window.innerWidth + "px"; canvas.style.height = window.innerHeight + "px";
+            }
+            window.addEventListener('resize', resize); resize();
+            for(let i=0; i<85; i++) { stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.4+0.5, speed: Math.random()*0.12+0.04 }); }
+            function loop() {
+                ctx.clearRect(0,0, canvas.width, canvas.height); ctx.fillStyle = "rgba(255,255,255,0.22)";
+                stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = canvas.height; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill(); });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        window.onload = function() {
+            initStars();
+            renderContactos();
+            window.addEventListener('click', initAudio, { once: true });
+        }
+    </script>
+</body>
+</html>
