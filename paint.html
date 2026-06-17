@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ORIGIN - Matriz de Pintura</title>
+    <style>
+        :root {
+            --bg-main: #04040c; 
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent-purple: #c084fc;
+            --accent-cyan: #22d3ee;
+            --accent-gold: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #spaceCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #110b29 0%, #04040c 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            z-index: 1;
+            height: 88vh;
+        }
+        @media(max-width: 850px) { .container { grid-template-columns: 1fr; height: auto; } }
+
+        /* PANEL DE HERRAMIENTAS (IZQUIERDA) */
+        .toolbox {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 22px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 { 
+            font-size: 0.9rem; 
+            color: var(--accent-purple); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding-bottom: 8px; 
+        }
+
+        .tool-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* PALETAS DE COLOR */
+        .color-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .color-swatch {
+            width: 100%;
+            height: 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.active { border: 2px solid #fff; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 100%;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: transparent;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: 1px solid var(--glass-border); border-radius: 10px; }
+
+        /* CONTROLES DE RANGO */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        /* BOTONES */
+        button {
+            background: rgba(255,255,255,0.04); 
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff; 
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            font-size: 0.8rem;
+            cursor: pointer; 
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        button:hover { background: var(--accent-purple); color: #000; border-color: transparent; transform: translateY(-1px); }
+        button.active { background: var(--accent-cyan); color: #000; border-color: transparent; }
+        
+        .btn-action { background: rgba(255,255,255,0.02); width: 100%; }
+        .btn-download { background: var(--accent-cyan); color: #000; font-weight: 700; margin-top: auto; }
+        .btn-download:hover { background: #fff; box-shadow: 0 0 15px rgba(34, 211, 238, 0.4); }
+
+        /* CONTENEDOR DEL LIENZO (DERECHA) */
+        .canvas-area {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas#paintCanvas {
+            background: #000000;
+            cursor: crosshair;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="spaceCanvas"></canvas>
+
+    <div class="container">
+        
+        <div class="toolbox">
+            <h2>🎨 Matriz de Diseño</h2>
+            
+            <div class="tool-section">
+                <span class="label">Herramienta</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button id="btnPincel" class="active" onclick="setModo('pincel')">✏️ Pincel</button>
+                    <button id="btnGoma" onclick="setModo('goma')">🧽 Goma</button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <div class="label" style="display:flex; justify-content:space-between;">
+                    <span>Calibre</span>
+                    <span id="brushSizeVal">5px</span>
+                </div>
+                <input type="range" id="brushSize" min="1" max="50" value="5" oninput="updateGrosor(this.value)">
+            </div>
+
+            <div class="tool-section">
+                <span class="label">Espectros Base</span>
+                <div class="color-presets">
+                    <div class="color-swatch active" style="background: #22d3ee;" onclick="setColor('#22d3ee', this)"></div>
+                    <div class="color-swatch" style="background: #c084fc;" onclick="setColor('#c084fc', this)"></div>
+                    <div class="color-swatch" style="background: #f59e0b;" onclick="setColor('#f59e0b', this)"></div>
+                    <div class="color-swatch" style="background: #ff4757;" onclick="setColor('#ff4757', this)"></div>
+                    <div class="color-swatch" style="background: #2ed573;" onclick="setColor('#2ed573', this)"></div>
+                    <div class="color-swatch" style="background: #ffffff;" onclick="setColor('#ffffff', this)"></div>
+                    <div class="color-swatch" style="background: #ffa502;" onclick="setColor('#ffa502', this)"></div>
+                    <div class="color-swatch" style="background: #57606f;" onclick="setColor('#57606f', this)"></div>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <span class="label">Mezclador Custom</span>
+                <input type="color" id="customColor" value="#22d3ee" oninput="setColor(this.value)">
+            </div>
+
+            <div class="tool-section" style="margin-top: 10px;">
+                <button class="btn-action" onclick="limpiarLienzo()">🗑️ Reiniciar Matriz</button>
+            </div>
+
+            <button class="btn-download" onclick="descargarDibujo()">💾 Descargar Plano</button>
+            <a href="menuprincipal.html" style="text-decoration:none;"><button class="btn-action" style="width:100%;">🏠 Volver al Núcleo</button></a>
+        </div>
+
+        <div class="canvas-area" id="canvasArea">
+            <canvas id="paintCanvas"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasArea = document.getElementById('canvasArea');
+
+        let pintando = false;
+        let modoActual = 'pincel'; // pincel o goma
+        let colorActual = '#22d3ee';
+        let grosorActual = 5;
+
+        // --- SISTEMA DE AUDIO ---
+        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playClick() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+        }
+        function playClear() {
+            initAudio(); if(!audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+        }
+
+        // --- AJUSTE DINÁMICO DEL LIENZO ---
+        function ajustarResolucionLienzo() {
+            // El lienzo ocupará el tamaño visible disponible en su contenedor de manera fluida
+            canvas.width = canvasArea.clientWidth - 40;
+            canvas.height = canvasArea.clientHeight - 40;
+            
+            // Forzar fondo negro inicial para evitar transparencias al descargar
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Restablecer configuraciones de trazado tras redimensionar
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        // --- CONTROL DE TRAZADO (RATÓN Y TOUCH) ---
+        function empezarDibujo(e) {
+            pintando = true;
+            initAudio();
+            dibujar(e);
+        }
+
+        function terminarDibujo() {
+            pintando = false;
+            ctx.beginPath(); // Rompe la línea de dibujo previa
+        }
+
+        function dibujar(e) {
+            if (!pintando) return;
+
+            // Obtener coordenadas relativas exactas al canvas
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            ctx.lineWidth = grosorActual;
+            ctx.strokeStyle = (modoActual === 'goma') ? '#000000' : colorActual;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        // --- PANEL DE CONTROL LOGIC ---
+        function setModo(nuevoModo) {
+            playClick();
+            modoActual = nuevoModo;
+            document.getElementById('btnPincel').classList.toggle('active', modoActual === 'pincel');
+            document.getElementById('btnGoma').classList.toggle('active', modoActual === 'goma');
+        }
+
+        function setColor(nuevoColor, elementoSwatch = null) {
+            playClick();
+            colorActual = nuevoColor;
+            document.getElementById('customColor').value = nuevoColor;
+
+            if(elementoSwatch) {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                elementoSwatch.classList.add('active');
+            }
+        }
+
+        function updateGrosor(val) {
+            grosorActual = val;
+            document.getElementById('brushSizeVal').innerText = val + "px";
+        }
+
+        function limpiarLienzo() {
+            playClear();
+            if(confirm("¿Purgar los datos del lienzo actual? Todo el arte se perderá.")) {
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        // --- SISTEMA DE DESCARGA DIRECTA ---
+        function descargarDibujo() {
+            playClick();
+            // Convertir la matriz del canvas a datos URL de imagen PNG
+            const dataURL = canvas.toDataURL('image/png');
+            
+            // Forzar enlace de descarga fantasma
+            const enlace = document.createElement('a');
+            enlace.href = dataURL;
+            enlace.download = `origin_blueprint_${Date.now()}.png`;
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+        }
+
+        // --- FONDO DE ESTRELLAS MOVILES ---
+        function initStars() {
+            const canvasBg = document.getElementById('spaceCanvas'); const ctxBg = canvasBg.getContext('2d');
+            let stars = [];
+            function resize() {
+                canvasBg.width = window.innerWidth * window.devicePixelRatio; canvasBg.height = window.innerHeight * window.devicePixelRatio;
+                canvasBg.style.width = window.innerWidth + "px"; canvasBg.style.height = window.innerHeight + "px";
+            }
+            window.addEventListener('resize', resize); resize();
+            for(let i=0; i<80; i++) { stars.push({ x: Math.random()*canvasBg.width, y: Math.random()*canvasBg.height, size: Math.random()*1.3+0.5, speed: Math.random()*0.1+0.05 }); }
+            function loop() {
+                ctxBg.clearRect(0,0, canvasBg.width, canvasBg.height); ctxBg.fillStyle = "rgba(255,255,255,0.2)";
+                stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = canvasBg.height; ctxBg.beginPath(); ctxBg.arc(s.x, s.y, s.size, 0, Math.PI*2); ctxBg.fill(); });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // --- EVENT LISTENERS ---
+        window.onload = function() {
+            initStars();
+            ajustarResolucionLienzo();
+            window.addEventListener('resize', ajustarResolucionLienzo);
+
+            // Ratón
+            canvas.addEventListener('mousedown', empezarDibujo);
+            canvas.addEventListener('mousemove', dibujar);
+            window.addEventListener('mouseup', terminarDibujo);
+
+            // Pantallas táctiles (Móviles/Tablets)
+            canvas.addEventListener('touchstart', empezarDibujo, { passive: true });
+            canvas.addEventListener('touchmove', dibujar, { passive: true });
+            window.addEventListener('touchend', terminarDibujo);
+
+            window.addEventListener('click', initAudio, { once: true });
+        }
+    </script>
+</body>
+</html>
